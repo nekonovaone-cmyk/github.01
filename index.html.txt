@@ -1,0 +1,4298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live2D Rigging Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #fff8fc 50%, #fff0f8 100%);
+            color: #4a4a4a;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(255, 182, 217, 0.3);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(255, 182, 217, 0.12);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF9EC6, #FFB6D9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .logo::before {
+            content: '✨';
+            font-size: 1.3rem;
+            background: none;
+            -webkit-text-fill-color: unset;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #999;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #FF9EC6, #FFB6D9);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #FF9EC6;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* ===== SECTION HEADER ===== */
+        .section-header {
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: slideInDown 0.6s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kicker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .kicker-bar {
+            width: 12px;
+            height: 20px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #FF9EC6, #FFB6D9);
+            box-shadow: 0 0 20px rgba(255, 158, 198, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 158, 198, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 158, 198, 0.8);
+            }
+        }
+
+        .kicker-text {
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #999;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+            color: #222;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: #999;
+            font-weight: 500;
+        }
+
+        /* ===== SHOWCASE GRID ===== */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 1.5rem;
+            min-height: 600px;
+            background: linear-gradient(135deg, 
+                rgba(255, 248, 252, 0.8) 0%,
+                rgba(255, 235, 248, 0.6) 100%);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 182, 217, 0.2);
+            box-shadow: 
+                0 20px 60px rgba(255, 182, 217, 0.08),
+                inset 0 0 60px rgba(255, 182, 217, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showcase-grid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 50%, rgba(255, 182, 217, 0.04), transparent 50%),
+                radial-gradient(circle at 90% 50%, rgba(255, 182, 217, 0.03), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .showcase-grid > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== SIDEBAR LIST ===== */
+        .video-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border-right: 1px solid rgba(255, 182, 217, 0.3);
+            padding-right: 1.5rem;
+            max-height: 600px;
+            overflow: hidden;
+        }
+
+        .video-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .video-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .video-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 182, 217, 0.5);
+            border-radius: 3px;
+        }
+
+        .video-sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 182, 217, 0.7);
+        }
+
+        .sidebar-header {
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(255, 182, 217, 0.3);
+            margin-bottom: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 0.85rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+        }
+
+        .sidebar-count {
+            font-size: 0.75rem;
+            color: #ccc;
+            margin-top: 0.4rem;
+        }
+
+        .sidebar-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            flex: 1;
+            padding-bottom: 0.8rem;
+        }
+
+        .sidebar-items::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-items::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-items::-webkit-scrollbar-thumb {
+            background: rgba(255, 182, 217, 0.5);
+            border-radius: 3px;
+        }
+
+        .sidebar-items::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 182, 217, 0.7);
+        }
+
+        /* ===== VIDEO ITEM ===== */
+        .video-item {
+            all: unset;
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 182, 217, 0.3);
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-item:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 182, 217, 0.3) 0%,
+                rgba(255, 200, 230, 0.2) 100%);
+            border-color: rgba(255, 182, 217, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 182, 217, 0.2);
+        }
+
+        .video-item.active {
+            background: linear-gradient(135deg, 
+                rgba(255, 182, 217, 0.4) 0%,
+                rgba(255, 200, 230, 0.25) 100%);
+            border-color: rgba(255, 182, 217, 0.7);
+            box-shadow: 0 8px 32px rgba(255, 182, 217, 0.3),
+                        inset 0 0 20px rgba(255, 182, 217, 0.12);
+        }
+
+        .video-thumb {
+            width: 80px;
+            height: 45px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FF9EC6 0%, #FFB6D9 100%);
+            border: 1px solid rgba(255, 182, 217, 0.3);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: contrast(1.1) brightness(0.95);
+        }
+
+        .video-thumb::after {
+            content: '▶';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover .video-thumb::after {
+            opacity: 1;
+        }
+
+        .video-info {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .video-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .video-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-weight: 700;
+            background: rgba(255, 182, 217, 0.25);
+            color: #FF9EC6;
+            border: 1px solid rgba(255, 182, 217, 0.4);
+            white-space: nowrap;
+        }
+
+        .video-badge--platform {
+            background: rgba(255, 182, 217, 0.2);
+            border-color: rgba(255, 182, 217, 0.35);
+            color: #E57890;
+        }
+
+        /* ===== MAIN PLAYER ===== */
+        .player-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 182, 217, 0.3);
+            min-height: 50px;
+        }
+
+        .player-now {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .player-now-label {
+            font-size: 0.7rem;
+            font-weight: 900;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(255, 182, 217, 0.25);
+            color: #FF9EC6;
+            border: 1px solid rgba(255, 182, 217, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .player-now-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .player-chips {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .chip {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(255, 182, 217, 0.15);
+            color: #999;
+            border: 1px solid rgba(255, 182, 217, 0.25);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* ===== VIDEO PLAYER ===== */
+        .video-player {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 182, 217, 0.25);
+            box-shadow: 0 20px 60px rgba(255, 182, 217, 0.15);
+        }
+
+        .video-player iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .video-scan {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.03) 0px,
+                rgba(0, 0, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 4px
+            );
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+        }
+
+        .video-frame {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            box-shadow: 
+                inset 0 0 0 1px rgba(255, 182, 217, 0.2),
+                inset 0 0 0 3px rgba(255, 255, 255, 0.8);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        .playlist-toggle {
+            display: none;
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 182, 217, 0.3);
+            border-radius: 12px;
+            color: #333;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .playlist-toggle:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 182, 217, 0.3) 0%,
+                rgba(255, 200, 230, 0.2) 100%);
+            border-color: rgba(255, 182, 217, 0.6);
+        }
+
+        .playlist-toggle.open {
+            background: linear-gradient(135deg, 
+                rgba(255, 182, 217, 0.4) 0%,
+                rgba(255, 200, 230, 0.25) 100%);
+            border-color: rgba(255, 182, 217, 0.7);
+            color: #FF9EC6;
+        }
+
+        @media (max-width: 1024px) {
+            .showcase-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .playlist-toggle {
+                display: block;
+            }
+
+            .video-sidebar {
+                border-right: none;
+                border-bottom: none;
+                padding-right: 0;
+                padding-bottom: 0;
+                max-height: 0;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                transition: max-height 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+            }
+
+            .video-sidebar.show {
+                max-height: 1000px;
+                padding-bottom: 1.5rem;
+                padding-top: 0;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid rgba(255, 182, 217, 0.3);
+                overflow: hidden;
+            }
+
+            .sidebar-header {
+                position: sticky;
+                top: 0;
+                background: linear-gradient(135deg, 
+                    rgba(255, 248, 252, 0.85) 0%,
+                    rgba(255, 235, 248, 0.65) 100%);
+                padding-top: 1rem;
+                padding-bottom: 0.8rem;
+                padding-left: 0;
+                z-index: 10;
+                flex-shrink: 0;
+            }
+
+            .sidebar-items {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 0.8rem;
+                overflow-y: auto;
+                flex: 1;
+                padding-bottom: 0.8rem;
+                max-height: 600px;
+            }
+
+            .video-item {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+                gap: 0.6rem;
+            }
+
+            .video-thumb {
+                width: 100%;
+                height: 70px;
+            }
+
+            .video-info {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 0.8rem 1rem;
+            }
+
+            .header-content {
+                gap: 1rem;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .showcase-grid {
+                min-height: auto;
+                padding: 1.2rem;
+                border-radius: 16px;
+            }
+
+            .playlist-toggle {
+                display: block;
+            }
+
+            .video-sidebar {
+                max-height: 0;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                transition: max-height 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+            }
+
+            .video-sidebar.show {
+                max-height: 800px;
+                border-bottom: 1px solid rgba(255, 182, 217, 0.3);
+                padding-bottom: 1.5rem;
+                padding-top: 0;
+                margin-bottom: 1rem;
+                overflow: hidden;
+            }
+
+            .sidebar-header {
+                position: sticky;
+                top: 0;
+                background: linear-gradient(135deg, 
+                    rgba(255, 248, 252, 0.85) 0%,
+                    rgba(255, 235, 248, 0.65) 100%);
+                padding-top: 1rem;
+                padding-bottom: 0.8rem;
+                padding-left: 0;
+                z-index: 10;
+                flex-shrink: 0;
+            }
+
+            .sidebar-items {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                gap: 0.8rem;
+                overflow-y: auto;
+                flex: 1;
+                padding-bottom: 0.8rem;
+                max-height: 500px;
+            }
+
+            .video-item {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+                gap: 0.6rem;
+            }
+
+            .video-thumb {
+                width: 100%;
+                height: 70px;
+            }
+
+            .video-name {
+                font-size: 0.8rem;
+            }
+
+            .video-badge {
+                font-size: 0.6rem;
+            }
+
+            .player-header {
+                flex-wrap: wrap;
+                gap: 0.6rem;
+            }
+
+            .player-now {
+                order: 1;
+                flex-basis: 100%;
+            }
+
+            .player-chips {
+                order: 2;
+                flex-basis: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem 0.75rem;
+            }
+
+            .section-header {
+                margin-bottom: 1.5rem;
+            }
+
+            .kicker {
+                gap: 0.6rem;
+            }
+
+            .kicker-text {
+                font-size: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .showcase-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            .playlist-toggle {
+                padding: 0.7rem;
+                font-size: 0.85rem;
+            }
+
+            .video-sidebar {
+                max-height: 0;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                transition: max-height 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+            }
+
+            .video-sidebar.show {
+                max-height: 600px;
+                padding-top: 0;
+                padding-bottom: 1rem;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid rgba(255, 182, 217, 0.3);
+                overflow: hidden;
+            }
+
+            .sidebar-header {
+                position: sticky;
+                top: 0;
+                background: linear-gradient(135deg, 
+                    rgba(255, 248, 252, 0.85) 0%,
+                    rgba(255, 235, 248, 0.65) 100%);
+                padding-top: 0.8rem;
+                padding-bottom: 0.8rem;
+                padding-left: 0;
+                z-index: 10;
+                flex-shrink: 0;
+            }
+
+            .sidebar-items {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 0.6rem;
+                overflow-y: auto;
+                flex: 1;
+                padding-bottom: 0.8rem;
+                max-height: 400px;
+            }
+
+            .video-item {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .video-thumb {
+                width: 100%;
+                height: 55px;
+            }
+
+            .player-header {
+                padding: 0.6rem;
+                border-radius: 8px;
+            }
+
+            .player-now-title {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">Live2D Rigging</div>
+
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div class="kicker">
+                <div class="kicker-bar"></div>
+                <span class="kicker-text">Showcase</span>
+            </div>
+            <h1 class="section-title">작업 갤러리</h1>
+            <p class="section-subtitle">리스트를 클릭해서 전환하세요 • 모바일 스와이프 지원</p>
+        </div>
+
+        <!-- Showcase Grid -->
+        <div class="showcase-grid">
+            <!-- Playlist Toggle Button (Mobile Only) -->
+            <button class="playlist-toggle" id="playlistToggle">📋 플레이리스트 보기</button>
+
+            <!-- Sidebar -->
+            <div class="video-sidebar" id="videoSidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">Playlist</div>
+                    <div class="sidebar-count">총 <span id="totalCount">0</span>개</div>
+                </div>
+            </div>
+
+            <!-- Player Section -->
+            <div class="player-section">
+                <!-- Player Header -->
+                <div class="player-header">
+                    <div class="player-now">
+                        <span class="player-now-label">Now</span>
+                        <span class="player-now-title" id="nowTitle">로딩 중...</span>
+                    </div>
+                    <div class="player-chips">
+                        <span class="chip">YouTube</span>
+                    </div>
+                </div>
+
+                <!-- Video Player -->
+                <div class="video-player" id="swipeArea">
+                    <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Live2D Showcase"></iframe>
+                    <div class="video-scan"></div>
+                    <div class="video-frame"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const VIDEOS = [
+            { id: "B7JMb4uTo_A", title: "Showcase 13", name: "쿠로네코", tags: [] },
+            { id: "3n33khIgAgc", title: "Showcase 12", name: "유우이", platform: "CHZZK" },
+            { id: "Vwv1Ut-qEtg", title: "Showcase 11", name: "슬묘", platform: "CHZZK" },
+            { id: "GmHCBD8DT_4", title: "Showcase 10", name: "하주야", platform: "CHZZK" },
+            { id: "u9pkq4Gwj9c", title: "Showcase 09", name: "박유넬", platform: "CHZZK", tags: ["반신리깅"] },
+            { id: "zM50eZXTxVY", title: "Showcase 08", name: "시로가네 미오", platform: "SOOP", tags: ["신의상"] },
+            { id: "nKnbNQM_E6Y", title: "Showcase 01", name: "아야린", platform: "CHZZK" }
+        ];
+
+        const sidebar = document.getElementById('videoSidebar');
+        const frame = document.getElementById('videoFrame');
+        const nowTitle = document.getElementById('nowTitle');
+        const totalCount = document.getElementById('totalCount');
+        const swipeArea = document.getElementById('swipeArea');
+        const playlistToggle = document.getElementById('playlistToggle');
+
+        let currentIndex = 0;
+        const mq = window.matchMedia('(max-width: 1024px)');
+
+        const embed = (id) => `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1`;
+        const thumb = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+
+        function setActive(idx) {
+            if (idx < 0 || idx >= VIDEOS.length) return;
+
+            currentIndex = idx;
+            const v = VIDEOS[idx];
+
+            frame.src = embed(v.id);
+            nowTitle.textContent = v.name;
+
+            renderItems();
+        }
+
+        function renderItems() {
+            let itemsContainer = sidebar.querySelector('.sidebar-items');
+            
+            if (!itemsContainer) {
+                itemsContainer = document.createElement('div');
+                itemsContainer.className = 'sidebar-items';
+                sidebar.appendChild(itemsContainer);
+            }
+
+            itemsContainer.innerHTML = '';
+
+            totalCount.textContent = VIDEOS.length;
+
+            VIDEOS.forEach((v, i) => {
+                const isActive = i === currentIndex;
+
+                const item = document.createElement('button');
+                item.className = `video-item ${isActive ? 'active' : ''}`;
+                item.type = 'button';
+                item.setAttribute('aria-label', `${v.name} 선택`);
+
+                item.innerHTML = `
+                    <div class="video-thumb">
+                        <img src="${thumb(v.id)}" alt="${v.name}" loading="lazy">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-name">${v.name}</div>
+                        <div class="video-meta">
+                            ${v.tags ? v.tags.map(t => `<span class="video-badge">${t}</span>`).join('') : ''}
+                            ${v.platform ? `<span class="video-badge video-badge--platform">${v.platform}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                item.addEventListener('click', () => {
+                    item.blur();
+                    setActive(i);
+                });
+
+                itemsContainer.appendChild(item);
+            });
+        }
+
+        // Swipe support
+        let sx = 0, sy = 0, tracking = false;
+
+        swipeArea.addEventListener('touchstart', (e) => {
+            if (!e.touches || e.touches.length !== 1) return;
+            tracking = true;
+            sx = e.touches[0].clientX;
+            sy = e.touches[0].clientY;
+        }, { passive: true });
+
+        swipeArea.addEventListener('touchend', (e) => {
+            if (!tracking) return;
+            tracking = false;
+
+            const t = e.changedTouches?.[0];
+            if (!t) return;
+
+            const dx = t.clientX - sx;
+            const dy = t.clientY - sy;
+
+            if (Math.abs(dy) > Math.abs(dx)) return;
+            if (dx > 50) setActive(currentIndex - 1);
+            if (dx < -50) setActive(currentIndex + 1);
+        }, { passive: true });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') setActive(currentIndex - 1);
+            if (e.key === 'ArrowRight') setActive(currentIndex + 1);
+        });
+
+        // Playlist toggle for mobile
+        if (playlistToggle) {
+            playlistToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+                playlistToggle.classList.toggle('open');
+                if (playlistToggle.classList.contains('open')) {
+                    playlistToggle.textContent = '✕ 플레이리스트 닫기';
+                } else {
+                    playlistToggle.textContent = '📋 플레이리스트 보기';
+                }
+            });
+        }
+
+        // Initialize
+        setActive(0);
+    </script>
+</body>
+</html>
+
+
+<!-- ===================== NOTICE + EVENT (WHITE PINK) ===================== -->
+<section class="ne" id="notice-event" aria-label="공지 및 이벤트">
+  <div class="ne__container">
+    <!-- Section Header 제거 -->
+    <!-- Grid Layout -->
+    <div class="ne__grid">
+      <!-- NOTICE PANEL -->
+      <div class="ne__panel ne__panel--notice">
+        <div class="ne__panelHeader">
+          <div class="ne__panelTitle">
+            <span class="ne__badge ne__badge--notice">NOTICE</span>
+            <h3>공지사항</h3>
+          </div>
+        </div>
+
+        <div class="ne__panelContent">
+          <ul class="ne__list">
+            <li class="ne__listItem">
+              <div class="ne__listItemTag ne__listItemTag--blue">안내</div>
+              <div class="ne__listItemBody">
+                <strong class="ne__listItemTitle">3월부로 메뉴 가격이 인상될 예정입니다.</strong>
+                <p class="ne__listItemDesc">더 좋은 작업으로 보답하겠습니다. </p>
+              </div>
+            </li>
+
+            <li class="ne__listItem">
+              <div class="ne__listItemTag ne__listItemTag--pink">작업</div>
+              <div class="ne__listItemBody">
+                <strong class="ne__listItemTitle">작업 과정은 중간마다 영상으로 공유됩니다.</strong>
+                <p class="ne__listItemDesc">컨펌은 편하신 시점에 요청 가능하며, 총 3회까지 진행됩니다.</p>
+              </div>
+            </li>
+
+            <li class="ne__listItem">
+              <div class="ne__listItemTag ne__listItemTag--purple">위약금</div>
+              <div class="ne__listItemBody">
+                <strong class="ne__listItemTitle">예약 취소 시 결제 금액 10%의 위약금이 발생합니다.</strong>
+                <p class="ne__listItemDesc">작업 진행 전 예약 취소에 한해 적용됩니다.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- EVENT PANEL -->
+      <div class="ne__panel ne__panel--event ne__panel--ended">
+        <div class="ne__panelHeader">
+          <div class="ne__panelTitle">
+            <span class="ne__badge ne__badge--event">EVENT</span>
+            <h3>이벤트</h3>
+          </div>
+          <div class="ne__status ne__status--ended">
+            <span class="ne__statusDot"></span>
+            종료됨
+          </div>
+        </div>
+
+        <div class="ne__endedOverlay">
+          <div class="ne__endedContent">
+            <span class="ne__endedTitle">종료된 이벤트</span>
+            <span class="ne__endedSubtitle">현재는 진행 중인 이벤트가 없습니다</span>
+          </div>
+        </div>
+
+        <div class="ne__panelContent ne__panelContent--faded">
+          <div class="ne__eventCard">
+            <div class="ne__eventCardHead">
+              <div class="ne__eventCardTitle">
+                <span class="ne__eventBadge ne__eventBadge--ended">종료</span>
+                <strong>리깅 할인 이벤트</strong>
+              </div>
+              <div class="ne__eventDate">
+                <span class="ne__dateIcon">📅</span>
+                2026.02.1 ~ 2026.02.28
+              </div>
+            </div>
+
+            <div class="ne__offerGrid">
+              <div class="ne__offerCard">
+                <div class="ne__offerLabel ne__offerLabel--full">전신 리깅</div>
+                <div class="ne__offerPrice">
+                  <span class="ne__priceOriginal">900,000원</span>
+                  <span class="ne__priceArrow">→</span>
+                  <span class="ne__priceDiscounted">850,000원</span>
+                </div>
+                <div class="ne__priceSave">-50,000원 할인</div>
+              </div>
+
+              <div class="ne__offerCard">
+                <div class="ne__offerLabel ne__offerLabel--half">반신 리깅</div>
+                <div class="ne__offerPrice">
+                  <span class="ne__priceOriginal">750,000원</span>
+                  <span class="ne__priceArrow">→</span>
+                  <span class="ne__priceDiscounted">700,000원</span>
+                </div>
+                <div class="ne__priceSave">-50,000원 할인</div>
+              </div>
+            </div>
+
+            <div class="ne__bonusBox">
+              <div class="ne__bonusIcon">🎁</div>
+              <div class="ne__bonusText">
+                <strong>리깅 신청 시</strong>
+                <span>간단 표정 3종 무료 제공</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== ROOT COLOR VARIABLES ===== */
+  :root {
+    --ne-white: #ffffff;
+    --ne-bg-light: #fff8fc;
+    --ne-bg-pale: #fff0f8;
+    --ne-text-dark: #333333;
+    --ne-text-gray: #666666;
+    --ne-text-light: #999999;
+    
+    --ne-pink: #FF9EC6;
+    --ne-pink-light: #FFB6D9;
+    --ne-purple: #C291E8;
+    --ne-purple-light: #E8D4FF;
+    --ne-blue: #9EC9FF;
+    --ne-blue-light: #D4E8FF;
+  }
+
+  /* ===== SECTION ===== */
+  .ne {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .ne__container {
+    position: relative;
+  }
+
+  /* ===== GRID ===== */
+  .ne__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* ===== PANEL ===== */
+  .ne__panel {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(255, 182, 217, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .ne__panel:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(255, 182, 217, 0.15);
+  }
+
+  .ne__panelHeader {
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(255, 182, 217, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ne__panelTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .ne__panelTitle h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #333;
+    margin: 0;
+  }
+
+  .ne__badge {
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .ne__badge--notice {
+    background: rgba(158, 201, 255, 0.25);
+    color: #0066FF;
+    border: 1px solid rgba(158, 201, 255, 0.4);
+  }
+
+  .ne__badge--event {
+    background: rgba(194, 145, 232, 0.25);
+    color: #7B3FF2;
+    border: 1px solid rgba(194, 145, 232, 0.4);
+  }
+
+  /* ===== STATUS ===== */
+  .ne__status {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(200, 200, 200, 0.15);
+    color: #999;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+  }
+
+  .ne__status--ended {
+    background: rgba(200, 200, 200, 0.15);
+    color: #999;
+    border-color: rgba(200, 200, 200, 0.3);
+  }
+
+  .ne__statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #999;
+  }
+
+  /* ===== PANEL CONTENT ===== */
+  .ne__panelContent {
+    padding: 1.5rem;
+  }
+
+  .ne__panelContent--faded {
+    opacity: 0.6;
+    filter: grayscale(0.2);
+  }
+
+  /* ===== LIST ===== */
+  .ne__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .ne__listItem {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 240, 250, 0.6);
+    border: 1px solid rgba(255, 182, 217, 0.2);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .ne__listItem:hover {
+    background: rgba(255, 220, 240, 0.7);
+    border-color: rgba(255, 182, 217, 0.4);
+    transform: translateX(4px);
+  }
+
+  .ne__listItemTag {
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 4px 8px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    height: fit-content;
+  }
+
+  .ne__listItemTag--blue {
+    background: var(--ne-blue-light);
+    color: #0066FF;
+    border: 1px solid rgba(158, 201, 255, 0.3);
+  }
+
+  .ne__listItemTag--pink {
+    background: rgba(255, 158, 198, 0.25);
+    color: #FF4B8F;
+    border: 1px solid rgba(255, 158, 198, 0.4);
+  }
+
+  .ne__listItemTag--purple {
+    background: var(--ne-purple-light);
+    color: #7B3FF2;
+    border: 1px solid rgba(194, 145, 232, 0.3);
+  }
+
+  .ne__listItemBody {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .ne__listItemTitle {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.3;
+  }
+
+  .ne__listItemDesc {
+    font-size: 0.85rem;
+    color: #999;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ===== EVENT CARD ===== */
+  .ne__eventCard {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .ne__eventCardHead {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .ne__eventCardTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #333;
+  }
+
+  .ne__eventBadge {
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(200, 200, 200, 0.2);
+    color: #999;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .ne__eventBadge--ended {
+    background: rgba(200, 200, 200, 0.2);
+    color: #999;
+  }
+
+  .ne__eventDate {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 600;
+  }
+
+  .ne__dateIcon {
+    font-size: 1.1rem;
+  }
+
+  /* ===== OFFER GRID ===== */
+  .ne__offerGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .ne__offerCard {
+    padding: 1.2rem;
+    background: linear-gradient(135deg, rgba(255, 240, 250, 0.8) 0%, rgba(255, 220, 240, 0.5) 100%);
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    border-radius: 14px;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .ne__offerLabel {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    width: fit-content;
+  }
+
+  .ne__offerLabel--full {
+    background: rgba(158, 201, 255, 0.25);
+    color: #0066FF;
+    border: 1px solid rgba(158, 201, 255, 0.3);
+  }
+
+  .ne__offerLabel--half {
+    background: rgba(194, 145, 232, 0.25);
+    color: #7B3FF2;
+    border: 1px solid rgba(194, 145, 232, 0.3);
+  }
+
+  .ne__offerPrice {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-weight: 700;
+  }
+
+  .ne__priceOriginal {
+    font-size: 0.85rem;
+    color: #999;
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+  }
+
+  .ne__priceArrow {
+    color: #ccc;
+    font-size: 0.9rem;
+  }
+
+  .ne__priceDiscounted {
+    font-size: 1.3rem;
+    color: #FF4B8F;
+  }
+
+  .ne__priceSave {
+    font-size: 0.8rem;
+    color: #FF4B8F;
+    font-weight: 700;
+  }
+
+  /* ===== BONUS BOX ===== */
+  .ne__bonusBox {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, rgba(255, 158, 198, 0.15) 0%, rgba(194, 145, 232, 0.1) 100%);
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    border-radius: 14px;
+    margin-top: 0.5rem;
+  }
+
+  .ne__bonusIcon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .ne__bonusText {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .ne__bonusText strong {
+    font-size: 0.95rem;
+    color: #333;
+    display: block;
+  }
+
+  .ne__bonusText span {
+    font-size: 0.85rem;
+    color: #666;
+    display: block;
+  }
+
+  /* ===== ENDED STATE OVERLAY ===== */
+  .ne__panel--ended {
+    position: relative;
+  }
+
+  .ne__endedOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(3px);
+    border-radius: 20px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .ne__endedContent {
+    text-align: center;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .ne__endedTitle {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #999;
+    display: block;
+  }
+
+  .ne__endedTitle::before {
+    content: "●";
+    margin-right: 0.6rem;
+    color: #999;
+    font-size: 0.8rem;
+  }
+
+  .ne__endedSubtitle {
+    font-size: 0.85rem;
+    color: #bbb;
+    display: block;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .ne__grid {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+
+    .ne__offerGrid {
+      grid-template-columns: 1fr;
+    }
+
+    .ne__bonusBox {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ne {
+      padding: 2rem 1rem;
+    }
+
+    .ne__title {
+      font-size: 1.8rem;
+    }
+
+    .ne__panelHeader {
+      padding: 1.2rem 1.2rem 0.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .ne__panelTitle h3 {
+      font-size: 1rem;
+    }
+
+    .ne__panelContent {
+      padding: 1.2rem;
+    }
+
+    .ne__listItem {
+      gap: 0.8rem;
+      padding: 0.8rem;
+    }
+
+    .ne__listItemTitle {
+      font-size: 0.9rem;
+    }
+
+    .ne__listItemDesc {
+      font-size: 0.8rem;
+    }
+
+    .ne__offerCard {
+      padding: 1rem;
+    }
+
+    .ne__priceDiscounted {
+      font-size: 1.1rem;
+    }
+
+    .ne__bonusBox {
+      padding: 1rem;
+      gap: 0.8rem;
+    }
+
+    .ne__bonusIcon {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ne {
+      padding: 1.5rem 0.75rem;
+    }
+
+    .ne__title {
+      font-size: 1.4rem;
+    }
+
+    .ne__header {
+      margin-bottom: 2rem;
+    }
+
+    .ne__grid {
+      gap: 1rem;
+    }
+
+    .ne__panelHeader {
+      padding: 1rem 1rem 0.8rem;
+    }
+
+    .ne__panelContent {
+      padding: 1rem;
+    }
+
+    .ne__listItem {
+      grid-template-columns: auto 1fr;
+      gap: 0.8rem;
+      padding: 0.8rem;
+    }
+
+    .ne__eventCardTitle {
+      font-size: 1rem;
+    }
+
+    .ne__offerCard {
+      padding: 0.8rem;
+    }
+
+    .ne__priceDiscounted {
+      font-size: 1rem;
+    }
+
+    .ne__bonusBox {
+      padding: 0.8rem;
+      gap: 0.6rem;
+    }
+
+    .ne__bonusIcon {
+      font-size: 1.4rem;
+    }
+
+    .ne__bonusText strong {
+      font-size: 0.85rem;
+    }
+
+    .ne__bonusText span {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+
+<style>
+.gl{font-family:'Pretendard',-apple-system,sans-serif;display:grid;gap:1.4rem;padding:.5rem 0;max-width:900px;margin:0 auto;}
+.gl__sec{display:grid;gap:.6rem;}
+.gl__secHead{display:flex;align-items:center;gap:8px;}
+.gl__badge{font-size:.62rem;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.3px;text-transform:uppercase;}
+.gl__badge--pink{background:rgba(255,158,198,.18);color:#993556;border:1px solid rgba(255,158,198,.32);}
+.gl__badge--purple{background:rgba(194,145,232,.18);color:#3C3489;border:1px solid rgba(194,145,232,.32);}
+.gl__badge--blue{background:rgba(55,138,221,.13);color:#0C447C;border:1px solid rgba(55,138,221,.25);}
+.gl__badge--gray{background:rgba(136,135,128,.12);color:#444441;border:1px solid rgba(136,135,128,.22);}
+
+.gl__grid--3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;}
+.gl__row3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;}
+.gl__row2{display:grid;grid-template-columns:repeat(2,1fr);gap:.55rem;}
+.gl__wrap5{display:grid;gap:.55rem;}
+.gl__wrap4{display:grid;gap:.55rem;}
+.gl__body-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:.55rem;}
+
+.gl__card{
+  border:1.5px solid rgba(255,182,217,.5);
+  border-radius:10px;
+  background:rgba(255,248,252,.75);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:border-color .18s,transform .18s;
+}
+.gl__card:hover{border-color:#FF9EC6;transform:translateY(-2px);}
+
+.gl__slot{
+  background:rgba(255,240,250,.5);
+  border-bottom:1px solid rgba(255,182,217,.28);
+  display:flex;align-items:center;justify-content:center;flex:1;
+}
+.gl__slot--sq{aspect-ratio:1/1;}
+.gl__slot--body-main{aspect-ratio:4/3;}
+
+.gl__slotInner{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.gl__slotIc{font-size:18px;color:rgba(255,158,198,.45);}
+.gl__slotTxt{font-size:.58rem;color:rgba(255,158,198,.6);letter-spacing:.1px;}
+
+/* 푸터: 더 컴팩트하게 */
+.gl__foot{padding:5px 9px 7px;background:rgba(255,255,255,.85);}
+.gl__name{font-size:.7rem;font-weight:600;color:#333;margin:0;}
+.gl__sub{font-size:.6rem;color:#aaa;margin:0;}
+.gl__tag{display:inline-block;font-size:.54rem;font-weight:700;padding:1px 5px;border-radius:4px;margin-bottom:2px;}
+.gl__tag--pink{background:rgba(255,158,198,.18);color:#993556;}
+.gl__tag--purple{background:rgba(194,145,232,.18);color:#3C3489;}
+.gl__tag--blue{background:rgba(55,138,221,.12);color:#0C447C;}
+.gl__tag--gray{background:rgba(136,135,128,.12);color:#444441;}
+
+@media(max-width:600px){
+  .gl__grid--3,.gl__row3{grid-template-columns:repeat(2,1fr);}
+  .gl__body-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+
+<div class="gl">
+
+  <!-- 얼굴 리깅 -->
+  <div class="gl__sec">
+    <div class="gl__secHead"><span class="gl__badge gl__badge--pink">얼굴 리깅</span></div>
+    <div class="gl__grid--3">
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">X 각도</p><p class="gl__sub">좌우 고개 돌림</p></div>
+      </div>
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">Y 각도</p><p class="gl__sub">상하 고개 움직임</p></div>
+      </div>
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 표현</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 몸 리깅 -->
+  <div class="gl__sec">
+    <div class="gl__secHead"><span class="gl__badge gl__badge--purple">몸 리깅</span></div>
+    <div class="gl__body-grid">
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">X 각도</p><p class="gl__sub">몸 좌우 움직임</p></div>
+      </div>
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">Y 각도</p><p class="gl__sub">몸 상하 움직임</p></div>
+      </div>
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--body-main"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 · 물리 · 의상</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 가치코이 / VBridger -->
+  <div class="gl__sec">
+    <div class="gl__secHead"><span class="gl__badge gl__badge--blue">가치코이 / VBridger</span></div>
+    <div class="gl__grid--3">
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--blue">가치코이</div><p class="gl__name">페이셜</p><p class="gl__sub">캠 거리 인식 입체 연출</p></div>
+      </div>
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--blue">가치코이</div><p class="gl__name">단축키</p><p class="gl__sub">숙이기 단축키 연출</p></div>
+      </div>
+      <div class="gl__card">
+        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__foot"><div class="gl__tag gl__tag--blue">VBridger</div><p class="gl__name">립싱크 보정</p><p class="gl__sub">발음별 입 모양 정밀 구성</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 간단 표정 -->
+  <div class="gl__sec">
+    <div class="gl__secHead"><span class="gl__badge gl__badge--pink">간단 표정</span></div>
+    <div class="gl__wrap5">
+      <div class="gl__row3">
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #3</p></div></div>
+      </div>
+      <div class="gl__row2">
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #5</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 애니메이션 표정 -->
+  <div class="gl__sec">
+    <div class="gl__secHead"><span class="gl__badge gl__badge--purple">애니메이션 표정</span></div>
+    <div class="gl__wrap4">
+      <div class="gl__row2">
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #2</p></div></div>
+      </div>
+      <div class="gl__row2">
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #3</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #4</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 기타 리깅 -->
+  <div class="gl__sec">
+    <div class="gl__secHead"><span class="gl__badge gl__badge--gray">기타 리깅</span></div>
+    <div class="gl__wrap5">
+      <div class="gl__row3">
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #3</p></div></div>
+      </div>
+      <div class="gl__row2">
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">준비 중</span></div></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #5</p></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ===================== LIVE2D MENU (WHITE PINK) ===================== -->
+<section class="ldm" id="menu" aria-label="Live2D 리깅 메뉴">
+  <div class="ldm__container">
+    <!-- Header -->
+    <div class="ldm__header">
+      <div class="ldm__headerTop">
+        <div class="ldm__headerTitle">
+          <h2 class="ldm__title">Live2D 리깅 메뉴</h2>
+          <p class="ldm__subtitle">자세한 내용은 펼쳐서 확인하세요</p>
+        </div>
+        <div class="ldm__headerActions">
+          <button class="ldm__btn" type="button" onclick="document.querySelectorAll('#menu details').forEach(d=>d.open=true)">
+            전체 펼치기
+          </button>
+          <button class="ldm__btn" type="button" onclick="document.querySelectorAll('#menu details').forEach(d=>d.open=false)">
+            전체 접기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu List -->
+    <div class="ldm__list">
+
+      <!-- 1. LD 리깅 -->
+      <details class="ldm__accordion" open>
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">✦</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">LD 리깅</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--blue">전신 ₩900,000</span>
+                <span class="ldm__chip ldm__chip--purple">반신 ₩750,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩750,000 ~ ₩900,000</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">LD 전신 리깅</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩900,000</span>
+              </div>
+              <ul class="ldm__itemList">
+                <li>머리 XYZ / 몸 XYZ</li>
+                <li>눈동자 물리 · 놀란 눈 · 눈썹 움직임</li>
+                <li>입 모양 12점 이상 정교 제작</li>
+                <li>머리카락 흔들림 물리 & 전신 의상 물리</li>
+                <li>허리 튕기기 구성</li>
+              </ul>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">LD 반신 리깅</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩750,000</span>
+              </div>
+              <ul class="ldm__itemList">
+                <li>머리 XYZ / 몸 XYZ</li>
+                <li>눈동자 물리 · 놀란 눈 · 눈썹 움직임</li>
+                <li>입 모양 12점 이상 정교 제작</li>
+                <li>머리카락 흔들림 물리 & 상체 의상 물리</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 2. 표정 · 페이셜 옵션 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">✧</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">표정 · 페이셜 옵션</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--purple">간단 ₩10,000</span>
+                <span class="ldm__chip ldm__chip--pink">애니 ₩20,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩10,000 ~ ₩50,000</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">간단 토글 표정 (1종)</h4>
+                <span class="ldm__itemPrice">₩10,000</span>
+              </div>
+              <p class="ldm__itemDesc">홍조, 정색 등 고정 표정 ON/OFF 구성</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">애니메이션 토글 표정 (1종)</h4>
+                <span class="ldm__itemPrice">₩20,000</span>
+              </div>
+              <p class="ldm__itemDesc">눈물, 반짝임, 어질어질 눈 등 애니메이션 포함 특수 표정 구성</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">입 좌우 움직임</h4>
+                <span class="ldm__itemPrice">₩30,000</span>
+              </div>
+              <p class="ldm__itemDesc">입의 좌우 움직임을 추가하여 더 자연스러운 입 모양 연출</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">볼빵빵</h4>
+                <span class="ldm__itemPrice">₩30,000</span>
+              </div>
+              <p class="ldm__itemDesc">볼을 부풀리는 귀여운 표정 토글 구성</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">혀내밀기</h4>
+                <span class="ldm__itemPrice">₩50,000</span>
+              </div>
+              <p class="ldm__itemDesc">혀를 내미는 표정/움직임 구성</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3. VBridger -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">◌</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">VBridger</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--purple">립싱크 ₩100,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩100,000</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">VBridger 연동</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩100,000</span>
+              </div>
+              <p class="ldm__itemDesc">발음별 입 모양 보정 및 더 섬세한 입 움직임 구성</p>
+              <div class="ldm__callout">
+                <span class="ldm__calloutTag">필수 프로그램</span>
+                <span class="ldm__calloutText">VBridger 프로그램 실행 필수 (미실행 시 입 모양 움직임 제한)</span>
+              </div>
+              <p class="ldm__note">※ VBridger는 별도 유료 프로그램입니다</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 4. 손 옵션 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">✋</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">손 옵션</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--purple">1종 ₩30,000~</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩30,000 ~</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">손 옵션 (1종)</h4>
+                <span class="ldm__itemPrice">₩30,000~</span>
+              </div>
+              <p class="ldm__itemDesc">게임패드, 마이크 등 특정 소품을 든 손 동작 구현</p>
+              <div class="ldm__difficultyGrid">
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--easy">난이도: 낮음</span>
+                  <p class="ldm__difficultyPrice">₩30,000</p>
+                  <p class="ldm__difficultyDesc">마이크 같은 간단한 소품을 든 손 ON/OFF</p>
+                </div>
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--medium">난이도: 중간</span>
+                  <p class="ldm__difficultyPrice">₩50,000</p>
+                  <p class="ldm__difficultyDesc">게임패드를 쥔 손 같은 약간의 손가락 포즈</p>
+                </div>
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--hard">난이도: 높음</span>
+                  <p class="ldm__difficultyPrice">₩70,000~</p>
+                  <p class="ldm__difficultyDesc">타블렛 펜을 들고 그리는 등 복잡한 손 애니메이션</p>
+                </div>
+              </div>
+              <p class="ldm__note">※ 난이도는 손 모양의 복잡도와 움직임 정도에 따라 결정됩니다</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 5. 동물 귀 · 꼬리 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">⌁</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">동물 귀 · 꼬리</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--pink">귀 ₩50,000</span>
+                <span class="ldm__chip ldm__chip--purple">꼬리 ₩30,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩30,000 ~ ₩50,000</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">동물 귀</h4>
+                <span class="ldm__itemPrice">₩50,000</span>
+              </div>
+              <p class="ldm__itemDesc">동물 귀 파츠의 자연스러운 흔들림 및 물리 구성</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">꼬리</h4>
+                <span class="ldm__itemPrice">₩30,000</span>
+              </div>
+              <p class="ldm__itemDesc">꼬리 파츠의 생동감 있는 흔들림 및 물리 구성</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 6. 기타 옵션 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">⚙</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">기타 옵션</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--purple">ON/OFF ₩10,000</span>
+                <span class="ldm__chip ldm__chip--pink">스텝 ₩30,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩10,000 ~ ₩100,000</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">ON / OFF 옵션 추가 (1종)</h4>
+                <span class="ldm__itemPrice">₩10,000</span>
+              </div>
+              <p class="ldm__itemDesc">머리띠, 의상, 소품 등 개별 파츠의 ON/OFF 토글 구성</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">간단 소품 추가</h4>
+                <span class="ldm__itemPrice">₩30,000</span>
+              </div>
+              <p class="ldm__itemDesc">안대처럼 구조가 단순한 소품 파츠 추가 구성</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">복잡 소품 추가</h4>
+                <span class="ldm__itemPrice">₩60,000</span>
+              </div>
+              <p class="ldm__itemDesc">헤드셋처럼 파츠 구조가 복잡하거나 움직임 구성이 필요한 소품 추가 구성</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">스텝 추가</h4>
+                <span class="ldm__itemPrice">₩30,000</span>
+              </div>
+              <p class="ldm__itemDesc">몸의 기울기에 발 위치를 연동한 스텝 구성</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 7. 가치코이 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">♡</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">가치코이</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--pink">단축키 ₩100,000</span>
+                <span class="ldm__chip ldm__chip--purple">페이셜 ₩200,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩100,000 ~ ₩200,000</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">가치코이 – 단축키</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩100,000</span>
+              </div>
+              <p class="ldm__itemDesc">단축키 활성화 시 화면 근처로 다가오는 듯한 숙이기 연출 구성</p>
+              <p class="ldm__note">※ 신의상에도 가치코이 단축키 적용 시 의상 1종당 ₩50,000 추가</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">가치코이 – 페이셜</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩200,000</span>
+              </div>
+              <p class="ldm__itemDesc">캠 거리 인식 기반 전·후 이동 입체 연출</p>
+              <p class="ldm__note">※ 신의상에도 가치코이 페이셜 적용 시 의상 1종당 ₩100,000 추가</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 8. 신규 헤어 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">💇</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">신규 헤어</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--purple">1종 ₩150,000~</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩150,000 ~</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">신규 헤어 추가 (1종)</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩150,000~</span>
+              </div>
+              <p class="ldm__itemDesc">신규 헤어 추가 및 흔들림 물리 구성</p>
+              <div class="ldm__difficultyGrid">
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--easy">난이도: 낮음</span>
+                  <p class="ldm__difficultyPrice">₩150,000</p>
+                  <p class="ldm__difficultyDesc">짧은 머리처럼 매우 간단한 파츠 구조</p>
+                </div>
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--medium">난이도: 중간</span>
+                  <p class="ldm__difficultyPrice">₩200,000</p>
+                  <p class="ldm__difficultyDesc">중간 정도의 파츠 수와 물리 구성 (일반적인 긴 머리)</p>
+                </div>
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--hard">난이도: 높음</span>
+                  <p class="ldm__difficultyPrice">₩280,000~</p>
+                  <p class="ldm__difficultyDesc">잔머리 많은 머리, 복잡한 헤어스타일</p>
+                </div>
+              </div>
+              <p class="ldm__note">※ 난이도는 파츠 수와 물리 표현 복잡도에 따라 결정되며, 추가금이 발생할 수 있습니다</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 9. 신규 의상 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">👗</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">신규 의상</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--pink">1종 ₩200,000~</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩200,000 ~</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">신규 의상 추가 (1종)</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩200,000~</span>
+              </div>
+              <p class="ldm__itemDesc">신규 의상 리깅 및 의상 물리 구성</p>
+              <div class="ldm__difficultyGrid">
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--easy">난이도: 낮음</span>
+                  <p class="ldm__difficultyPrice">₩200,000</p>
+                  <p class="ldm__difficultyDesc">박스티처럼 매우 간단한 의상</p>
+                </div>
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--medium">난이도: 중간</span>
+                  <p class="ldm__difficultyPrice">₩300,000</p>
+                  <p class="ldm__difficultyDesc">상의와 하의가 모두 있고 무난한 구조</p>
+                </div>
+                <div class="ldm__difficultyItem">
+                  <span class="ldm__difficultyTag ldm__difficultyTag--hard">난이도: 높음</span>
+                  <p class="ldm__difficultyPrice">₩400,000~</p>
+                  <p class="ldm__difficultyDesc">복잡한 의상 구조와 많은 디테일</p>
+                </div>
+              </div>
+              <p class="ldm__note">※ 난이도는 의상 구조, 파츠 수, 물리 표현에 따라 결정되며, 추가금이 발생할 수 있습니다</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 10. 기타 서비스 -->
+      <details class="ldm__accordion">
+        <summary class="ldm__summary">
+          <div class="ldm__summaryLeft">
+            <span class="ldm__icon">⚑</span>
+            <div class="ldm__summaryText">
+              <h3 class="ldm__summaryTitle">기타 서비스</h3>
+              <div class="ldm__summaryChips">
+                <span class="ldm__chip ldm__chip--purple">60일 비공개 ₩100,000</span>
+                <span class="ldm__chip ldm__chip--pink">영구 비공개 ₩500,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="ldm__summaryRight">
+            <span class="ldm__priceRange">₩0 ~ ₩500,000</span>
+            <span class="ldm__chevron"></span>
+          </div>
+        </summary>
+
+        <div class="ldm__content">
+          <div class="ldm__items">
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">완성 후 60일 이상 비공개</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩100,000</span>
+              </div>
+              <p class="ldm__itemDesc">작업 완료 후 데뷔까지 60일 이상 보관/비공개 유지가 필요한 경우 추가됩니다</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">작업 영구 비공개</h4>
+                <span class="ldm__itemPrice ldm__itemPrice--high">₩500,000</span>
+              </div>
+              <p class="ldm__itemDesc">포트폴리오 및 샘플 공개 없이 작업물 정보 노출을 제한</p>
+            </div>
+
+            <div class="ldm__item">
+              <div class="ldm__itemHeader">
+                <h4 class="ldm__itemTitle">설치 도움</h4>
+                <span class="ldm__itemPrice">₩0</span>
+              </div>
+              <p class="ldm__itemDesc">VTube Studio 초기 세팅 및 적용 도움</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== ROOT COLOR VARIABLES ===== */
+  :root {
+    --ldm-white: #ffffff;
+    --ldm-bg-light: #fff8fc;
+    --ldm-bg-pale: #fff0f8;
+    --ldm-text-dark: #333333;
+    --ldm-text-gray: #666666;
+    --ldm-text-light: #999999;
+    
+    --ldm-pink: #FF9EC6;
+    --ldm-pink-light: #FFB6D9;
+    --ldm-purple: #C291E8;
+    --ldm-purple-light: #E8D4FF;
+    --ldm-blue: #9EC9FF;
+    --ldm-blue-light: #D4E8FF;
+  }
+
+  /* ===== SECTION ===== */
+  .ldm {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .ldm__container {
+    position: relative;
+  }
+
+  /* ===== HEADER ===== */
+  .ldm__header {
+    margin-bottom: 2rem;
+  }
+
+  .ldm__headerTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ldm__headerTitle {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ldm__title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #222;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.5px;
+  }
+
+  .ldm__subtitle {
+    font-size: 1rem;
+    color: #999;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .ldm__headerActions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .ldm__btn {
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    background: rgba(255, 255, 255, 0.6);
+    color: #333;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ldm__btn:hover {
+    background: linear-gradient(135deg, rgba(255, 182, 217, 0.2) 0%, rgba(255, 200, 230, 0.15) 100%);
+    border-color: rgba(255, 182, 217, 0.5);
+  }
+
+  /* ===== LIST ===== */
+  .ldm__list {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  /* ===== ACCORDION ===== */
+  .ldm__accordion {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(255, 182, 217, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .ldm__accordion:hover {
+    box-shadow: 0 12px 40px rgba(255, 182, 217, 0.15);
+  }
+
+  .ldm__accordion > summary {
+    list-style: none;
+  }
+
+  .ldm__accordion > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* ===== SUMMARY ===== */
+  .ldm__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    padding: 1.2rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ldm__accordion:hover .ldm__summary {
+    background: rgba(255, 240, 250, 0.4);
+  }
+
+  .ldm__summaryLeft {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ldm__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255, 158, 198, 0.15) 0%, rgba(194, 145, 232, 0.1) 100%);
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .ldm__summaryText {
+    display: grid;
+    gap: 0.6rem;
+    min-width: 0;
+  }
+
+  .ldm__summaryTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+
+  .ldm__summaryChips {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .ldm__chip {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  .ldm__chip--blue {
+    background: rgba(158, 201, 255, 0.25);
+    color: #0066FF;
+    border: 1px solid rgba(158, 201, 255, 0.3);
+  }
+
+  .ldm__chip--purple {
+    background: rgba(194, 145, 232, 0.25);
+    color: #7B3FF2;
+    border: 1px solid rgba(194, 145, 232, 0.3);
+  }
+
+  .ldm__chip--pink {
+    background: rgba(255, 158, 198, 0.25);
+    color: #FF4B8F;
+    border: 1px solid rgba(255, 158, 198, 0.3);
+  }
+
+  .ldm__summaryRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .ldm__priceRange {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #FF4B8F;
+    white-space: nowrap;
+    background: linear-gradient(135deg, rgba(255, 158, 198, 0.1) 0%, rgba(255, 200, 230, 0.08) 100%);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 158, 198, 0.3);
+  }
+
+  .ldm__chevron {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .ldm__chevron::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #999;
+    border-bottom: 2px solid #999;
+    transform: rotate(45deg);
+  }
+
+  .ldm__accordion[open] .ldm__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ===== CONTENT ===== */
+  .ldm__content {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 182, 217, 0.2);
+    background: rgba(255, 240, 250, 0.3);
+  }
+
+  .ldm__items {
+    display: grid;
+    gap: 1rem;
+  }
+
+  /* ===== ITEM ===== */
+  .ldm__item {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 182, 217, 0.25);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .ldm__itemHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .ldm__itemTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+
+  .ldm__itemPrice {
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(158, 201, 255, 0.2) 0%, rgba(194, 145, 232, 0.15) 100%);
+    color: #666;
+    border: 1px solid rgba(255, 182, 217, 0.25);
+    white-space: nowrap;
+  }
+
+  .ldm__itemPrice--high {
+    background: linear-gradient(135deg, rgba(255, 158, 198, 0.25) 0%, rgba(194, 145, 232, 0.2) 100%);
+    color: #FF4B8F;
+  }
+
+  .ldm__itemDesc {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ldm__itemList {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .ldm__itemList li {
+    margin-bottom: 0.4rem;
+  }
+
+  /* ===== DIFFICULTY GRID ===== */
+  .ldm__difficultyGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .ldm__difficultyItem {
+    background: rgba(255, 240, 250, 0.5);
+    border: 1px solid rgba(255, 182, 217, 0.2);
+    border-radius: 10px;
+    padding: 1rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .ldm__difficultyTag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  .ldm__difficultyTag--easy {
+    background: rgba(76, 175, 80, 0.25);
+    color: #2E7D32;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+  }
+
+  .ldm__difficultyTag--medium {
+    background: rgba(255, 193, 7, 0.25);
+    color: #F57F17;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+  }
+
+  .ldm__difficultyTag--hard {
+    background: rgba(244, 67, 54, 0.25);
+    color: #C62828;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+  }
+
+  .ldm__difficultyPrice {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #FF4B8F;
+    margin: 0.2rem 0 0;
+  }
+
+  .ldm__difficultyDesc {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  /* ===== CALLOUT ===== */
+  .ldm__callout {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255, 158, 198, 0.15) 0%, rgba(194, 145, 232, 0.1) 100%);
+    border: 1px solid rgba(255, 182, 217, 0.3);
+    border-radius: 10px;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .ldm__calloutTag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(255, 158, 198, 0.3);
+    color: #FF4B8F;
+    border: 1px solid rgba(255, 158, 198, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .ldm__calloutText {
+    font-size: 0.85rem;
+    color: #333;
+    font-weight: 600;
+  }
+
+  /* ===== NOTE ===== */
+  .ldm__note {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .ldm__headerTop {
+      flex-direction: column;
+    }
+
+    .ldm__headerActions {
+      justify-content: flex-start;
+    }
+
+    .ldm__difficultyGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ldm {
+      padding: 1.5rem 1rem;
+    }
+
+    .ldm__title {
+      font-size: 1.8rem;
+    }
+
+    .ldm__summary {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .ldm__summaryRight {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .ldm__itemHeader {
+      flex-wrap: wrap;
+    }
+
+    .ldm__content {
+      padding: 1.2rem;
+    }
+
+    .ldm__item {
+      padding: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ldm {
+      padding: 1rem 0.75rem;
+    }
+
+    .ldm__title {
+      font-size: 1.4rem;
+    }
+
+    .ldm__headerActions {
+      width: 100%;
+      gap: 0.6rem;
+    }
+
+    .ldm__btn {
+      flex: 1;
+      padding: 0.7rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .ldm__summary {
+      padding: 1rem;
+    }
+
+    .ldm__icon {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+    }
+
+    .ldm__summaryTitle {
+      font-size: 1rem;
+    }
+
+    .ldm__chip {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+    }
+
+    .ldm__priceRange {
+      font-size: 0.8rem;
+    }
+
+    .ldm__itemTitle {
+      font-size: 0.95rem;
+    }
+
+    .ldm__itemPrice {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .ldm__difficultyGrid {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    .ldm__difficultyItem {
+      padding: 0.8rem;
+    }
+  }
+</style>
+
+<script>
+  /* iOS 자동재생 보조 */
+  (function(){
+    document.querySelectorAll('#menu details').forEach(detail => {
+      detail.addEventListener('toggle', function() {
+        if(this.open) {
+          this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    });
+  })();
+</script>
+<!-- ===================== /LIVE2D MENU (WHITE PINK) ===================== -->
+
+<!-- 작업 진행 안내-->
+
+<style>
+.proc{
+  max-width:1280px;margin:0 auto;padding:2rem 1rem;
+  font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:#4a4a4a;
+}
+
+.proc__shell{
+  background:linear-gradient(135deg,rgba(255,248,252,.8) 0%,rgba(255,235,248,.6) 100%);
+  padding:1.5rem;
+  border-radius:20px;
+  border:1px solid rgba(255,182,217,.2);
+  box-shadow:0 20px 60px rgba(255,182,217,.08),inset 0 0 60px rgba(255,182,217,.05);
+  position:relative;
+  overflow:hidden;
+}
+.proc__shell::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 10% 50%,rgba(255,182,217,.04),transparent 50%),
+    radial-gradient(circle at 90% 50%,rgba(255,182,217,.03),transparent 50%);
+  z-index:0;
+}
+.proc__shell>*{position:relative;z-index:1;}
+
+/* HEAD */
+.proc__head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;
+}
+.proc__kicker{
+  display:flex;align-items:center;gap:.6rem;
+}
+.proc__bar{
+  width:10px;height:20px;border-radius:4px;
+  background:linear-gradient(180deg,#FF9EC6,#FFB6D9);
+  box-shadow:0 0 20px rgba(255,158,198,.4);
+  animation:pkpulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes pkpulse{
+  0%,100%{box-shadow:0 0 20px rgba(255,158,198,.4);}
+  50%{box-shadow:0 0 40px rgba(255,158,198,.8);}
+}
+.proc__kickerTxt{
+  font-size:.85rem;font-weight:900;letter-spacing:1px;
+  text-transform:uppercase;color:#999;
+}
+.proc__title{
+  font-size:1.5rem;font-weight:900;color:#222;letter-spacing:-.5px;margin:0;
+}
+
+/* GRID */
+.proc__grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+  margin-bottom:1.2rem;
+}
+.proc__card{
+  background:rgba(255,255,255,.6);
+  border:1px solid rgba(255,182,217,.3);
+  border-radius:14px;padding:1rem 1.1rem;
+  display:flex;align-items:center;gap:.85rem;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+.proc__card:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.3) 0%,rgba(255,200,230,.2) 100%);
+  border-color:rgba(255,182,217,.6);
+  transform:translateY(-4px);
+  box-shadow:0 8px 24px rgba(255,182,217,.2);
+}
+.proc__no{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:.82rem;color:#fff;
+  background:linear-gradient(135deg,#FF9EC6,#FFB6D9);
+  box-shadow:0 4px 12px rgba(255,158,198,.3);
+  flex-shrink:0;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.proc__card:hover .proc__no{transform:scale(1.1) rotate(-4deg);}
+.proc__name{font-size:.88rem;font-weight:700;color:#333;}
+.proc__desc{font-size:.72rem;color:#aaa;margin-top:2px;line-height:1.3;}
+
+/* NOTES */
+.proc__notes{display:grid;gap:.7rem;}
+.proc__note{
+  display:flex;align-items:center;gap:.85rem;
+  padding:.85rem 1.1rem;border-radius:12px;
+  background:rgba(255,255,255,.6);
+  border:1px solid rgba(255,182,217,.3);
+  transition:all .3s ease;
+}
+.proc__note:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.3) 0%,rgba(255,200,230,.2) 100%);
+  border-color:rgba(255,182,217,.6);
+  box-shadow:0 8px 24px rgba(255,182,217,.2);
+}
+.proc__ic{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:700;flex-shrink:0;
+  background:rgba(255,255,255,.9);
+  border:1px solid rgba(255,182,217,.35);
+  color:#FF9EC6;
+}
+.proc__note--pink .proc__ic{background:#FF9EC6;color:#fff;border-color:#FF9EC6;}
+.proc__note--purple .proc__ic{background:#C291E8;color:#fff;border-color:#C291E8;}
+.proc__txt{font-size:.83rem;color:#666;line-height:1.5;}
+.proc__txt b{color:#222;font-weight:700;}
+
+@media(max-width:1024px){.proc__grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){
+  .proc__grid{grid-template-columns:1fr;}
+  .proc__shell{padding:1.1rem;}
+  .proc__title{font-size:1.2rem;}
+}
+</style>
+
+<section class="proc" aria-label="작업 진행 안내">
+  <div class="proc__shell">
+
+    <div class="proc__head">
+      <div class="proc__kicker">
+        <span class="proc__bar" aria-hidden="true"></span>
+        <span class="proc__kickerTxt">PROCESS</span>
+      </div>
+      <h2 class="proc__title">작업 진행 안내</h2>
+    </div>
+
+    <div class="proc__grid" aria-label="작업 단계">
+      <div class="proc__card">
+        <div class="proc__no">01</div>
+        <div><div class="proc__name">문의</div><div class="proc__desc">일정/옵션/요청사항 확인</div></div>
+      </div>
+      <div class="proc__card">
+        <div class="proc__no">02</div>
+        <div><div class="proc__name">결제</div><div class="proc__desc">메뉴 확정 후 진행</div></div>
+      </div>
+      <div class="proc__card">
+        <div class="proc__no">03</div>
+        <div><div class="proc__name">예약</div><div class="proc__desc">작업 시작/마감 일정 안내</div></div>
+      </div>
+      <div class="proc__card">
+        <div class="proc__no">04</div>
+        <div><div class="proc__name">파츠 정리</div><div class="proc__desc">PSD 구조/명칭 점검</div></div>
+      </div>
+      <div class="proc__card">
+        <div class="proc__no">05</div>
+        <div><div class="proc__name">얼굴 리깅</div><div class="proc__desc">눈·눈썹·입 기본 세팅</div></div>
+      </div>
+      <div class="proc__card">
+        <div class="proc__no">06</div>
+        <div><div class="proc__name">머리 리깅</div><div class="proc__desc">각도/물리/헤어 세팅</div></div>
+      </div>
+      <div class="proc__card">
+        <div class="proc__no">07</div>
+        <div><div class="proc__name">몸 리깅</div><div class="proc__desc">가동 + 의상/몸 물리</div></div>
+      </div>
+      <div class="proc__card">
+        <div class="proc__no">08</div>
+        <div><div class="proc__name">토글 세팅</div><div class="proc__desc">표정/옵션 ON·OFF 정리</div></div>
+      </div>
+    </div>
+
+    <div class="proc__notes" aria-label="안내 사항">
+      <div class="proc__note proc__note--pink">
+        <div class="proc__ic" aria-hidden="true">✓</div>
+        <span class="proc__txt"><b>리깅 컨펌은 총 3회</b>까지 진행하실 수 있습니다.</span>
+      </div>
+      <div class="proc__note">
+        <div class="proc__ic" aria-hidden="true">🎬</div>
+        <span class="proc__txt">작업 과정은 중간마다 <b>동영상으로 제공</b>드리며, 컨펌은 편하신 시점에 요청해 주시면 됩니다.</span>
+      </div>
+      <div class="proc__note">
+        <div class="proc__ic" aria-hidden="true">🛠</div>
+        <span class="proc__txt">작가의 실수로 발생한 오류는 <b>기간과 관계없이 언제든 수정</b>해드립니다.</span>
+      </div>
+      <div class="proc__note proc__note--purple">
+        <div class="proc__ic" aria-hidden="true">!</div>
+        <span class="proc__txt">작업 기간은 <b>최대 21일</b>이며, 작업 난이도에 따라 더 소요될 수 있습니다.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- 작업 진행 안내 -->
+
+
+<style>
+.col2{
+  max-width:1280px;margin:0 auto;padding:2rem 1rem;
+  font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:#4a4a4a;
+}
+.col2__shell{
+  background:linear-gradient(135deg,rgba(255,248,252,.8) 0%,rgba(255,235,248,.6) 100%);
+  padding:1.5rem;
+  border-radius:20px;
+  border:1px solid rgba(255,182,217,.2);
+  box-shadow:0 20px 60px rgba(255,182,217,.08),inset 0 0 60px rgba(255,182,217,.05);
+  position:relative;overflow:hidden;
+}
+.col2__shell::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 10% 50%,rgba(255,182,217,.04),transparent 50%),
+    radial-gradient(circle at 90% 50%,rgba(255,182,217,.03),transparent 50%);
+  z-index:0;
+}
+.col2__shell>*{position:relative;z-index:1;}
+
+/* HEAD */
+.col2__head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.3rem;flex-wrap:wrap;gap:1rem;
+}
+.col2__kicker{display:flex;align-items:center;gap:.6rem;}
+.col2__bar{
+  width:10px;height:20px;border-radius:4px;
+  background:linear-gradient(180deg,#FF9EC6,#FFB6D9);
+  box-shadow:0 0 20px rgba(255,158,198,.4);
+  animation:c2pulse 2s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes c2pulse{
+  0%,100%{box-shadow:0 0 20px rgba(255,158,198,.4);}
+  50%{box-shadow:0 0 40px rgba(255,158,198,.8);}
+}
+.col2__kickerTxt{font-size:.85rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#999;}
+.col2__title{font-size:1.5rem;font-weight:900;color:#222;letter-spacing:-.5px;margin:0;}
+
+/* NOTICE */
+.col2__notice{
+  display:flex;align-items:center;gap:11px;
+  padding:.9rem 1.1rem;border-radius:12px;
+  border:1px solid rgba(255,182,217,.3);
+  background:rgba(255,255,255,.6);
+  margin-bottom:1.2rem;
+  transition:all .3s ease;
+}
+.col2__notice:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.25) 0%,rgba(255,200,230,.15) 100%);
+  border-color:rgba(255,182,217,.55);
+}
+.col2__noticeIc{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#FF9EC6;color:#fff;font-size:.8rem;font-weight:700;flex-shrink:0;
+}
+.col2__noticeTxt{font-size:.83rem;color:#555;line-height:1.5;}
+.col2__noticeTxt b{color:#222;font-weight:700;}
+
+/* GRID */
+.col2__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;}
+
+/* ITEM */
+.col2__item{display:flex;flex-direction:column;gap:0;}
+
+/* BANNER */
+.col2__banner{
+  position:relative;border-radius:14px 14px 0 0;overflow:hidden;
+  border:1px solid rgba(255,182,217,.35);border-bottom:none;
+  min-height:160px;text-decoration:none;color:#fff;display:block;
+  background:rgba(255,255,255,.72);
+  transition:border-color .2s,transform .22s cubic-bezier(.34,1.56,.64,1);
+}
+.col2__banner--link:hover{border-color:#FF9EC6;transform:translateY(-4px);}
+
+.col2__img{position:absolute;inset:0;background-image:var(--img);background-size:cover;background-position:center;}
+
+/* coming soon */
+.col2__img--soon{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,240,250,.9) 0%,rgba(255,220,240,.7) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+}
+.col2__soonDot{display:flex;gap:5px;}
+.col2__soonDot span{width:6px;height:6px;border-radius:50%;background:rgba(255,158,198,.4);}
+.col2__soonLabel{font-size:.78rem;font-weight:700;color:rgba(255,158,198,.6);letter-spacing:.5px;}
+
+/* OVERLAY */
+.col2__overlay{
+  position:absolute;inset:0;
+  background:rgba(40,10,30,.72);
+  opacity:0;display:flex;flex-direction:column;justify-content:flex-end;
+  gap:6px;padding:1rem;transition:opacity .22s;
+}
+.col2__banner--link:hover .col2__overlay{opacity:1;}
+.col2__oName{font-weight:800;font-size:.9rem;color:#fff;}
+.col2__oPerk{font-size:.76rem;line-height:1.6;color:rgba(255,255,255,.82);}
+.col2__oPerk b{color:#FFB6D9;}
+.col2__oGo{margin-top:2px;font-size:.76rem;font-weight:700;color:#FF9EC6;}
+
+/* INFO BAR */
+.col2__info{
+  padding:.75rem 1rem .85rem;
+  border:1px solid rgba(255,182,217,.35);border-top:none;
+  border-radius:0 0 14px 14px;
+  background:rgba(255,255,255,.65);
+  transition:background .2s,box-shadow .2s;
+}
+.col2__banner--link:hover+.col2__info,
+.col2__item:hover .col2__info{
+  background:linear-gradient(135deg,rgba(255,182,217,.18) 0%,rgba(255,200,230,.12) 100%);
+  box-shadow:0 8px 24px rgba(255,182,217,.18);
+}
+.col2__infoName{font-weight:700;font-size:.85rem;color:#333;margin-bottom:4px;}
+.col2__infoPerk{list-style:none;margin:0;padding:0;display:grid;gap:3px;}
+.col2__infoPerk li{font-size:.78rem;color:#777;display:flex;align-items:baseline;gap:5px;}
+.col2__infoPerk li::before{content:"•";color:#FF9EC6;font-size:.7rem;flex:0 0 auto;}
+.col2__infoPerk b{color:#333;font-weight:700;}
+.col2__infoSoon{font-size:.78rem;color:rgba(255,158,198,.7);font-weight:600;}
+
+@media(max-width:900px){.col2__grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){
+  .col2__grid{grid-template-columns:1fr;}
+  .col2__shell{padding:1.1rem;}
+  .col2__title{font-size:1.2rem;}
+}
+</style>
+
+<section class="col2" aria-label="협업 이벤트 안내">
+  <div class="col2__shell">
+
+    <div class="col2__head">
+      <div class="col2__kicker">
+        <span class="col2__bar" aria-hidden="true"></span>
+        <span class="col2__kickerTxt">COLLAB</span>
+      </div>
+      <h2 class="col2__title">협업 이벤트 안내</h2>
+    </div>
+
+    <div class="col2__notice">
+      <div class="col2__noticeIc" aria-hidden="true">!</div>
+      <p class="col2__noticeTxt">
+        본 이벤트는 <b>일러스트</b>와 <b>리깅</b> 양쪽 결제가 <b>모두 완료된 경우에만</b> 적용됩니다.
+      </p>
+    </div>
+
+    <div class="col2__grid">
+
+      <!-- Cooing -->
+      <div class="col2__item">
+        <a class="col2__banner col2__banner--link"
+           href="https://artmug.kr/index.php?channel=view&uid=53653"
+           target="_blank" rel="noopener"
+           style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17739956820_Re.jpg');">
+          <div class="col2__img"></div>
+          <div class="col2__overlay">
+            <div class="col2__oName">Cooing 작가님</div>
+            <div class="col2__oPerk">일러스트 <b>₩50,000 할인</b><br>리깅 <b>₩50,000 할인 + 표정 3개 무료</b></div>
+            <div class="col2__oGo">작가님 페이지로 이동 →</div>
+          </div>
+        </a>
+        <div class="col2__info">
+          <div class="col2__infoName">Cooing 작가님</div>
+          <ul class="col2__infoPerk">
+            <li>일러스트 <b>₩50,000 할인</b></li>
+            <li>리깅 <b>₩50,000 할인 + 표정 3개 무료</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 쿠리 -->
+      <div class="col2__item">
+        <a class="col2__banner col2__banner--link"
+           href="https://artmug.kr/index.php?channel=view&uid=54330"
+           target="_blank" rel="noopener"
+           style="--img:url('https://artmugfile2.cafe24.com/image/up_img/detail/5/goods_51824/17668233240_Re.jpg');">
+          <div class="col2__img"></div>
+          <div class="col2__overlay">
+            <div class="col2__oName">쿠리 작가님</div>
+            <div class="col2__oPerk">일러스트 <b>₩50,000 할인</b><br>리깅 <b>₩100,000 할인</b></div>
+            <div class="col2__oGo">작가님 페이지로 이동 →</div>
+          </div>
+        </a>
+        <div class="col2__info">
+          <div class="col2__infoName">쿠리 작가님</div>
+          <ul class="col2__infoPerk">
+            <li>일러스트 <b>₩50,000 할인</b></li>
+            <li>리깅 <b>₩100,000 할인</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 피치 -->
+      <div class="col2__item">
+        <a class="col2__banner col2__banner--link"
+           href="https://artmug.kr/index.php?channel=view&uid=51109"
+           target="_blank" rel="noopener"
+           style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17737150290_Re.jpg');">
+          <div class="col2__img"></div>
+          <div class="col2__overlay">
+            <div class="col2__oName">피치 작가님</div>
+            <div class="col2__oPerk">일러스트 <b>₩100,000 할인</b><br>리깅 <b>₩100,000 할인 + 표정 3종 무료</b></div>
+            <div class="col2__oGo">작가님 페이지로 이동 →</div>
+          </div>
+        </a>
+        <div class="col2__info">
+          <div class="col2__infoName">피치 작가님</div>
+          <ul class="col2__infoPerk">
+            <li>일러스트 <b>₩100,000 할인</b></li>
+            <li>리깅 <b>₩100,000 할인 + 표정 3종 무료</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Coming Soon × 3 -->
+      <div class="col2__item">
+        <div class="col2__banner">
+          <div class="col2__img--soon">
+            <div class="col2__soonDot"><span></span><span></span><span></span></div>
+            <div class="col2__soonLabel">COMING SOON</div>
+          </div>
+        </div>
+        <div class="col2__info">
+          <div class="col2__infoName" style="color:#ccc;">Coming Soon</div>
+          <div class="col2__infoSoon">새로운 협업 작가님 추가 예정</div>
+        </div>
+      </div>
+      <div class="col2__item">
+        <div class="col2__banner">
+          <div class="col2__img--soon">
+            <div class="col2__soonDot"><span></span><span></span><span></span></div>
+            <div class="col2__soonLabel">COMING SOON</div>
+          </div>
+        </div>
+        <div class="col2__info">
+          <div class="col2__infoName" style="color:#ccc;">Coming Soon</div>
+          <div class="col2__infoSoon">새로운 협업 작가님 추가 예정</div>
+        </div>
+      </div>
+      <div class="col2__item">
+        <div class="col2__banner">
+          <div class="col2__img--soon">
+            <div class="col2__soonDot"><span></span><span></span><span></span></div>
+            <div class="col2__soonLabel">COMING SOON</div>
+          </div>
+        </div>
+        <div class="col2__info">
+          <div class="col2__infoName" style="color:#ccc;">Coming Soon</div>
+          <div class="col2__infoSoon">새로운 협업 작가님 추가 예정</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<style>
+.sl{
+  max-width:1280px;margin:0 auto;padding:2rem 1rem;
+  font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:#4a4a4a;
+}
+.sl__shell{
+  background:linear-gradient(135deg,rgba(255,248,252,.8) 0%,rgba(255,235,248,.6) 100%);
+  padding:1.5rem;border-radius:20px;
+  border:1px solid rgba(255,182,217,.2);
+  box-shadow:0 20px 60px rgba(255,182,217,.08),inset 0 0 60px rgba(255,182,217,.05);
+  position:relative;overflow:hidden;
+}
+.sl__shell::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 10% 50%,rgba(255,182,217,.04),transparent 50%),
+    radial-gradient(circle at 90% 50%,rgba(255,182,217,.03),transparent 50%);
+  z-index:0;
+}
+.sl__shell>*{position:relative;z-index:1;}
+
+.sl__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.3rem;flex-wrap:wrap;gap:1rem;}
+.sl__kicker{display:flex;align-items:center;gap:.6rem;}
+.sl__bar{
+  width:10px;height:20px;border-radius:4px;
+  background:linear-gradient(180deg,#FF9EC6,#FFB6D9);
+  box-shadow:0 0 20px rgba(255,158,198,.4);
+  animation:slpulse 2s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes slpulse{0%,100%{box-shadow:0 0 20px rgba(255,158,198,.4);}50%{box-shadow:0 0 40px rgba(255,158,198,.8);}}
+.sl__kickerTxt{font-size:.85rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#999;}
+.sl__title{font-size:1.5rem;font-weight:900;color:#222;letter-spacing:-.5px;margin:0;}
+
+.sl__desc{
+  padding:1rem 1.2rem;border-radius:12px;
+  border:1px solid rgba(255,182,217,.3);
+  background:rgba(255,255,255,.6);
+  font-size:.83rem;color:#555;line-height:1.75;
+  margin-bottom:1.1rem;transition:all .3s ease;
+}
+.sl__desc:hover{background:linear-gradient(135deg,rgba(255,182,217,.18),rgba(255,200,230,.1));border-color:rgba(255,182,217,.5);}
+.sl__desc p{margin:0;}
+.sl__desc p+p{margin-top:.6rem;}
+.sl__desc b{color:#222;font-weight:700;}
+
+.sl__legend{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;font-size:.8rem;color:#888;margin-bottom:1rem;}
+.sl__legItem{display:flex;align-items:center;gap:7px;}
+.sl__pip{width:14px;height:14px;border-radius:5px;display:inline-block;flex-shrink:0;}
+.sl__pip--open{background:rgba(255,255,255,.8);border:1.5px solid rgba(255,182,217,.45);}
+.sl__pip--full{background:linear-gradient(135deg,#FF9EC6,#C291E8);border:1.5px solid rgba(255,182,217,.3);}
+.sl__pip--closed{background:rgba(220,220,220,.6);border:1.5px solid rgba(200,200,200,.4);}
+.sl__pip--vacation{background:linear-gradient(135deg,rgba(255,220,100,.5),rgba(255,190,60,.35));border:1.5px solid rgba(255,200,80,.4);}
+
+.sl__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;}
+
+.sl__month{
+  border:1px solid rgba(255,182,217,.28);border-radius:14px;
+  background:rgba(255,255,255,.65);
+  padding:1rem 1.1rem;
+  position:relative;overflow:hidden;
+  transition:border-color .2s,transform .22s cubic-bezier(.34,1.56,.64,1),background .2s,box-shadow .2s;
+}
+.sl__month:not(.sl__month--closed):not(.sl__month--vacation):hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.25),rgba(255,200,230,.15));
+  border-color:rgba(255,182,217,.6);
+  transform:translateY(-4px);
+  box-shadow:0 8px 24px rgba(255,182,217,.2);
+}
+
+/* 마감 */
+.sl__month--closed{opacity:.55;filter:grayscale(.3);cursor:default;}
+.sl__month--closed::after{
+  content:'마감';
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:900;letter-spacing:.5px;
+  color:rgba(120,120,120,.75);
+  background:rgba(255,255,255,.38);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  border-radius:13px;pointer-events:none;z-index:2;
+}
+
+/* 휴가 */
+.sl__month--vacation{opacity:.65;cursor:default;}
+.sl__month--vacation::after{
+  content:'휴가';
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:900;letter-spacing:.5px;
+  color:rgba(180,130,30,.8);
+  background:rgba(255,248,220,.45);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  border-radius:13px;pointer-events:none;z-index:2;
+}
+
+.sl__mHead{display:flex;align-items:baseline;justify-content:space-between;gap:6px;margin-bottom:.75rem;}
+.sl__mName{font-weight:800;font-size:.95rem;color:#222;letter-spacing:-.2px;}
+.sl__mCap{font-size:.72rem;color:#bbb;white-space:nowrap;font-weight:600;}
+
+.sl__cells{display:flex;gap:8px;flex-wrap:wrap;}
+.sl__cell{width:32px;height:32px;border-radius:9px;border:1.5px solid rgba(255,182,217,.35);background:rgba(255,255,255,.7);transition:transform .18s;}
+.sl__cell--open{background:rgba(255,255,255,.7);border-color:rgba(255,182,217,.35);}
+.sl__cell--full{background:linear-gradient(135deg,#FF9EC6,#C291E8);border-color:rgba(255,158,198,.25);}
+.sl__month:not(.sl__month--closed):not(.sl__month--vacation):hover .sl__cell--full{transform:scale(1.08);}
+
+@media(max-width:900px){.sl__grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){
+  .sl__grid{grid-template-columns:1fr;}
+  .sl__shell{padding:1.1rem;}
+  .sl__title{font-size:1.2rem;}
+}
+</style>
+
+<section class="sl" id="slots" aria-label="월별 슬롯 현황">
+  <div class="sl__shell">
+
+    <div class="sl__head">
+      <div class="sl__kicker">
+        <span class="sl__bar" aria-hidden="true"></span>
+        <span class="sl__kickerTxt">SLOTS</span>
+      </div>
+      <h2 class="sl__title">월별 슬롯 현황</h2>
+    </div>
+
+    <div class="sl__desc">
+      <p>매월 최대 <b>2명</b>까지 예약을 받고 있으나, 작업 일정과 난이도에 따라 <b>1명만 진행</b>하는 달도 있습니다.</p>
+      <p>상담 후 <b>결제 완료 순</b>으로 슬롯이 최종 확정됩니다. 예약 월에 슬롯이 확정되더라도, 앞선 작업이 완료된 뒤 순차적으로 착수합니다.</p>
+      <p>작업 시작 전에는 미리 연락드리며, 일정은 진행 상황에 따라 조율될 수 있습니다.</p>
+      <p>리깅 상세 메뉴나 추가 옵션이 확정되지 않았더라도 <b>기본 리깅 결제</b>만으로 우선 슬롯 예약이 가능합니다.</p>
+      <p>아래에 표기되지 않은 월도 사전 예약 및 상담이 가능하니 편하게 문의해 주세요.</p>
+    </div>
+
+    <div class="sl__legend" aria-label="슬롯 범례">
+      <div class="sl__legItem"><span class="sl__pip sl__pip--open"></span><span>예약 가능</span></div>
+      <div class="sl__legItem"><span class="sl__pip sl__pip--full"></span><span>예약 완료</span></div>
+      <div class="sl__legItem"><span class="sl__pip sl__pip--closed"></span><span>마감</span></div>
+      <div class="sl__legItem"><span class="sl__pip sl__pip--vacation"></span><span>휴가</span></div>
+    </div>
+
+    <div class="sl__grid" aria-label="월별 슬롯">
+
+      <!-- 8월: 마감 (월 2명, 2개 꽉 참) -->
+      <div class="sl__month sl__month--closed">
+        <div class="sl__mHead">
+          <div class="sl__mName">8월</div>
+          <div class="sl__mCap">월 2명</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell sl__cell--full"></span>
+          <span class="sl__cell sl__cell--full"></span>
+        </div>
+      </div>
+
+      <!-- 9월: 마감 (월 1명) -->
+      <div class="sl__month sl__month--closed">
+        <div class="sl__mHead">
+          <div class="sl__mName">9월</div>
+          <div class="sl__mCap">월 1명</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell sl__cell--full"></span>
+        </div>
+      </div>
+
+      <!-- 10월: 마감 (월 1명) -->
+      <div class="sl__month sl__month--closed">
+        <div class="sl__mHead">
+          <div class="sl__mName">10월</div>
+          <div class="sl__mCap">월 1명</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell sl__cell--full"></span>
+        </div>
+      </div>
+
+      <!-- 11월: 마감 (월 2명) -->
+      <div class="sl__month sl__month--closed">
+        <div class="sl__mHead">
+          <div class="sl__mName">11월</div>
+          <div class="sl__mCap">월 2명</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell sl__cell--full"></span>
+          <span class="sl__cell sl__cell--full"></span>
+        </div>
+      </div>
+
+      <!-- 12월: 마감 (월 2명) -->
+      <div class="sl__month sl__month--closed">
+        <div class="sl__mHead">
+          <div class="sl__mName">12월</div>
+          <div class="sl__mCap">월 2명</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell sl__cell--full"></span>
+          <span class="sl__cell sl__cell--full"></span>
+        </div>
+      </div>
+
+      <!-- 1월: 마감 (월 2명) -->
+      <div class="sl__month sl__month--closed">
+        <div class="sl__mHead">
+          <div class="sl__mName">1월</div>
+          <div class="sl__mCap">월 2명</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell sl__cell--full"></span>
+          <span class="sl__cell sl__cell--full"></span>
+        </div>
+      </div>
+
+      <!-- 2월: 마감 (월 2명) -->
+      <div class="sl__month sl__month--closed">
+        <div class="sl__mHead">
+          <div class="sl__mName">2월</div>
+          <div class="sl__mCap">월 1명</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell sl__cell--full"></span>
+        </div>
+      </div>
+
+      <!-- 3월: 휴가 -->
+      <div class="sl__month sl__month--vacation">
+        <div class="sl__mHead">
+          <div class="sl__mName">3월</div>
+          <div class="sl__mCap">예약 없음</div>
+        </div>
+        <div class="sl__cells">
+          <span class="sl__cell" style="border-color:rgba(255,200,80,.3);background:rgba(255,248,220,.5);"></span>
+          <span class="sl__cell" style="border-color:rgba(255,200,80,.3);background:rgba(255,248,220,.5);"></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.iq{
+  max-width:1280px;margin:0 auto;padding:2rem 1rem;
+  font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:#4a4a4a;
+}
+.iq__shell{
+  background:linear-gradient(135deg,rgba(255,248,252,.8) 0%,rgba(255,235,248,.6) 100%);
+  padding:1.5rem;border-radius:20px;
+  border:1px solid rgba(255,182,217,.2);
+  box-shadow:0 20px 60px rgba(255,182,217,.08),inset 0 0 60px rgba(255,182,217,.05);
+  position:relative;overflow:hidden;
+}
+.iq__shell::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 10% 50%,rgba(255,182,217,.04),transparent 50%),
+    radial-gradient(circle at 90% 50%,rgba(255,182,217,.03),transparent 50%);
+  z-index:0;
+}
+.iq__shell>*{position:relative;z-index:1;}
+
+/* HEAD */
+.iq__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.3rem;flex-wrap:wrap;gap:1rem;}
+.iq__kicker{display:flex;align-items:center;gap:.6rem;}
+.iq__bar{
+  width:10px;height:20px;border-radius:4px;
+  background:linear-gradient(180deg,#FF9EC6,#FFB6D9);
+  box-shadow:0 0 20px rgba(255,158,198,.4);
+  animation:iqpulse 2s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes iqpulse{0%,100%{box-shadow:0 0 20px rgba(255,158,198,.4);}50%{box-shadow:0 0 40px rgba(255,158,198,.8);}}
+.iq__kickerTxt{font-size:.85rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#999;}
+.iq__title{font-size:1.5rem;font-weight:900;color:#222;letter-spacing:-.5px;margin:0;}
+
+/* SUB */
+.iq__sub{
+  font-size:.83rem;color:#555;line-height:1.6;
+  padding:.9rem 1.1rem;border-radius:12px;
+  border:1px solid rgba(255,182,217,.3);
+  background:rgba(255,255,255,.6);
+  margin-bottom:1.2rem;
+  transition:all .3s ease;
+}
+.iq__sub:hover{background:linear-gradient(135deg,rgba(255,182,217,.18),rgba(255,200,230,.1));border-color:rgba(255,182,217,.5);}
+.iq__sub b{color:#222;font-weight:700;}
+
+/* SECTION LABEL */
+.iq__secLabel{font-size:.75rem;font-weight:900;color:#bbb;letter-spacing:.6px;text-transform:uppercase;margin-bottom:.55rem;}
+.iq__divider{height:1px;background:rgba(255,182,217,.2);margin:.4rem 0;}
+
+/* INFO GRID */
+.iq__infoGrid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;align-items:start;}
+.iq__field{display:flex;flex-direction:column;gap:.38rem;}
+.iq__label{font-size:.78rem;font-weight:700;color:#555;line-height:1;}
+.iq__labelSub{font-size:.7rem;color:#bbb;line-height:1;}
+.iq__hint{font-size:.7rem;color:#bbb;}
+
+.iq__input{
+  width:100%;outline:none;border-radius:10px;padding:.65rem .9rem;
+  background:rgba(255,255,255,.8);color:#333;
+  border:1px solid rgba(255,182,217,.3);
+  font-size:.82rem;font-family:inherit;transition:border-color .15s,box-shadow .15s;height:42px;
+}
+.iq__textarea{
+  width:100%;outline:none;border-radius:10px;padding:.65rem .9rem;
+  background:rgba(255,255,255,.8);color:#333;
+  border:1px solid rgba(255,182,217,.3);
+  font-size:.82rem;font-family:inherit;transition:border-color .15s;min-height:90px;resize:vertical;
+}
+.iq__input:focus,.iq__textarea:focus{border-color:#FF9EC6;box-shadow:0 0 0 3px rgba(255,158,198,.12);}
+
+/* CHIPS */
+.iq__chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.1rem;}
+.iq__chip{
+  display:inline-flex;align-items:center;gap:6px;padding:.5rem .9rem;
+  border-radius:999px;border:1px solid rgba(255,182,217,.3);
+  background:rgba(255,255,255,.7);cursor:pointer;font-size:.78rem;font-weight:700;
+  color:#666;transition:all .2s;
+}
+.iq__chip:has(input:checked){
+  background:linear-gradient(135deg,rgba(255,182,217,.3),rgba(255,200,230,.2));
+  border-color:rgba(255,182,217,.65);color:#FF4B8F;
+  box-shadow:0 4px 12px rgba(255,182,217,.2);
+}
+.iq__chip input{accent-color:#FF9EC6;}
+
+/* MAIN LAYOUT */
+.iq__main{display:grid;grid-template-columns:1.3fr .85fr;gap:1.2rem;align-items:start;}
+.iq__picker{display:grid;gap:1rem;}
+
+/* BASE CARDS */
+.iq__bases{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.iq__baseCard{
+  border:1.5px solid rgba(255,182,217,.3);border-radius:14px;
+  background:rgba(255,255,255,.7);padding:1rem;
+  cursor:pointer;text-align:left;color:#333;
+  display:flex;flex-direction:column;gap:.35rem;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+.iq__baseCard:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.25),rgba(255,200,230,.15));
+  border-color:rgba(255,182,217,.65);transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(255,182,217,.2);
+}
+.iq__baseCard[aria-pressed=true]{
+  border-color:rgba(255,182,217,.75);
+  background:linear-gradient(135deg,rgba(255,158,198,.2),rgba(194,145,232,.1));
+  box-shadow:0 0 0 3px rgba(255,158,198,.15),0 8px 24px rgba(255,158,198,.15);
+}
+.iq__baseName{font-weight:800;font-size:.88rem;color:#222;}
+.iq__baseSub{font-size:.72rem;color:#999;line-height:1.35;}
+.iq__basePrice{font-size:1rem;font-weight:800;color:#FF4B8F;margin-top:auto;padding-top:.3rem;}
+
+/* COLLAB */
+.iq__collabs{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;}
+.iq__collabBtn{
+  border:1.5px solid rgba(255,182,217,.3);border-radius:12px;
+  background:rgba(255,255,255,.7);padding:.8rem;
+  cursor:pointer;color:#333;text-align:left;
+  display:flex;flex-direction:column;gap:.28rem;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);width:100%;
+}
+.iq__collabBtn:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.25),rgba(255,200,230,.15));
+  border-color:rgba(255,182,217,.65);transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(255,182,217,.2);
+}
+.iq__collabBtn[aria-pressed=true]{
+  border-color:rgba(255,182,217,.75);
+  background:linear-gradient(135deg,rgba(255,158,198,.2),rgba(194,145,232,.1));
+  box-shadow:0 0 0 3px rgba(255,158,198,.15);
+}
+.iq__collabName{font-size:.82rem;font-weight:800;color:#222;}
+.iq__collabDesc{font-size:.67rem;color:#999;line-height:1.35;word-break:keep-all;}
+.iq__collabSave{font-size:.67rem;font-weight:700;color:#FF4B8F;word-break:keep-all;line-height:1.4;}
+
+/* ACCORDION */
+.iq__acc{
+  border:1px solid rgba(255,182,217,.28);border-radius:14px;
+  background:rgba(255,255,255,.65);overflow:hidden;
+}
+.iq__accSum{
+  padding:.8rem 1rem;cursor:pointer;list-style:none;
+  font-size:.8rem;font-weight:800;color:#333;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.55);user-select:none;
+  transition:background .18s;
+}
+.iq__accSum:hover{background:rgba(255,245,250,.8);}
+.iq__accSum::-webkit-details-marker{display:none;}
+.iq__accArr{font-size:.7rem;color:#ccc;transition:transform .2s;}
+details[open] .iq__accArr{transform:rotate(180deg);}
+.iq__accBody{padding:.75rem .9rem .9rem;}
+.iq__qtyList{display:grid;gap:.5rem;}
+
+/* QTY ITEM */
+.iq__qtyItem{
+  border-radius:10px;border:1px solid rgba(255,182,217,.2);
+  background:rgba(255,255,255,.65);
+  transition:border-color .18s,background .18s;
+}
+.iq__qtyItem:hover{
+  background:rgba(255,255,255,.9);border-color:rgba(255,182,217,.4);
+}
+.iq__qtyMain{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.65rem .8rem;}
+.iq__qtyName{font-size:.78rem;font-weight:700;color:#333;}
+.iq__qtySub{font-size:.68rem;color:#bbb;margin-top:2px;}
+.iq__qtyRight{display:flex;align-items:center;gap:.6rem;flex-shrink:0;}
+.iq__qtyPrice{font-size:.72rem;font-weight:700;color:#999;padding:3px 8px;border-radius:6px;background:rgba(255,182,217,.12);border:1px solid rgba(255,182,217,.2);white-space:nowrap;}
+.iq__stepper{display:flex;align-items:center;gap:6px;}
+.iq__stepBtn{
+  width:26px;height:26px;border-radius:50%;
+  border:1px solid rgba(255,182,217,.4);
+  background:rgba(255,255,255,.9);color:#FF9EC6;
+  font-size:.9rem;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;line-height:1;
+}
+.iq__stepBtn:hover{background:#FF9EC6;color:#fff;border-color:#FF9EC6;transform:scale(1.1);}
+.iq__stepVal{min-width:20px;text-align:center;font-size:.8rem;font-weight:800;color:#333;}
+
+/* DIFF ITEM */
+.iq__diffItem{
+  border-radius:12px;border:1px solid rgba(255,182,217,.25);
+  background:rgba(255,255,255,.7);overflow:hidden;
+  transition:border-color .18s;
+}
+.iq__diffItem:hover{border-color:rgba(255,182,217,.45);}
+.iq__diffItemHead{padding:.7rem .9rem;display:flex;align-items:center;justify-content:space-between;gap:.6rem;}
+.iq__diffItemName{font-size:.78rem;font-weight:700;color:#333;}
+.iq__diffItemSub{font-size:.67rem;color:#bbb;margin-top:2px;}
+.iq__diffPicker{padding:0 .9rem .75rem;display:grid;gap:.5rem;}
+.iq__diffPickLabel{font-size:.68rem;font-weight:700;color:#bbb;}
+.iq__diffBtns{display:flex;gap:.4rem;}
+.iq__diffBtn{
+  flex:1;padding:.45rem .4rem;border-radius:9px;
+  border:1px solid rgba(255,182,217,.22);background:rgba(255,255,255,.8);
+  cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.18rem;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.iq__diffBtn:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.2),rgba(255,200,230,.12));
+  border-color:rgba(255,182,217,.5);transform:translateY(-2px);
+}
+.iq__diffBtn[aria-pressed=true]{
+  border-color:rgba(255,182,217,.65);
+  background:linear-gradient(135deg,rgba(255,158,198,.18),rgba(194,145,232,.1));
+  box-shadow:0 0 0 2px rgba(255,158,198,.12);
+}
+.iq__diffTag{display:inline-block;font-size:.58rem;font-weight:700;padding:2px 5px;border-radius:4px;}
+.iq__diffTag--easy{background:rgba(76,175,80,.16);color:#2E7D32;border:1px solid rgba(76,175,80,.22);}
+.iq__diffTag--mid{background:rgba(255,193,7,.18);color:#b07800;border:1px solid rgba(255,193,7,.28);}
+.iq__diffTag--hard{background:rgba(244,67,54,.13);color:#C62828;border:1px solid rgba(244,67,54,.18);}
+.iq__diffPrice{font-size:.75rem;font-weight:800;color:#FF4B8F;}
+.iq__diffDesc{font-size:.6rem;color:#aaa;line-height:1.25;text-align:center;}
+.iq__diffAddRow{padding:0 .9rem .75rem;display:flex;align-items:center;justify-content:space-between;gap:.6rem;}
+.iq__diffAddNote{font-size:.68rem;color:#bbb;}
+.iq__diffAddBtn{
+  padding:.42rem .9rem;border-radius:8px;
+  border:1px solid rgba(255,182,217,.4);
+  background:linear-gradient(135deg,rgba(255,158,198,.15),rgba(194,145,232,.09));
+  color:#FF4B8F;font-size:.75rem;font-weight:800;cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.iq__diffAddBtn:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.35),rgba(255,200,230,.2));
+  transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,182,217,.2);
+}
+
+/* TOGGLE */
+.iq__toggleGrid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+.iq__toggle{
+  display:flex;align-items:flex-start;gap:.55rem;padding:.6rem .75rem;border-radius:10px;
+  border:1px solid rgba(255,182,217,.2);background:rgba(255,255,255,.65);
+  cursor:pointer;font-size:.75rem;color:#555;line-height:1.4;
+  transition:all .2s;
+}
+.iq__toggle:hover{
+  background:rgba(255,255,255,.9);border-color:rgba(255,182,217,.4);
+}
+.iq__toggle:has(input:checked){
+  border-color:rgba(255,182,217,.55);
+  background:linear-gradient(135deg,rgba(255,158,198,.12),rgba(194,145,232,.07));
+}
+.iq__toggle input{accent-color:#FF9EC6;margin-top:1px;flex-shrink:0;}
+.iq__togglePriceTag{display:inline-block;margin-left:3px;font-size:.67rem;font-weight:700;color:#FF4B8F;padding:1px 5px;border-radius:4px;background:rgba(255,158,198,.15);border:1px solid rgba(255,158,198,.25);}
+
+/* RECEIPT */
+.iq__receipt{
+  position:sticky;top:12px;
+  border:1px solid rgba(255,182,217,.3);border-radius:16px;
+  background:rgba(255,255,255,.8);overflow:hidden;
+  box-shadow:0 8px 32px rgba(255,182,217,.1);
+}
+.iq__receiptHead{
+  padding:.9rem 1.1rem;border-bottom:1px solid rgba(255,182,217,.2);
+  background:rgba(255,245,250,.7);
+}
+.iq__receiptTitle{font-size:.85rem;font-weight:800;color:#222;}
+.iq__receiptSub{font-size:.7rem;color:#bbb;margin-top:2px;}
+.iq__receiptBody{padding:.7rem .9rem;min-height:80px;}
+.iq__recLine{
+  display:flex;align-items:center;gap:.4rem;padding:.38rem .45rem;border-radius:7px;
+  font-size:.74rem;border:1px solid transparent;margin-bottom:.25rem;transition:all .15s;
+}
+.iq__recLine:hover{background:rgba(255,182,217,.1);border-color:rgba(255,182,217,.2);}
+.iq__recLineName{color:#555;flex:1;min-width:0;line-height:1.3;}
+.iq__recLinePrice{font-weight:700;color:#333;white-space:nowrap;flex-shrink:0;}
+.iq__recLinePrice--neg{color:#C291E8;}
+.iq__recDel{
+  width:18px;height:18px;border-radius:50%;
+  border:1px solid rgba(255,182,217,.35);background:rgba(255,255,255,.9);
+  color:#ddd;font-size:.6rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .15s;line-height:1;padding:0;
+}
+.iq__recDel:hover{background:#FF9EC6;border-color:#FF9EC6;color:#fff;transform:scale(1.1);}
+.iq__recEmpty{font-size:.75rem;color:#ccc;padding:.5rem .55rem;}
+
+.iq__receiptFoot{
+  padding:.85rem 1.1rem;border-top:1px solid rgba(255,182,217,.2);
+  background:linear-gradient(135deg,rgba(255,158,198,.12),rgba(194,145,232,.07));
+  display:flex;justify-content:space-between;align-items:center;gap:.5rem;
+}
+.iq__totalLabel{font-size:.78rem;font-weight:700;color:#666;}
+.iq__totalSub{font-size:.68rem;color:#bbb;margin-top:2px;}
+.iq__totalNum{font-size:1.3rem;font-weight:800;color:#FF4B8F;}
+
+.iq__actions{display:flex;gap:.6rem;padding:.8rem 1rem 0;}
+.iq__btn{
+  flex:1;padding:.65rem;border-radius:10px;
+  font-size:.78rem;font-weight:800;cursor:pointer;border:none;
+  transition:all .2s;font-family:inherit;
+}
+.iq__btn--main{
+  background:linear-gradient(135deg,#FF9EC6,#C291E8);color:#fff;
+  box-shadow:0 4px 16px rgba(255,158,198,.3);
+}
+.iq__btn--main:hover{filter:brightness(1.06);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,158,198,.35);}
+.iq__btn--ghost{
+  background:rgba(255,255,255,.7);color:#999;
+  border:1px solid rgba(255,182,217,.3);
+}
+.iq__btn--ghost:hover{
+  background:linear-gradient(135deg,rgba(255,182,217,.2),rgba(255,200,230,.12));
+  border-color:rgba(255,182,217,.55);color:#FF4B8F;
+}
+
+.iq__outWrap{padding:.8rem 1rem 1rem;}
+.iq__outLabel{font-size:.72rem;font-weight:700;color:#bbb;margin-bottom:.4rem;}
+.iq__out{
+  width:100%;min-height:160px;resize:vertical;outline:none;
+  border-radius:9px;padding:.65rem .8rem;
+  background:rgba(255,255,255,.75);color:#444;
+  border:1px solid rgba(255,182,217,.22);font-size:.72rem;line-height:1.6;font-family:inherit;
+}
+
+.iq__toast{
+  position:fixed;left:50%;bottom:22px;
+  transform:translateX(-50%) translateY(10px);opacity:0;
+  transition:.2s;padding:8px 18px;border-radius:999px;
+  background:linear-gradient(135deg,#FF9EC6,#C291E8);color:#fff;
+  font-size:.8rem;font-weight:700;z-index:9999;pointer-events:none;
+  box-shadow:0 8px 24px rgba(255,158,198,.4);
+}
+.iq__toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media(max-width:900px){
+  .iq__main{grid-template-columns:1fr;}
+  .iq__receipt{position:relative;top:auto;}
+}
+@media(max-width:680px){
+  .iq__infoGrid,.iq__bases{grid-template-columns:1fr;}
+  .iq__collabs{grid-template-columns:1fr;}
+  .iq__toggleGrid{grid-template-columns:1fr;}
+  .iq__diffBtns{flex-direction:column;}
+}
+</style>
+
+<section class="iq" id="inquiry" aria-label="문의 양식">
+<div class="iq__shell">
+  <div class="iq__head">
+    <div class="iq__kicker">
+      <span class="iq__bar" aria-hidden="true"></span>
+      <span class="iq__kickerTxt">INQUIRY</span>
+    </div>
+    <h2 class="iq__title">문의 양식</h2>
+  </div>
+
+  <div class="iq__sub">항목을 선택·작성한 뒤 <b>"문의 내용 복사"</b>를 눌러 그대로 붙여넣어 주세요.</div>
+
+  <!-- 기본 정보 -->
+  <div style="margin-bottom:1rem;">
+    <div class="iq__secLabel">기본 정보</div>
+    <div class="iq__infoGrid">
+      <div class="iq__field">
+        <label class="iq__label" for="iq_slot">예약 희망 일정</label>
+        <input class="iq__input" id="iq_slot" type="text" placeholder="예) 8월 1번째 슬롯">
+        <div class="iq__hint">X월 1 or 2번째 슬롯 형식</div>
+      </div>
+      <div class="iq__field">
+        <label class="iq__label" for="iq_debut">데뷔 예정일</label>
+        <input class="iq__input" id="iq_debut" type="text" placeholder="예) 2026-09-01 / 미정">
+        <div class="iq__hint">&nbsp;</div>
+      </div>
+      <div class="iq__field">
+        <label class="iq__label" for="iq_platform">방송 플랫폼 &amp; 닉네임</label>
+        <input class="iq__input" id="iq_platform" type="text" placeholder="예) 치지직 / 닉네임">
+      </div>
+      <div class="iq__field">
+        <label class="iq__label" for="iq_illust">일러스트 작가</label>
+        <input class="iq__input" id="iq_illust" type="text" placeholder="예) 작가 닉네임">
+      </div>
+      <div class="iq__field">
+        <div class="iq__label">PSD 파일 준비</div>
+        <div class="iq__labelSub">바로 제출 가능하면 "예"</div>
+        <div class="iq__chips">
+          <label class="iq__chip"><input type="radio" name="psd" value="예" checked><span>예</span></label>
+          <label class="iq__chip"><input type="radio" name="psd" value="아니오"><span>아니오</span></label>
+        </div>
+      </div>
+      <div class="iq__field">
+        <div class="iq__label">사용 장치</div>
+        <div class="iq__labelSub">&nbsp;</div>
+        <div class="iq__chips">
+          <label class="iq__chip"><input type="radio" name="device" value="웹캠" checked><span>웹캠</span></label>
+          <label class="iq__chip"><input type="radio" name="device" value="아이폰"><span>아이폰</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="iq__divider"></div>
+
+  <!-- MAIN -->
+  <div class="iq__main" style="margin-top:1rem;">
+    <div class="iq__picker">
+
+      <div>
+        <div class="iq__secLabel">1 · 기본 작업 선택 (필수)</div>
+        <div class="iq__bases">
+          <button class="iq__baseCard" type="button" data-base="LD 전신 리깅" data-price="900000" aria-pressed="false">
+            <div class="iq__baseName">LD 전신 리깅</div>
+            <div class="iq__baseSub">머리/몸 XYZ · 물리 · 입 12점 이상<br>헤어·의상 물리 · 허리 튕기기</div>
+            <div class="iq__basePrice">₩900,000</div>
+          </button>
+          <button class="iq__baseCard" type="button" data-base="LD 반신 리깅" data-price="750000" aria-pressed="false">
+            <div class="iq__baseName">LD 반신 리깅</div>
+            <div class="iq__baseSub">머리/몸 XYZ · 물리 · 입 12점 이상<br>헤어·상체 의상 물리</div>
+            <div class="iq__basePrice">₩750,000</div>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="iq__secLabel">2 · 협업 작가 할인 (선택)</div>
+        <div class="iq__collabs">
+          <button class="iq__collabBtn" type="button" data-collab="Cooing" data-discount="50000" data-benefit="표정 3종 무료" aria-pressed="false">
+            <div class="iq__collabName">Cooing</div>
+            <div class="iq__collabDesc">일러스트 ₩50,000 할인</div>
+            <div class="iq__collabSave">리깅 ₩50,000↓&nbsp;+&nbsp;표정&nbsp;3종</div>
+          </button>
+          <button class="iq__collabBtn" type="button" data-collab="피치" data-discount="100000" data-benefit="표정 3종 무료" aria-pressed="false">
+            <div class="iq__collabName">피치</div>
+            <div class="iq__collabDesc">일러스트 ₩100,000 할인</div>
+            <div class="iq__collabSave">리깅 ₩100,000↓&nbsp;+&nbsp;표정&nbsp;3종</div>
+          </button>
+          <button class="iq__collabBtn" type="button" data-collab="쿠리" data-discount="100000" data-benefit="" aria-pressed="false">
+            <div class="iq__collabName">쿠리</div>
+            <div class="iq__collabDesc">일러스트 ₩50,000 할인</div>
+            <div class="iq__collabSave">리깅 ₩100,000↓</div>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="iq__secLabel">3 · 추가 옵션</div>
+        <details class="iq__acc" open>
+          <summary class="iq__accSum">수량 옵션 <span class="iq__accArr">▼</span></summary>
+          <div class="iq__accBody">
+            <div class="iq__qtyList">
+              <div class="iq__qtyItem" data-key="tf" data-label="간단 토글 표정" data-unit="10000">
+                <div class="iq__qtyMain">
+                  <div><div class="iq__qtyName">간단 토글 표정</div><div class="iq__qtySub">홍조·정색 등 고정 표정 (1종)</div></div>
+                  <div class="iq__qtyRight"><span class="iq__qtyPrice">₩10,000</span><div class="iq__stepper"><button class="iq__stepBtn" data-act="dec">−</button><span class="iq__stepVal">0</span><button class="iq__stepBtn" data-act="inc">+</button></div></div>
+                </div>
+              </div>
+              <div class="iq__qtyItem" data-key="af" data-label="애니메이션 토글 표정" data-unit="20000">
+                <div class="iq__qtyMain">
+                  <div><div class="iq__qtyName">애니메이션 토글 표정</div><div class="iq__qtySub">눈물·반짝·어질 등 루프 포함 (1종)</div></div>
+                  <div class="iq__qtyRight"><span class="iq__qtyPrice">₩20,000</span><div class="iq__stepper"><button class="iq__stepBtn" data-act="dec">−</button><span class="iq__stepVal">0</span><button class="iq__stepBtn" data-act="inc">+</button></div></div>
+                </div>
+              </div>
+              <div class="iq__qtyItem" data-key="oo" data-label="ON/OFF 옵션" data-unit="10000">
+                <div class="iq__qtyMain">
+                  <div><div class="iq__qtyName">ON/OFF 옵션</div><div class="iq__qtySub">파츠 토글 1종</div></div>
+                  <div class="iq__qtyRight"><span class="iq__qtyPrice">₩10,000</span><div class="iq__stepper"><button class="iq__stepBtn" data-act="dec">−</button><span class="iq__stepVal">0</span><button class="iq__stepBtn" data-act="inc">+</button></div></div>
+                </div>
+              </div>
+              <div class="iq__qtyItem" data-key="sp" data-label="간단 소품 추가" data-unit="30000">
+                <div class="iq__qtyMain">
+                  <div><div class="iq__qtyName">간단 소품 추가</div><div class="iq__qtySub">안대 등 단순 소품 (1종)</div></div>
+                  <div class="iq__qtyRight"><span class="iq__qtyPrice">₩30,000</span><div class="iq__stepper"><button class="iq__stepBtn" data-act="dec">−</button><span class="iq__stepVal">0</span><button class="iq__stepBtn" data-act="inc">+</button></div></div>
+                </div>
+              </div>
+              <div class="iq__qtyItem" data-key="cp" data-label="복잡 소품 추가" data-unit="60000">
+                <div class="iq__qtyMain">
+                  <div><div class="iq__qtyName">복잡 소품 추가</div><div class="iq__qtySub">헤드셋 등 복잡 소품 (1종)</div></div>
+                  <div class="iq__qtyRight"><span class="iq__qtyPrice">₩60,000</span><div class="iq__stepper"><button class="iq__stepBtn" data-act="dec">−</button><span class="iq__stepVal">0</span><button class="iq__stepBtn" data-act="inc">+</button></div></div>
+                </div>
+              </div>
+              <div class="iq__diffItem">
+                <div class="iq__diffItemHead"><div><div class="iq__diffItemName">손 옵션</div><div class="iq__diffItemSub">난이도 선택 후 추가 → 여러 종류 등록 가능</div></div></div>
+                <div class="iq__diffPicker"><div class="iq__diffPickLabel">난이도 선택</div>
+                  <div class="iq__diffBtns">
+                    <button class="iq__diffBtn" type="button" data-group="ho" data-label="손 옵션 (낮음)" data-unit="30000" aria-pressed="true"><span class="iq__diffTag iq__diffTag--easy">낮음</span><span class="iq__diffPrice">₩30,000</span><span class="iq__diffDesc">마이크 등<br>간단 소품</span></button>
+                    <button class="iq__diffBtn" type="button" data-group="ho" data-label="손 옵션 (중간)" data-unit="50000" aria-pressed="false"><span class="iq__diffTag iq__diffTag--mid">중간</span><span class="iq__diffPrice">₩50,000</span><span class="iq__diffDesc">게임패드 등<br>손가락 포즈</span></button>
+                    <button class="iq__diffBtn" type="button" data-group="ho" data-label="손 옵션 (높음)" data-unit="70000" aria-pressed="false"><span class="iq__diffTag iq__diffTag--hard">높음</span><span class="iq__diffPrice">₩70,000~</span><span class="iq__diffDesc">타블렛 등<br>복잡 애니</span></button>
+                  </div>
+                </div>
+                <div class="iq__diffAddRow"><span class="iq__diffAddNote">선택한 난이도로 1종 추가</span><button class="iq__diffAddBtn" type="button" data-group="ho">+ 추가</button></div>
+              </div>
+              <div class="iq__diffItem">
+                <div class="iq__diffItemHead"><div><div class="iq__diffItemName">신 헤어 추가</div><div class="iq__diffItemSub">난이도 선택 후 추가 → 여러 종류 등록 가능</div></div></div>
+                <div class="iq__diffPicker"><div class="iq__diffPickLabel">난이도 선택</div>
+                  <div class="iq__diffBtns">
+                    <button class="iq__diffBtn" type="button" data-group="nh" data-label="신 헤어 (낮음)" data-unit="150000" aria-pressed="true"><span class="iq__diffTag iq__diffTag--easy">낮음</span><span class="iq__diffPrice">₩150,000</span><span class="iq__diffDesc">짧은 머리 등<br>단순 구조</span></button>
+                    <button class="iq__diffBtn" type="button" data-group="nh" data-label="신 헤어 (중간)" data-unit="200000" aria-pressed="false"><span class="iq__diffTag iq__diffTag--mid">중간</span><span class="iq__diffPrice">₩200,000</span><span class="iq__diffDesc">일반적인<br>긴 머리</span></button>
+                    <button class="iq__diffBtn" type="button" data-group="nh" data-label="신 헤어 (높음)" data-unit="280000" aria-pressed="false"><span class="iq__diffTag iq__diffTag--hard">높음</span><span class="iq__diffPrice">₩280,000~</span><span class="iq__diffDesc">잔머리 많은<br>복잡 스타일</span></button>
+                  </div>
+                </div>
+                <div class="iq__diffAddRow"><span class="iq__diffAddNote">선택한 난이도로 1종 추가</span><button class="iq__diffAddBtn" type="button" data-group="nh">+ 추가</button></div>
+              </div>
+              <div class="iq__diffItem">
+                <div class="iq__diffItemHead"><div><div class="iq__diffItemName">신의상 추가</div><div class="iq__diffItemSub">난이도 선택 후 추가 → 여러 종류 등록 가능</div></div></div>
+                <div class="iq__diffPicker"><div class="iq__diffPickLabel">난이도 선택</div>
+                  <div class="iq__diffBtns">
+                    <button class="iq__diffBtn" type="button" data-group="no" data-label="신의상 (낮음)" data-unit="200000" aria-pressed="true"><span class="iq__diffTag iq__diffTag--easy">낮음</span><span class="iq__diffPrice">₩200,000</span><span class="iq__diffDesc">박스티 등<br>단순 의상</span></button>
+                    <button class="iq__diffBtn" type="button" data-group="no" data-label="신의상 (중간)" data-unit="300000" aria-pressed="false"><span class="iq__diffTag iq__diffTag--mid">중간</span><span class="iq__diffPrice">₩300,000</span><span class="iq__diffDesc">상·하의<br>모두 있는 구조</span></button>
+                    <button class="iq__diffBtn" type="button" data-group="no" data-label="신의상 (높음)" data-unit="400000" aria-pressed="false"><span class="iq__diffTag iq__diffTag--hard">높음</span><span class="iq__diffPrice">₩400,000~</span><span class="iq__diffDesc">복잡 디테일<br>파츠 다수</span></button>
+                  </div>
+                </div>
+                <div class="iq__diffAddRow"><span class="iq__diffAddNote">선택한 난이도로 1종 추가</span><button class="iq__diffAddBtn" type="button" data-group="no">+ 추가</button></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="iq__acc" style="margin-top:.6rem;" open>
+          <summary class="iq__accSum">체크 옵션 <span class="iq__accArr">▼</span></summary>
+          <div class="iq__accBody">
+            <div class="iq__toggleGrid">
+              <label class="iq__toggle"><input type="checkbox" data-label="입 좌우 움직임" data-price="30000"><span>입 좌우 움직임<span class="iq__togglePriceTag">₩30,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="볼빵빵" data-price="30000"><span>볼빵빵<span class="iq__togglePriceTag">₩30,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="혀내밀기" data-price="50000"><span>혀내밀기<span class="iq__togglePriceTag">₩50,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="VBridger" data-price="100000"><span>VBridger 연동<span class="iq__togglePriceTag">₩100,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="동물 귀" data-price="50000"><span>동물 귀<span class="iq__togglePriceTag">₩50,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="꼬리" data-price="30000"><span>꼬리<span class="iq__togglePriceTag">₩30,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="스텝 추가" data-price="30000"><span>스텝 추가<span class="iq__togglePriceTag">₩30,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="가치코이 단축키" data-price="100000"><span>가치코이 단축키<span class="iq__togglePriceTag">₩100,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="가치코이 페이셜" data-price="200000"><span>가치코이 페이셜<span class="iq__togglePriceTag">₩200,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="60일 이상 비공개" data-price="100000"><span>60일 이상 비공개<span class="iq__togglePriceTag">₩100,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="작업 영구 비공개" data-price="500000"><span>작업 영구 비공개<span class="iq__togglePriceTag">₩500,000</span></span></label>
+              <label class="iq__toggle"><input type="checkbox" data-label="설치 도움" data-price="0"><span>설치 도움<span class="iq__togglePriceTag">무료</span></span></label>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="iq__field">
+        <label class="iq__label" for="iq_extra">기타 문의내용</label>
+        <textarea class="iq__textarea" id="iq_extra" placeholder="요청사항을 자유롭게 작성해 주세요."></textarea>
+      </div>
+    </div>
+
+    <!-- RECEIPT -->
+    <div class="iq__receipt">
+      <div class="iq__receiptHead">
+        <div class="iq__receiptTitle">견적 요약</div>
+        <div class="iq__receiptSub">X 버튼으로 항목을 제거할 수 있어요</div>
+      </div>
+      <div class="iq__receiptBody" id="iq_recbody">
+        <div class="iq__recEmpty">선택된 항목이 없습니다.</div>
+      </div>
+      <div class="iq__receiptFoot">
+        <div>
+          <div class="iq__totalLabel">선택 합계</div>
+          <div class="iq__totalSub">문의 텍스트에 자동 포함</div>
+        </div>
+        <div class="iq__totalNum" id="iq_total">₩0</div>
+      </div>
+      <div class="iq__actions">
+        <button class="iq__btn iq__btn--ghost" type="button" id="iq_reset">초기화</button>
+        <button class="iq__btn iq__btn--main" type="button" id="iq_copy">문의 내용 복사 ↗</button>
+      </div>
+      <div class="iq__outWrap">
+        <div class="iq__outLabel">생성된 문의 텍스트</div>
+        <textarea class="iq__out" id="iq_out" readonly></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="iq__toast" id="iq_toast">복사 완료!</div>
+</section>
+
+<script>
+(function(){
+  const root=document.getElementById('inquiry');
+  const $=q=>root.querySelector(q);
+  const $$=q=>Array.from(root.querySelectorAll(q));
+  const fmt=n=>{const v=Number(n)||0;return(v<0?'-₩':'₩')+Math.abs(v).toLocaleString('ko-KR');};
+  const radio=name=>{const el=root.querySelector(`input[name="${name}"]:checked`);return el?el.value:'-';};
+
+  let lines=[];
+  let seq=0;
+  const newId=()=>++seq;
+
+  function addLine(obj){lines.push({id:newId(),...obj});renderAll();}
+  function removeLine(id){
+    const line=lines.find(l=>l.id===id);
+    if(!line)return;
+    if(line.type==='base'){$$('.iq__baseCard').forEach(b=>b.setAttribute('aria-pressed','false'));}
+    else if(line.type==='collab'){
+      $$('.iq__collabBtn').forEach(b=>b.setAttribute('aria-pressed','false'));
+      lines=lines.filter(l=>l.collabBenefitOf!==line.id);
+    }else if(line.type==='qty'){
+      const item=root.querySelector(`.iq__qtyItem[data-key="${line.key}"]`);
+      if(item){const valEl=item.querySelector('.iq__stepVal');if(valEl)valEl.textContent='0';}
+    }else if(line.type==='check'){
+      if(line.checkEl)line.checkEl.checked=false;
+    }
+    lines=lines.filter(l=>l.id!==id);
+    renderAll();
+  }
+
+  $$('.iq__baseCard').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const on=btn.getAttribute('aria-pressed')==='true';
+      if(on){const ex=lines.find(l=>l.type==='base');if(ex)removeLine(ex.id);return;}
+      lines=lines.filter(l=>l.type!=='base');
+      $$('.iq__baseCard').forEach(b=>b.setAttribute('aria-pressed','false'));
+      btn.setAttribute('aria-pressed','true');
+      addLine({type:'base',label:btn.dataset.base,price:+btn.dataset.price});
+    });
+  });
+
+  $$('.iq__collabBtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const on=btn.getAttribute('aria-pressed')==='true';
+      if(on){const ex=lines.find(l=>l.type==='collab');if(ex)removeLine(ex.id);return;}
+      lines=lines.filter(l=>l.type!=='collab'&&!l.collabBenefitOf);
+      $$('.iq__collabBtn').forEach(b=>b.setAttribute('aria-pressed','false'));
+      btn.setAttribute('aria-pressed','true');
+      const collabId=newId();
+      lines.push({id:collabId,type:'collab',label:`${btn.dataset.collab} 협업 할인`,price:-Math.abs(+btn.dataset.discount)});
+      if(btn.dataset.benefit){lines.push({id:newId(),type:'collabBenefit',label:`${btn.dataset.collab} 혜택 - ${btn.dataset.benefit}`,price:0,collabBenefitOf:collabId});}
+      renderAll();
+    });
+  });
+
+  $$('.iq__diffBtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const group=btn.dataset.group;
+      $$('.iq__diffBtn[data-group="'+group+'"]').forEach(b=>b.setAttribute('aria-pressed','false'));
+      btn.setAttribute('aria-pressed','true');
+    });
+  });
+
+  $$('.iq__diffAddBtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const group=btn.dataset.group;
+      const sel=root.querySelector('.iq__diffBtn[data-group="'+group+'"][aria-pressed="true"]');
+      if(!sel)return;
+      addLine({type:'diff',label:sel.dataset.label,price:+sel.dataset.unit});
+    });
+  });
+
+  $$('.iq__qtyItem').forEach(item=>{
+    const valEl=item.querySelector('.iq__stepVal');
+    item.querySelectorAll('.iq__stepBtn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const key=item.dataset.key;
+        const label=item.dataset.label;
+        const unit=+item.dataset.unit;
+        const cur=+valEl.textContent;
+        const next=Math.max(0,Math.min(8,btn.dataset.act==='inc'?cur+1:cur-1));
+        if(btn.dataset.act==='inc'){
+          valEl.textContent=next;
+          addLine({type:'qty',key,label,price:unit});
+        }else{
+          const idx=[...lines].reverse().findIndex(l=>l.type==='qty'&&l.key===key);
+          if(idx!==-1){const ri=lines.length-1-idx;lines.splice(ri,1);valEl.textContent=next;renderAll();}
+        }
+      });
+    });
+  });
+
+  $$('.iq__toggle input').forEach(ch=>{
+    ch.addEventListener('change',()=>{
+      if(ch.checked){addLine({type:'check',label:ch.dataset.label,price:+ch.dataset.price,checkEl:ch});}
+      else{lines=lines.filter(l=>!(l.type==='check'&&l.label===ch.dataset.label));renderAll();}
+    });
+  });
+
+  [$('#iq_slot'),$('#iq_platform'),$('#iq_debut'),$('#iq_extra'),$('#iq_illust')]
+    .forEach(el=>el&&el.addEventListener('input',buildOutput));
+  $$('input[type="radio"]').forEach(r=>r.addEventListener('change',buildOutput));
+
+  function calcTotal(){return Math.max(0,lines.reduce((s,l)=>s+(l.price||0),0));}
+
+  function renderReceipt(){
+    const body=$('#iq_recbody');
+    if(!lines.length){body.innerHTML='<div class="iq__recEmpty">선택된 항목이 없습니다.</div>';return;}
+    body.innerHTML=lines.map(l=>`
+      <div class="iq__recLine">
+        <button class="iq__recDel" data-del="${l.id}" title="삭제">✕</button>
+        <span class="iq__recLineName">${l.label}</span>
+        <b class="iq__recLinePrice${l.price<0?' iq__recLinePrice--neg':''}">${fmt(l.price)}</b>
+      </div>`).join('');
+    body.querySelectorAll('.iq__recDel').forEach(btn=>{
+      btn.addEventListener('click',()=>removeLine(+btn.dataset.del));
+    });
+  }
+
+  function buildOutput(){
+    const t=calcTotal();
+    const baseL=lines.find(l=>l.type==='base');
+    const collabL=lines.find(l=>l.type==='collab');
+    const opts=lines
+      .filter(l=>!['base','collab','collabBenefit'].includes(l.type))
+      .map(l=>`${l.label} (${fmt(l.price)})`);
+    if(collabL)opts.push(collabL.label+` (${fmt(collabL.price)})`);
+    const benefitL=lines.find(l=>l.type==='collabBenefit');
+    if(benefitL)opts.push(benefitL.label);
+    const txtLines=[
+      '안녕하세요! 문의드립니다.','',
+      `1) 희망 일정: ${$('#iq_slot').value||'-'}`,
+      `2) PSD 준비 여부: ${radio('psd')}`,
+      `3) 사용 장치: ${radio('device')}`,
+      `4) 방송 플랫폼: ${$('#iq_platform').value||'-'}`,
+      `5) 데뷔 예정일: ${$('#iq_debut').value||'-'}`,
+      `6) 일러스트 작가: ${$('#iq_illust').value||'-'}`,
+      `7) 협업 작가: ${collabL?collabL.label.replace(' 협업 할인',''):'해당 없음'}`,
+      `8) 기본 작업: ${baseL?baseL.label:'-'}`,
+      `9) 추가 옵션:\n${opts.length?opts.map(v=>' - '+v).join('\n'):'없음'}`,
+      `10) 예상 금액: ${fmt(t)}`,
+      '','[기타 문의사항]',
+      $('#iq_extra').value||'-'
+    ];
+    $('#iq_out').value=txtLines.join('\n');
+  }
+
+  function renderAll(){renderReceipt();$('#iq_total').textContent=fmt(calcTotal());buildOutput();}
+
+  $('#iq_reset').addEventListener('click',()=>{
+    lines=[];
+    $$('.iq__baseCard,.iq__collabBtn').forEach(b=>b.setAttribute('aria-pressed','false'));
+    $$('.iq__stepVal').forEach(v=>v.textContent='0');
+    $$('.iq__toggle input').forEach(c=>c.checked=false);
+    ['ho','nh','no'].forEach(g=>{
+      const first=root.querySelector('.iq__diffBtn[data-group="'+g+'"]');
+      $$('.iq__diffBtn[data-group="'+g+'"]').forEach(b=>b.setAttribute('aria-pressed','false'));
+      if(first)first.setAttribute('aria-pressed','true');
+    });
+    renderAll();
+  });
+
+  $('#iq_copy').addEventListener('click',async()=>{
+    buildOutput();
+    try{await navigator.clipboard.writeText($('#iq_out').value);}
+    catch(e){$('#iq_out').select();document.execCommand('copy');}
+    const t=$('#iq_toast');t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1600);
+  });
+
+  renderAll();
+})();
+</script>
