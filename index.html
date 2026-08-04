@@ -1676,7 +1676,7 @@
 .gl__row2{display:grid;grid-template-columns:repeat(2,1fr);gap:.55rem;}
 .gl__wrap5{display:grid;gap:.55rem;}
 .gl__wrap4{display:grid;gap:.55rem;}
-.gl__body-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:.55rem;}
+.gl__body-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;}
 
 .gl__card{
   border:1.5px solid rgba(255,182,217,.5);
@@ -1693,6 +1693,7 @@
   display:flex;align-items:center;justify-content:center;flex:1;
 }
 .gl__slot--sq{aspect-ratio:1/1;}
+.gl__slot--vertical{aspect-ratio:3/4;}
 .gl__slot--body-main{aspect-ratio:4/3;}
 
 .gl__slotInner{display:flex;flex-direction:column;align-items:center;gap:5px;}
@@ -1745,15 +1746,15 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--purple">몸 리깅</span></div>
     <div class="gl__body-grid">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__slot gl__slot--vertical"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">X 각도</p><p class="gl__sub">몸 좌우 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__slot gl__slot--vertical"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">Y 각도</p><p class="gl__sub">몸 상하 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--body-main"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__slot gl__slot--vertical"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 · 물리 · 의상</p></div>
       </div>
     </div>
@@ -1826,6 +1827,7 @@
   </div>
 
 </div>
+
 
 
 
