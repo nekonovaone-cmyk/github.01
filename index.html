@@ -2875,11 +2875,13 @@
 </style>
 
 <script>
-  /* iOS 자동재생 보조 */
+  /* iOS 자동재생 보조 - 초기 로드 시 스크롤 방지 */
   (function(){
-    document.querySelectorAll('#menu details').forEach(detail => {
+    var ready = false;
+    setTimeout(function(){ ready = true; }, 2000);
+    document.querySelectorAll('#menu details').forEach(function(detail) {
       detail.addEventListener('toggle', function() {
-        if(this.open) {
+        if(this.open && ready) {
           this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
       });
@@ -4324,6 +4326,11 @@ details[open] .iq__accArr{transform:rotate(180deg);}
 </script>
 
 <script>
+  window.addEventListener('load', function() {
+    setTimeout(function(){ window.scrollTo(0, 0); }, 100);
+    setTimeout(function(){ window.scrollTo(0, 0); }, 500);
+  });
+</script>
 function sendHeight() {
   parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
 }
