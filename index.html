@@ -1699,6 +1699,10 @@
 .gl__slotIc{font-size:18px;color:rgba(255,158,198,.45);}
 .gl__slotTxt{font-size:.58rem;color:rgba(255,158,198,.6);letter-spacing:.1px;}
 
+.gl__slot video{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+
 /* 푸터: 더 컴팩트하게 */
 .gl__foot{padding:5px 9px 7px;background:rgba(255,255,255,.85);}
 .gl__name{font-size:.7rem;font-weight:600;color:#333;margin:0;}
@@ -1722,15 +1726,15 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--pink">얼굴 리깅</span></div>
     <div class="gl__grid--3">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__slot gl__slot--sq"><video src="./AngleX.mp4" autoplay loop muted playsinline></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">X 각도</p><p class="gl__sub">좌우 고개 돌림</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__slot gl__slot--sq"><video src="./AngleY.mp4" autoplay loop muted playsinline></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">Y 각도</p><p class="gl__sub">상하 고개 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><div class="gl__slotInner"><span class="gl__slotIc">▶</span><span class="gl__slotTxt">영상 준비 중</span></div></div>
+        <div class="gl__slot gl__slot--sq"><video src="./AngleXY.mp4" autoplay loop muted playsinline></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 표현</p></div>
       </div>
     </div>
@@ -1822,6 +1826,7 @@
   </div>
 
 </div>
+
 
 
 <!-- ===================== LIVE2D MENU (WHITE PINK) ===================== -->
