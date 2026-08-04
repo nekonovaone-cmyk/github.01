@@ -861,7 +861,7 @@
 
                 <!-- Video Player -->
                 <div class="video-player" id="swipeArea">
-                    <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Live2D Showcase"></iframe>
+                   <iframe id="videoFrame" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Live2D Showcase"></iframe>
                     <div class="video-scan"></div>
                     <div class="video-frame"></div>
                 </div>
@@ -900,9 +900,16 @@
             const v = VIDEOS[idx];
 
             frame.src = embed(v.id);
+            frame.blur();
             nowTitle.textContent = v.name;
 
             renderItems();
+
+            frame.addEventListener('load', function onLoad() {
+                frame.blur();
+                window.focus();
+                frame.removeEventListener('load', onLoad);
+            });
         }
 
         function renderItems() {
