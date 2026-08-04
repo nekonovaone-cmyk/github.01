@@ -4316,5 +4316,11 @@ details[open] .iq__accArr{transform:rotate(180deg);}
 })();
 </script>
 
-
+<script>
+function sendHeight() {
+  parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
+}
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+</script>
 
