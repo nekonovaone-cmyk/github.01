@@ -811,6 +811,14 @@
             }
         }
     </style>
+
+<style id="responsive-embed-fix">
+body { min-width: 0; }
+img, video, iframe { max-width: 100%; }
+/* iframe 안에서는 body 의 min-height:100vh 때문에 문서가 iframe 높이만큼 억지로 늘어나므로 해제 */
+html.is-embedded body { min-height: 0; }
+</style>
+
 </head>
 <body>
     <!-- Header -->
@@ -821,8 +829,11 @@
         </div>
     </header>
 
+
+
+
     <!-- Main Content -->
-    <div class="container">
+    <div class="container" id="showcase">
         <!-- Section Header -->
         <div class="section-header">
             <div class="kicker">
@@ -1014,10 +1025,6 @@
             frame.removeEventListener('load', onFirstLoad);
         });
     </script>
-</body>
-</html>
-
-
 <!-- ===================== NOTICE + EVENT (WHITE PINK) ===================== -->
 <section class="ne" id="notice-event" aria-label="공지 및 이벤트">
   <div class="ne__container">
@@ -1863,14 +1870,7 @@
           <h2 class="ldm__title">Live2D 리깅 메뉴</h2>
           <p class="ldm__subtitle">자세한 내용은 펼쳐서 확인하세요</p>
         </div>
-        <div class="ldm__headerActions">
-          <button class="ldm__btn" type="button" onclick="document.querySelectorAll('#menu details').forEach(d=>d.open=true)">
-            전체 펼치기
-          </button>
-          <button class="ldm__btn" type="button" onclick="document.querySelectorAll('#menu details').forEach(d=>d.open=false)">
-            전체 접기
-          </button>
-        </div>
+        
       </div>
     </div>
 
@@ -2889,15 +2889,17 @@
 </style>
 
 <script>
-  /* iOS 자동재생 보조 - 초기 로드 시 스크롤 방지 */
+  /* Live2D 메뉴 아코디언: 한 번에 하나만 열림 (iframe 높이를 타이트하게 잡기 위함) */
   (function(){
     var ready = false;
     setTimeout(function(){ ready = true; }, 2000);
-    document.querySelectorAll('#menu details').forEach(function(detail) {
+    var all = Array.prototype.slice.call(document.querySelectorAll('#menu details'));
+    all.forEach(function(detail) {
       detail.addEventListener('toggle', function() {
-        if(this.open && ready) {
-          this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+        if (!this.open) return;
+        var me = this;
+        all.forEach(function(d){ if (d !== me && d.open) d.open = false; });
+        if (ready) me.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
     });
   })();
@@ -4358,3 +4360,14 @@ details[open] .iq__accArr{transform:rotate(180deg);}
   renderAll();
 })();
 </script>
+
+
+<script id="responsive-embed-script">
+(function () {
+  try { if (window.parent !== window) document.documentElement.classList.add('is-embedded'); }
+  catch (e) { document.documentElement.classList.add('is-embedded'); }
+})();
+</script>
+
+</body>
+</html>
