@@ -811,6 +811,97 @@
             }
         }
     </style>
+
+<style id="responsive-embed-fix">
+/* ===== RESPONSIVE EMBED / QUICK NAV ===== */
+html { scroll-behavior: smooth; }
+body { min-width: 0; }
+#showcase { scroll-margin-top: 90px; }
+#notice-event, #menu, #inquiry { scroll-margin-top: 90px; }
+
+.quick-nav {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.quick-nav__toggle {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 182, 217, .45);
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  color: #e578a4;
+  box-shadow: 0 8px 24px rgba(255, 158, 198, .22);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 800;
+  backdrop-filter: blur(12px);
+  transition: .2s ease;
+}
+.quick-nav__toggle:hover { transform: scale(1.05); }
+.quick-nav__links {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 8px;
+  border: 1px solid rgba(255, 182, 217, .32);
+  border-radius: 16px;
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 12px 35px rgba(255, 158, 198, .18);
+  backdrop-filter: blur(14px);
+}
+.quick-nav__links[hidden] { display: none; }
+.quick-nav__links a {
+  display: block;
+  min-width: 92px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  text-align: center;
+  color: #777;
+  background: rgba(255,240,248,.72);
+  border: 1px solid rgba(255,182,217,.2);
+  font-size: 12px;
+  font-weight: 800;
+  transition: .2s ease;
+}
+.quick-nav__links a:hover,
+.quick-nav__links a.is-active {
+  color: #fff;
+  background: linear-gradient(135deg,#ff9ec6,#c291e8);
+  border-color: transparent;
+}
+
+/* Prevent the iframe page from becoming horizontally wider than its parent. */
+img, video, iframe { max-width: 100%; }
+
+@media (max-width: 1024px) {
+  .quick-nav {
+    top: auto;
+    right: 50%;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    transform: translateX(50%);
+    align-items: center;
+  }
+  .quick-nav__links {
+    flex-direction: row;
+    max-width: calc(100vw - 24px);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .quick-nav__links::-webkit-scrollbar { display: none; }
+  .quick-nav__links a { min-width: auto; white-space: nowrap; padding: 8px 10px; }
+  .quick-nav__toggle { width: 42px; height: 42px; }
+}
+</style>
+
 </head>
 <body>
     <!-- Header -->
@@ -821,8 +912,20 @@
         </div>
     </header>
 
+<!-- ===== FLOATING QUICK NAV ===== -->
+<nav class="quick-nav" id="quickNav" aria-label="빠른 이동">
+  <button class="quick-nav__toggle" id="quickNavToggle" type="button" aria-expanded="true" aria-controls="quickNavLinks" title="빠른 이동 메뉴">☰</button>
+  <div class="quick-nav__links" id="quickNavLinks">
+    <a href="#showcase" data-target="showcase">작업영상</a>
+    <a href="#notice-event" data-target="notice-event">공지·이벤트</a>
+    <a href="#menu" data-target="menu">Live2D 메뉴</a>
+    <a href="#inquiry" data-target="inquiry">견적·문의</a>
+  </div>
+</nav>
+
+
     <!-- Main Content -->
-    <div class="container">
+    <div class="container" id="showcase">
         <!-- Section Header -->
         <div class="section-header">
             <div class="kicker">
@@ -1014,10 +1117,6 @@
             frame.removeEventListener('load', onFirstLoad);
         });
     </script>
-</body>
-</html>
-
-
 <!-- ===================== NOTICE + EVENT (WHITE PINK) ===================== -->
 <section class="ne" id="notice-event" aria-label="공지 및 이벤트">
   <div class="ne__container">
@@ -4358,3 +4457,122 @@ details[open] .iq__accArr{transform:rotate(180deg);}
   renderAll();
 })();
 </script>
+
+
+<script id="responsive-embed-script">
+(function () {
+  'use strict';
+
+  const quickNavToggle = document.getElementById('quickNavToggle');
+  const quickNavLinks = document.getElementById('quickNavLinks');
+  const navLinks = Array.from(document.querySelectorAll('.quick-nav__links a'));
+
+  if (quickNavToggle && quickNavLinks) {
+    quickNavToggle.addEventListener('click', function () {
+      const willOpen = quickNavLinks.hidden;
+      quickNavLinks.hidden = !willOpen;
+      quickNavToggle.setAttribute('aria-expanded', String(willOpen));
+      quickNavToggle.textContent = willOpen ? '☰' : '✕';
+    });
+  }
+
+  // Highlight the section currently visible in the viewport.
+  const sections = navLinks
+    .map(function (link) { return document.getElementById(link.dataset.target); })
+    .filter(Boolean);
+
+  if ('IntersectionObserver' in window && sections.length) {
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function (link) {
+            link.classList.toggle('is-active', link.dataset.target === entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 });
+    sections.forEach(function (section) { observer.observe(section); });
+  }
+
+  // Tell the parent page how tall this document is.
+  // This is safe for a cross-origin iframe because it uses postMessage.
+  let lastHeight = 0;
+  let scheduled = false;
+
+  function getHeight() {
+    const body = document.body;
+    const html = document.documentElement;
+    return Math.max(
+      body ? body.scrollHeight : 0,
+      body ? body.offsetHeight : 0,
+      html ? html.clientHeight : 0,
+      html ? html.scrollHeight : 0,
+      html ? html.offsetHeight : 0
+    );
+  }
+
+  function sendHeight() {
+    scheduled = false;
+    const height = getHeight();
+    if (!height || Math.abs(height - lastHeight) < 2) return;
+    lastHeight = height;
+    window.parent.postMessage({ type: 'live2d-page-height', height: height }, '*');
+  }
+
+  function requestHeight() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(sendHeight);
+  }
+
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(requestHeight).observe(document.documentElement);
+  }
+
+  window.addEventListener('load', requestHeight);
+  window.addEventListener('resize', requestHeight);
+  document.fonts && document.fonts.ready && document.fonts.ready.then(requestHeight);
+  setTimeout(requestHeight, 100);
+  setTimeout(requestHeight, 500);
+  setTimeout(requestHeight, 1500);
+})();
+
+quickNavLinks.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+
+        const targetId = href.slice(1);
+        const target = document.getElementById(targetId);
+        if (!target) return;
+
+        // 아트머그 iframe 안에서 실행 중이면 부모 페이지에 이동 요청
+        if (window.parent !== window) {
+          e.preventDefault();
+
+          const rect = target.getBoundingClientRect();
+          const iframeRect = window.frameElement
+            ? window.frameElement.getBoundingClientRect()
+            : { top: 0 };
+
+          window.parent.postMessage({
+            type: 'live2d-quick-nav',
+            targetY: rect.top + iframeRect.top + window.parent.scrollY
+          }, '*');
+
+          return;
+        }
+
+        // 직접 사이트에 접속한 경우에는 기존처럼 현재 페이지 내부에서 이동
+        e.preventDefault();
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+    });
+    });
+</script>
+
+</body>
+</html>
