@@ -4358,26 +4358,3 @@ details[open] .iq__accArr{transform:rotate(180deg);}
   renderAll();
 })();
 </script>
-
-<script>
-  window.addEventListener('load', function() {
-    setTimeout(function(){ window.scrollTo(0, 0); }, 100);
-    setTimeout(function(){ window.scrollTo(0, 0); }, 500);
-  });
-<script>
-function sendHeight() {
-  parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
-}
-window.addEventListener('load', sendHeight);
-window.addEventListener('resize', sendHeight);
-</script>
-
-<script>
-  function sendHeight() {
-    const h = document.documentElement.scrollHeight;
-    parent.postMessage({ type: 'resize', height: h }, '*');
-  }
-  window.addEventListener('load', sendHeight);
-  // 버튼으로 펼치기/접기 해도 크기 변화를 자동 감지
-  new ResizeObserver(sendHeight).observe(document.body);
-</script>
