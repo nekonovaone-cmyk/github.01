@@ -1735,6 +1735,48 @@
 .gl__tag--blue{background:rgba(55,138,221,.12);color:#0C447C;}
 .gl__tag--gray{background:rgba(136,135,128,.12);color:#444441;}
 
+/* ===== 모바일 탭 재생 ===== */
+.gl__slot{position:relative;overflow:hidden;}
+.gl__hint{display:none;}
+.gl__play{display:none;}
+.gl--tap .gl__hint{
+  display:flex;align-items:center;gap:6px;justify-self:start;
+  font-size:.7rem;font-weight:600;color:#b4577f;
+  background:rgba(255,158,198,.12);border:1px solid rgba(255,158,198,.3);
+  padding:5px 11px;border-radius:999px;
+}
+.gl--tap .gl__hint::before{
+  content:'';width:0;height:0;border-left:6px solid #FF7FB0;
+  border-top:4px solid transparent;border-bottom:4px solid transparent;
+}
+.gl--tap .gl__slot{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.gl--tap .gl__play{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  border:0;padding:0;margin:0;background:rgba(255,236,246,.18);
+  cursor:pointer;transition:opacity .25s ease,background .25s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.gl__playIc{
+  position:relative;width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.92);
+  box-shadow:0 6px 18px rgba(255,120,175,.35),0 0 0 4px rgba(255,182,217,.35);
+  transition:transform .25s ease;
+}
+.gl__playIc::after{
+  content:'';position:absolute;left:50%;top:50%;
+  transform:translate(-35%,-50%);
+  border-left:14px solid #FF6FA8;border-top:9px solid transparent;border-bottom:9px solid transparent;
+}
+.gl__card.is-playing .gl__play{opacity:0;background:transparent;}
+.gl__card.is-loading .gl__playIc::after{
+  border:3px solid rgba(255,111,168,.25);border-top-color:#FF6FA8;border-radius:50%;
+  width:18px;height:18px;transform:none;left:calc(50% - 12px);top:calc(50% - 12px);
+  animation:glSpin .8s linear infinite;
+}
+.gl__slot:active .gl__playIc{transform:scale(.92);}
+@keyframes glSpin{to{transform:rotate(360deg);}}
+@media (hover:none){ .gl__card:hover{transform:none;} }
+
 @media(max-width:600px){
   .gl__grid--3,.gl__row3{grid-template-columns:repeat(2,1fr);}
   .gl__body-grid{grid-template-columns:1fr 1fr;}
@@ -1743,20 +1785,22 @@
 
 <div class="gl">
 
+  <p class="gl__hint">영상을 탭하면 재생돼요 · 한 번 더 탭하면 일시정지</p>
+
   <!-- 얼굴 리깅 -->
   <div class="gl__sec">
     <div class="gl__secHead"><span class="gl__badge gl__badge--pink">얼굴 리깅</span></div>
     <div class="gl__grid--3">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/AngleX.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/AngleX.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">X 각도</p><p class="gl__sub">좌우 고개 돌림</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/AngleY.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/AngleY.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">Y 각도</p><p class="gl__sub">상하 고개 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/AngleXY.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/AngleXY.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 표현</p></div>
       </div>
     </div>
@@ -1767,15 +1811,15 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--purple">몸 리깅</span></div>
     <div class="gl__body-grid">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/BodyX.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--vertical"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/BodyX.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">X 각도</p><p class="gl__sub">몸 좌우 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/BodyY.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--vertical"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/BodyY.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">Y 각도</p><p class="gl__sub">몸 상하 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/BodyXY.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--vertical"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/BodyXY.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 · 물리 · 의상</p></div>
       </div>
     </div>
@@ -1786,15 +1830,15 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--blue">가치코이 / VBridger</span></div>
     <div class="gl__grid--3">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/gg0.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/gg0.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--blue">가치코이</div><p class="gl__name">페이셜</p><p class="gl__sub">캠 거리 인식 입체 연출</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/gg1.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/gg1.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--blue">가치코이</div><p class="gl__name">단축키</p><p class="gl__sub">숙이기 단축키 연출</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/VBridger.mp4" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/VBridger.mp4#t=0.1" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--blue">VBridger</div><p class="gl__name">립싱크 보정</p><p class="gl__sub">발음별 입 모양 정밀 구성</p></div>
       </div>
     </div>
@@ -1805,13 +1849,13 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--pink">간단 표정</span></div>
     <div class="gl__wrap5">
       <div class="gl__row3">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T2.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #1</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T3.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #2</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T4.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #3</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/T2.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/T3.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/T4.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #3</p></div></div>
       </div>
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T1.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #4</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T5.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #5</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/T1.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/T5.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #5</p></div></div>
       </div>
     </div>
   </div>
@@ -1821,12 +1865,12 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--purple">애니메이션 표정</span></div>
     <div class="gl__wrap4">
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT1.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #1</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT2.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/aniT1.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/aniT2.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #2</p></div></div>
       </div>
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT3.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #3</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT4.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/aniT3.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #3</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/aniT4.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #4</p></div></div>
       </div>
     </div>
   </div>
@@ -1836,19 +1880,112 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--gray">기타 리깅</span></div>
     <div class="gl__wrap5">
       <div class="gl__row3">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git1.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #1</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git2.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #2</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git3.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #3</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/git1.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/git2.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/git3.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #3</p></div></div>
       </div>
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git4.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #4</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git5.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #5</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/git4.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video loop muted playsinline webkit-playsinline preload="metadata"><source src="https://nekonovaone-cmyk.github.io/github.01/git5.mp4#t=0.1" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #5</p></div></div>
       </div>
     </div>
   </div>
 
 </div>
 
+<script>
+/* ===== 리깅 예시 영상: PC 자동재생 / 모바일 탭 재생 ===== */
+(function(){
+  var gl = document.querySelector('.gl');
+  if(!gl) return;
+  var vids = Array.prototype.slice.call(gl.querySelectorAll('video'));
+  var isMobile = window.matchMedia('(hover: none) and (pointer: coarse), (max-width: 768px)').matches;
+
+  function safePlay(v){
+    var p = v.play();
+    if(p && p.catch) p.catch(function(){});
+    return p;
+  }
+
+  /* PC: 기존처럼 전부 자동재생 */
+  if(!isMobile){
+    vids.forEach(function(v){
+      v.muted = true;
+      v.autoplay = true;
+      v.preload = 'auto';
+      safePlay(v);
+    });
+    return;
+  }
+
+  /* 모바일: 탭해서 재생 (한 번에 하나만 재생, 화면 밖으로 나가면 정지) */
+  gl.classList.add('gl--tap');
+  var current = null;
+
+  vids.forEach(function(v){
+    var slot = v.parentNode;
+    var card = slot.closest('.gl__card') || slot;
+    var name = card.querySelector('.gl__name');
+    var label = name ? name.textContent : '리깅 예시';
+
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+    v.setAttribute('muted','');
+    v.setAttribute('playsinline','');
+    v.setAttribute('webkit-playsinline','');
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'gl__play';
+    btn.setAttribute('aria-label', label + ' 영상 재생');
+    btn.innerHTML = '<span class="gl__playIc"></span>';
+    slot.appendChild(btn);
+
+    slot.addEventListener('click', function(e){
+      e.preventDefault();
+      if(v.paused){
+        if(current && current !== v) current.pause();
+        current = v;
+        card.classList.add('is-loading');
+        var p = safePlay(v);
+        if(p && p.catch){
+          p.catch(function(){
+            // 네트워크 지연 등으로 실패하면 한 번 다시 로드 후 재시도
+            v.load();
+            safePlay(v);
+          });
+        }
+      } else {
+        v.pause();
+      }
+    });
+
+    v.addEventListener('playing', function(){
+      card.classList.remove('is-loading');
+      card.classList.add('is-playing');
+      btn.setAttribute('aria-label', label + ' 영상 일시정지');
+    });
+    v.addEventListener('waiting', function(){
+      if(!v.paused) card.classList.add('is-loading');
+    });
+    v.addEventListener('pause', function(){
+      card.classList.remove('is-playing','is-loading');
+      btn.setAttribute('aria-label', label + ' 영상 재생');
+      if(current === v) current = null;
+    });
+  });
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(!en.isIntersecting && !en.target.paused) en.target.pause();
+      });
+    }, { threshold: 0.15 });
+    vids.forEach(function(v){ io.observe(v); });
+  }
+})();
+</script>
 
 
 
@@ -1861,15 +1998,7 @@
       <div class="ldm__headerTop">
         <div class="ldm__headerTitle">
           <h2 class="ldm__title">Live2D 리깅 메뉴</h2>
-          <p class="ldm__subtitle">자세한 내용은 펼쳐서 확인하세요</p>
-        </div>
-        <div class="ldm__headerActions">
-          <button class="ldm__btn" type="button" onclick="document.querySelectorAll('#menu details').forEach(d=>d.open=true)">
-            전체 펼치기
-          </button>
-          <button class="ldm__btn" type="button" onclick="document.querySelectorAll('#menu details').forEach(d=>d.open=false)">
-            전체 접기
-          </button>
+          <p class="ldm__subtitle">항목을 누르면 상세 내용이 펼쳐집니다</p>
         </div>
       </div>
     </div>
@@ -2580,6 +2709,7 @@
   }
 
   .ldm__chevron {
+    transition: transform 0.38s cubic-bezier(.22,.61,.36,1), background 0.3s ease, border-color 0.3s ease;
     width: 32px;
     height: 32px;
     border-radius: 10px;
@@ -2602,8 +2732,14 @@
     transform: rotate(45deg);
   }
 
-  .ldm__accordion[open] .ldm__chevron {
+  .ldm__accordion.is-open .ldm__chevron {
     transform: rotate(180deg);
+    background: linear-gradient(135deg, #FF9EC6 0%, #C291E8 100%);
+    border-color: transparent;
+  }
+
+  .ldm__accordion.is-open .ldm__chevron::after {
+    border-color: #fff;
   }
 
   /* ===== CONTENT ===== */
@@ -2778,6 +2914,105 @@
     line-height: 1.4;
   }
 
+
+  /* ===== 아코디언 개선 (단일 펼침 + 애니메이션) ===== */
+  .ldm__accordion {
+    position: relative;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  }
+
+  .ldm__accordion::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #FF9EC6 0%, #C291E8 100%);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.38s cubic-bezier(.22,.61,.36,1);
+    z-index: 1;
+  }
+
+  .ldm__accordion.is-open {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(255, 158, 198, 0.55);
+    box-shadow: 0 14px 44px rgba(255, 158, 198, 0.22);
+  }
+
+  .ldm__accordion.is-open::before {
+    transform: scaleY(1);
+  }
+
+  .ldm__icon {
+    transition: background 0.3s ease, color 0.3s ease, transform 0.38s cubic-bezier(.22,.61,.36,1), box-shadow 0.3s ease;
+  }
+
+  .ldm__accordion.is-open .ldm__icon {
+    background: linear-gradient(135deg, #FF9EC6 0%, #C291E8 100%);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(255, 158, 198, 0.4);
+    transform: rotate(-8deg) scale(1.05);
+  }
+
+  .ldm__accordion.is-open .ldm__summaryTitle {
+    color: #d23f7c;
+  }
+
+  .ldm__summary {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .ldm__summary:active {
+    background: rgba(255, 228, 242, 0.6);
+  }
+
+  .ldm__summary:focus-visible {
+    outline: 2px solid #FF9EC6;
+    outline-offset: -2px;
+    border-radius: 16px;
+  }
+
+  .ldm__panel {
+    will-change: height;
+  }
+
+  /* 펼칠 때 항목이 순서대로 떠오르기 */
+  .ldm__accordion.is-entering .ldm__item {
+    animation: ldmItemIn 0.45s cubic-bezier(.22,.61,.36,1) both;
+  }
+  .ldm__accordion.is-entering .ldm__item:nth-child(2) { animation-delay: 0.05s; }
+  .ldm__accordion.is-entering .ldm__item:nth-child(3) { animation-delay: 0.1s; }
+  .ldm__accordion.is-entering .ldm__item:nth-child(4) { animation-delay: 0.15s; }
+  .ldm__accordion.is-entering .ldm__item:nth-child(n+5) { animation-delay: 0.2s; }
+
+  @keyframes ldmItemIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .ldm__item {
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  @media (hover: hover) {
+    .ldm__item:hover {
+      border-color: rgba(255, 158, 198, 0.5);
+      background: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ldm__accordion::before,
+    .ldm__icon,
+    .ldm__chevron { transition: none; }
+    .ldm__accordion.is-entering .ldm__item { animation: none; }
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1024px) {
     .ldm__headerTop {
@@ -2889,17 +3124,98 @@
 </style>
 
 <script>
-  /* iOS 자동재생 보조 - 초기 로드 시 스크롤 방지 */
+  /* ===== 리깅 메뉴: 하나씩만 펼치기 + 펼침/접힘 애니메이션 ===== */
   (function(){
-    var ready = false;
-    setTimeout(function(){ ready = true; }, 2000);
-    document.querySelectorAll('#menu details').forEach(function(detail) {
-      detail.addEventListener('toggle', function() {
-        if(this.open && ready) {
-          this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    var menu = document.getElementById('menu');
+    if(!menu) return;
+    var items = Array.prototype.slice.call(menu.querySelectorAll('details.ldm__accordion'));
+    var DUR = 380, EASE = 'cubic-bezier(.22,.61,.36,1)';
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function isMobile(){
+      return window.matchMedia('(hover: none) and (pointer: coarse), (max-width: 768px)').matches;
+    }
+
+    items.forEach(function(d){
+      var content = d.querySelector('.ldm__content');
+      var panel = document.createElement('div');
+      panel.className = 'ldm__panel';
+      content.parentNode.insertBefore(panel, content);
+      panel.appendChild(content);
+      if(d.open) d.classList.add('is-open');
+
+      var summary = d.querySelector('summary');
+      summary.addEventListener('click', function(e){
+        e.preventDefault();
+        if(d.classList.contains('is-open')){
+          collapse(d);
+          return;
+        }
+        var before = summary.getBoundingClientRect().top;
+        var shiftsAbove = false;
+        items.forEach(function(o){
+          if(o !== d && o.classList.contains('is-open')){
+            if(o.compareDocumentPosition(d) & Node.DOCUMENT_POSITION_FOLLOWING) shiftsAbove = true;
+            collapse(o);
+          }
+        });
+        expand(d);
+        // 위쪽 항목이 접히면서 누른 제목이 밀려 올라가지 않도록 위치 고정
+        if(shiftsAbove) holdPosition(summary, before);
+        // PC만: 펼친 내용이 화면 아래로 잘리면 부드럽게 스크롤 (모바일은 스크롤 없음)
+        if(!isMobile()){
+          setTimeout(function(){
+            var r = d.getBoundingClientRect();
+            if(r.bottom > window.innerHeight) d.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, reduce ? 0 : DUR + 20);
         }
       });
     });
+
+    function run(panel, from, to, done){
+      if(panel._anim){ panel._anim.cancel(); panel._anim = null; }
+      if(reduce || !panel.animate){ done(); return; }
+      panel.style.overflow = 'hidden';
+      var a = panel.animate(
+        [{ height: from + 'px', opacity: from ? 1 : 0 }, { height: to + 'px', opacity: to ? 1 : 0 }],
+        { duration: DUR, easing: EASE, fill: 'forwards' }
+      );
+      panel._anim = a;
+      a.onfinish = function(){
+        done();
+        a.cancel();
+        panel._anim = null;
+        panel.style.overflow = '';
+      };
+    }
+
+    function expand(d){
+      var panel = d.querySelector('.ldm__panel');
+      var from = d.open ? panel.getBoundingClientRect().height : 0;
+      d.open = true;
+      d.classList.add('is-open', 'is-entering');
+      if(panel._anim){ panel._anim.cancel(); panel._anim = null; }
+      var to = panel.scrollHeight;
+      run(panel, from, to, function(){});
+      setTimeout(function(){ d.classList.remove('is-entering'); }, DUR + 300);
+    }
+
+    function collapse(d){
+      var panel = d.querySelector('.ldm__panel');
+      var from = panel.getBoundingClientRect().height;
+      d.classList.remove('is-open', 'is-entering');
+      run(panel, from, 0, function(){
+        if(!d.classList.contains('is-open')) d.open = false;
+      });
+    }
+
+    function holdPosition(el, top){
+      var end = performance.now() + (reduce ? 0 : DUR + 60);
+      (function tick(){
+        var diff = el.getBoundingClientRect().top - top;
+        if(Math.abs(diff) > 0.5) window.scrollBy(0, diff);
+        if(performance.now() < end) requestAnimationFrame(tick);
+      })();
+    }
   })();
 </script>
 <!-- ===================== /LIVE2D MENU (WHITE PINK) ===================== -->
