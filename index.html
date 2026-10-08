@@ -4371,3 +4371,13 @@ function sendHeight() {
 window.addEventListener('load', sendHeight);
 window.addEventListener('resize', sendHeight);
 </script>
+
+<script>
+  function sendHeight() {
+    const h = document.documentElement.scrollHeight;
+    parent.postMessage({ type: 'resize', height: h }, '*');
+  }
+  window.addEventListener('load', sendHeight);
+  // 버튼으로 펼치기/접기 해도 크기 변화를 자동 감지
+  new ResizeObserver(sendHeight).observe(document.body);
+</script>
