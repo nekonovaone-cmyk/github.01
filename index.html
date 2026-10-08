@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Live2D Rigging Showcase</title>
     <style>
         * {
@@ -862,7 +861,7 @@
 
                 <!-- Video Player -->
                 <div class="video-player" id="swipeArea">
-                   <iframe id="videoFrame" tabindex="-1" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Live2D Showcase"></iframe>
+                   <iframe id="videoFrame" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Live2D Showcase"></iframe>
                     <div class="video-scan"></div>
                     <div class="video-frame"></div>
                 </div>
@@ -891,7 +890,7 @@
         let currentIndex = 0;
         const mq = window.matchMedia('(max-width: 1024px)');
 
-        const embed = (id) => `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1&origin=${encodeURIComponent(location.origin)}`;
+        const embed = (id) => `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1`;
         const thumb = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 
         function setActive(idx) {
@@ -1749,15 +1748,15 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--pink">얼굴 리깅</span></div>
     <div class="gl__grid--3">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/AngleX.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/AngleX.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">X 각도</p><p class="gl__sub">좌우 고개 돌림</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/AngleY.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/AngleY.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">Y 각도</p><p class="gl__sub">상하 고개 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/AngleXY.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/AngleXY.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--pink">얼굴</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 표현</p></div>
       </div>
     </div>
@@ -1768,15 +1767,15 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--purple">몸 리깅</span></div>
     <div class="gl__body-grid">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/BodyX.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/BodyX.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">X 각도</p><p class="gl__sub">몸 좌우 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/BodyY.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/BodyY.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">Y 각도</p><p class="gl__sub">몸 상하 움직임</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/BodyXY.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--vertical"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/BodyXY.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--purple">몸</div><p class="gl__name">XY 각도</p><p class="gl__sub">복합 각도 · 물리 · 의상</p></div>
       </div>
     </div>
@@ -1787,15 +1786,15 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--blue">가치코이 / VBridger</span></div>
     <div class="gl__grid--3">
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/gg0.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/gg0.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--blue">가치코이</div><p class="gl__name">페이셜</p><p class="gl__sub">캠 거리 인식 입체 연출</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/gg1.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/gg1.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--blue">가치코이</div><p class="gl__name">단축키</p><p class="gl__sub">숙이기 단축키 연출</p></div>
       </div>
       <div class="gl__card">
-        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/VBridger.mp4#t=0.001" type="video/mp4"></video></div>
+        <div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/VBridger.mp4" type="video/mp4"></video></div>
         <div class="gl__foot"><div class="gl__tag gl__tag--blue">VBridger</div><p class="gl__name">립싱크 보정</p><p class="gl__sub">발음별 입 모양 정밀 구성</p></div>
       </div>
     </div>
@@ -1806,13 +1805,13 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--pink">간단 표정</span></div>
     <div class="gl__wrap5">
       <div class="gl__row3">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/T2.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #1</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/T3.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #2</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/T4.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #3</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T2.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T3.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T4.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #3</p></div></div>
       </div>
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/T1.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #4</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/T5.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #5</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T1.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/T5.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--pink">토글</div><p class="gl__name">표정 #5</p></div></div>
       </div>
     </div>
   </div>
@@ -1822,12 +1821,12 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--purple">애니메이션 표정</span></div>
     <div class="gl__wrap4">
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/aniT1.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #1</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/aniT2.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT1.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT2.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #2</p></div></div>
       </div>
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/aniT3.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #3</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/aniT4.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT3.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #3</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/aniT4.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--purple">애니</div><p class="gl__name">애니 표정 #4</p></div></div>
       </div>
     </div>
   </div>
@@ -1837,13 +1836,13 @@
     <div class="gl__secHead"><span class="gl__badge gl__badge--gray">기타 리깅</span></div>
     <div class="gl__wrap5">
       <div class="gl__row3">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/git1.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #1</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/git2.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #2</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/git3.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #3</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git1.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #1</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git2.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #2</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git3.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #3</p></div></div>
       </div>
       <div class="gl__row2">
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/git4.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #4</p></div></div>
-        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noremoteplayback"><source data-src="https://nekonovaone-cmyk.github.io/github.01/git5.mp4#t=0.001" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #5</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git4.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #4</p></div></div>
+        <div class="gl__card"><div class="gl__slot gl__slot--sq"><video autoplay loop muted playsinline><source src="https://nekonovaone-cmyk.github.io/github.01/git5.mp4" type="video/mp4"></video></div><div class="gl__foot"><div class="gl__tag gl__tag--gray">기타</div><p class="gl__name">기타 #5</p></div></div>
       </div>
     </div>
   </div>
@@ -4357,37 +4356,5 @@ details[open] .iq__accArr{transform:rotate(180deg);}
   });
 
   renderAll();
-})();
-</script>
-
-<script>
-/* 갤러리 영상: 한꺼번에 23개 로드하지 않고 3개씩 순서대로 로드 (아이폰/PC 대응) */
-(function(){
-  var vids=[].slice.call(document.querySelectorAll('.gl__slot video'));
-  var CONC=3, idx=0, active=0;
-  function play(v){
-    v.muted=true; v.defaultMuted=true; v.setAttribute('muted',''); v.setAttribute('playsinline','');
-    var p=v.play(); if(p&&p.catch)p.catch(function(){});
-  }
-  function next(){
-    while(active<CONC && idx<vids.length){
-      (function(v){
-        active++;
-        var done=false;
-        function fin(){ if(done)return; done=true; active--; next(); }
-        var src=v.querySelector('source');
-        if(src&&src.dataset.src){ src.src=src.dataset.src; }
-        v.preload='auto';
-        v.addEventListener('loadeddata',function(){ play(v); fin(); },{once:true});
-        v.addEventListener('error',function(){ console.warn('영상 로드 실패:',src&&src.src); fin(); },{once:true});
-        setTimeout(fin,6000);
-        v.load();
-      })(vids[idx++]);
-    }
-  }
-  next();
-  ['touchstart','click','scroll','keydown'].forEach(function(t){
-    window.addEventListener(t,function(){vids.forEach(function(v){if(v.paused&&v.readyState>=2)play(v);});},{once:true,passive:true});
-  });
 })();
 </script>
