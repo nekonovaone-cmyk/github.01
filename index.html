@@ -1638,6 +1638,19 @@
   white-space: nowrap;
 }
 </style>
+<style>
+/* 새 협업 작가 + 아이콘: 정중앙에 그린 도형, 호버 시 회전 대신 살짝 커지기 */
+.cb__plus { position: relative; font-size: 0 !important; }
+.cb__plus::before, .cb__plus::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 16px; height: 2px; margin: -1px 0 0 -8px;
+  border-radius: 2px; background: currentColor;
+}
+.cb__plus::after { transform: rotate(90deg); }
+@media (hover: hover) {
+  .cb__card--soon:hover .cb__plus { transform: scale(1.12) !important; }
+}
+</style>
 </head>
 <body>
 
@@ -2250,7 +2263,7 @@
 <div class="cb">
 <a class="cb__card nx-rv" style="--rd:0.00s" href="https://artmug.kr/index.php?channel=view&amp;uid=53653" target="_blank" rel="noopener">
   <div class="cb__media"><div class="cb__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17739956820_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-  <div class="cb__body"><h3 class="cb__name">Cooing 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩50,000 할인</dd></div><div><dt>리깅</dt><dd>₩50,000 할인 + 표정 3개 무료</dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
+  <div class="cb__body"><h3 class="cb__name">Cooing 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩100,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
 </a>
 <a class="cb__card nx-rv" style="--rd:0.08s" href="https://artmug.kr/index.php?channel=view&amp;uid=54330" target="_blank" rel="noopener">
   <div class="cb__media"><div class="cb__img" style="--img:url('https://artmugfile2.cafe24.com/image/up_img/detail/5/goods_51824/17668233240_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
@@ -2271,7 +2284,11 @@
 <a class="cb__card nx-rv" style="--rd:0.40s" href="https://artmug.kr/index.php?channel=view&amp;uid=7624" target="_blank" rel="noopener">
   <div class="cb__media"><div class="cb__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17933036580_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
   <div class="cb__body"><h3 class="cb__name">냥찬 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩100,000 할인 + 신헤어</dd></div><div><dt>리깅</dt><dd>₩100,000 할인 + 신헤어</dd></div><div><dt></dt><dd><span class="cb__limit">신헤어 선착순 3명 한정</span></dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-</a></div>
+</a>
+<div class="cb__card cb__card--soon nx-rv"><span class="cb__plus" aria-hidden="true"></span><strong>새 협업 작가</strong><p>곧 추가될 예정이에요</p></div>
+<div class="cb__card cb__card--soon nx-rv"><span class="cb__plus" aria-hidden="true"></span><strong>새 협업 작가</strong><p>곧 추가될 예정이에요</p></div>
+<div class="cb__card cb__card--soon nx-rv"><span class="cb__plus" aria-hidden="true"></span><strong>새 협업 작가</strong><p>곧 추가될 예정이에요</p></div>
+</div>
 </div>
 </section>
 <section class="nx-sec nx-sec--soft" id="slots" aria-label="예약 현황">
@@ -2364,15 +2381,15 @@
       <div>
         <div class="iq__secLabel"><em>3</em>협업 작가 할인 <small>선택</small></div>
         <div class="iq__collabs">
-          <button class="iq__collabBtn" type="button" data-collab="Cooing" data-discount="50000" data-benefit="표정 3종 무료" aria-pressed="false">
+          <button class="iq__collabBtn" type="button" data-collab="Cooing" data-discount="100000" aria-pressed="false">
             <div class="iq__collabName">Cooing</div>
-            <div class="iq__collabDesc">일러스트 ₩50,000 할인</div>
-            <div class="iq__collabSave">리깅 ₩50,000↓&nbsp;+&nbsp;표정&nbsp;3종</div>
+            <div class="iq__collabDesc">일러스트 ₩100,000 할인</div>
+            <div class="iq__collabSave">리깅 ₩100,000↓</div>
           </button>
           <button class="iq__collabBtn" type="button" data-collab="피치" data-discount="100000" data-benefit="표정 3종 무료" aria-pressed="false">
             <div class="iq__collabName">피치</div>
             <div class="iq__collabDesc">일러스트 ₩50,000 할인</div>
-            <div class="iq__collabSave">리깅 ₩100,000↓&nbsp;+&nbsp;표정&nbsp;3종</div>
+            <div class="iq__collabSave">리깅 ₩100,000↓</div>
           </button>
           <button class="iq__collabBtn" type="button" data-collab="쿠리" data-discount="100000" data-benefit="" aria-pressed="false">
             <div class="iq__collabName">쿠리</div>
