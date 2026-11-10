@@ -1670,280 +1670,810 @@
 .nx-rig .gl__single .gl__slot { flex: none; }
 @media (max-width: 768px) { .nx-rig .gl__single { grid-template-columns: calc((100% - 10px) / 2); } }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   LAVENDER NOIR — 블랙 · 화이트 · 라벤더, 레이스와 리본(୨୧) 장식
+   ========================================================= */
+:root {
+  --noir: #141118;
+  --noir-2: #1D1922;
+  --noir-line: #35303E;
+  --paper: #FFFFFF;
+  --mist: #F5F2FB;
+  --lav: #C8B6FF;
+  --lav-2: #A58CF5;
+  --vio: #7350DC;
+  --vio-ink: #5B3CC4;
+  --rose: #F48FC0;
+  --ink: #1A1620;
+  --txt: #4A4552;
+  --mut: #8A8494;
+  --line: #E6E0EF;
+  --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+}
+html, body { background: var(--paper) !important; }
+body { margin: 0; font-family: var(--sans); color: var(--txt); word-break: keep-all; -webkit-font-smoothing: antialiased; }
+
+/* 기존 컴포넌트(리깅 예시·견적 계산기) 색을 새 팔레트로 */
+.nx {
+  --ink: #1A1620; --text: #4A4552; --mute: #8A8494; --line: #E6E0EF; --line-2: #D5CDE3;
+  --soft: #F5F2FB; --card: #fff; --brand: #7350DC; --brand-ink: #5B3CC4; --brand-soft: #EEE8FD;
+  --grad: linear-gradient(120deg, #C8B6FF, #7350DC); --deep-grad: linear-gradient(120deg, #A58CF5, #5B3CC4);
+  --dark: #141118; --dark-2: #1D1922; --dark-line: #35303E; --dark-text: #F4F0FA; --dark-mute: #ABA4B8;
+  background: transparent !important;
+}
+.nx-sec { padding: 120px 0 !important; }
+.nx-sec--dark { background: var(--noir) !important; }
+.nx-sec--dark::before, .nx-sec--dark::after { display: none !important; }
+
+/* ---------- 섹션 제목: 이탤릭 영문 + 한글 ---------- */
+.nx-head { grid-template-columns: 1fr auto !important; margin-bottom: 56px !important; }
+.nx-h2 { font-size: clamp(1.8rem, 3vw, 2.4rem) !important; font-weight: 800 !important; letter-spacing: -0.04em !important; }
+.nx-h2::before {
+  content: attr(data-en) !important;
+  display: block !important; width: auto !important; height: auto !important; background: none !important; box-shadow: none !important; filter: none !important;
+  font-family: var(--serif); font-style: italic; font-weight: 500; letter-spacing: 0;
+  font-size: clamp(3rem, 7vw, 5.4rem); line-height: .9; color: var(--vio);
+  margin: 0 0 6px -0.04em !important; transform: none !important; clip-path: none !important;
+}
+.nx-sec--dark .nx-h2::before, .jr-dark .nx-h2::before { color: var(--lav); }
+.nx-anim .nx-h2::before { transform: none !important; }
+.nx-lede { color: var(--mut) !important; }
+.nx-sec--dark .nx-lede, .jr-dark .nx-lede { color: #ABA4B8 !important; }
+.jr-dark .nx-h2 { color: #fff !important; }
+.jr-dark .nx-lede b, .jr-dark .nx-lede strong { color: #fff !important; }
+.nx-meta { color: var(--mut); }
+.nx-meta b { background: none !important; -webkit-text-fill-color: var(--vio) !important; color: var(--vio) !important; }
+
+.orn { font-family: var(--serif); font-style: italic; font-size: 1.05rem; letter-spacing: .04em; color: var(--lav); margin: 0; }
+.orn::before, .orn::after { content: '୨୧'; font-style: normal; margin: 0 .55em; color: var(--rose); font-size: .9em; }
+.jr-div { text-align: center; color: var(--lav-2); font-size: 1rem; letter-spacing: .6em; margin: 0; }
+
+/* ---------- 레이스 가장자리 ---------- */
+.lace { position: relative; z-index: 1; height: 22px; margin: -1px 0; background-color: var(--lb, #fff);
+  background-image: radial-gradient(circle at 13px 6px, #fff 2.2px, transparent 2.8px), radial-gradient(circle at 13px 0, var(--noir) 12px, transparent 12.6px);
+  background-size: 26px 22px; background-repeat: repeat-x; }
+.lace--up { transform: scaleY(-1); }
+.lace-b, .lace-t { position: relative; }
+.lace-b::after, .lace-t::before {
+  content: ''; position: absolute; left: 0; right: 0; height: 22px; pointer-events: none; z-index: 2;
+  background:
+    radial-gradient(circle at 13px 6px, var(--paper) 2.2px, transparent 2.8px) 0 0 / 26px 22px repeat-x,
+    radial-gradient(circle at 13px 0, var(--noir) 12px, transparent 12.6px) 0 0 / 26px 22px repeat-x;
+}
+.lace-b::after { bottom: -21px; }
+.lace-t::before { top: -21px; transform: scaleY(-1); }
+
+/* ---------- 버튼 ---------- */
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 26px; border-radius: 999px; font: 700 1rem/1 var(--sans); text-decoration: none; cursor: pointer; transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease; }
+.btn--lav { background: var(--lav); color: var(--noir); box-shadow: 0 10px 30px -10px rgba(200, 182, 255, .7); }
+.btn--lav:hover { background: #fff; transform: translateY(-2px); }
+.btn--ghost { color: #fff; border: 1px solid rgba(255, 255, 255, .35); }
+.btn--ghost:hover { border-color: var(--lav); color: var(--lav); }
+.btn:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+
+/* =========================================================
+   1. HERO (작업 갤러리 포함)
+   ========================================================= */
+.hero { background: var(--noir); color: #fff; padding: 0 0 70px; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(700px 420px at 85% 10%, rgba(165, 140, 245, .22), transparent 70%), radial-gradient(500px 360px at 0% 90%, rgba(244, 143, 192, .12), transparent 70%); }
+.tb { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 26px 28px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.tb__logo { display: flex; align-items: baseline; gap: 10px; color: #fff; text-decoration: none; }
+.tb__logo b { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 1.7rem; letter-spacing: .01em; }
+.tb__logo span { font-size: .8rem; color: #ABA4B8; font-weight: 600; }
+.tb__nav { display: flex; gap: 26px; }
+.tb__nav a { color: #D9D3E4; text-decoration: none; font-size: .92rem; font-weight: 600; position: relative; }
+.tb__nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--lav); transform: scaleX(0); transition: transform .25s ease; }
+.tb__nav a:hover { color: #fff; }
+.tb__nav a:hover::after { transform: scaleX(1); }
+
+.hero__in { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 40px 28px 0; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); gap: 56px; align-items: center; }
+.hero__title { margin: 22px 0 0; font-size: clamp(2.2rem, 4.4vw, 3.6rem); line-height: 1.2; font-weight: 800; letter-spacing: -0.045em; color: #fff; }
+.hero__title .en { display: block; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: .62em; letter-spacing: 0; color: var(--lav); margin-bottom: 10px; }
+.hero__sub { margin: 22px 0 0; font-size: 1.05rem; line-height: 1.75; color: #C9C2D4; }
+.hero__cta { margin-top: 34px; display: flex; gap: 12px; flex-wrap: wrap; }
+.hero__slot { margin: 28px 0 0; display: inline-flex; align-items: center; gap: 10px; font-size: .9rem; color: #D9D3E4; padding-top: 22px; border-top: 1px solid var(--noir-line); }
+.hero__slot i { width: 8px; height: 8px; border-radius: 50%; background: #6E6879; }
+.hero__slot.is-open i { background: #8FF0C8; box-shadow: 0 0 0 0 rgba(143, 240, 200, .6); animation: jrPing 1.8s ease-out infinite; }
+@keyframes jrPing { to { box-shadow: 0 0 0 9px rgba(143, 240, 200, 0); } }
+
+.stage { position: relative; }
+.stage__frame { position: relative; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; background: #000; box-shadow: 0 0 0 1px rgba(200, 182, 255, .35), 0 40px 90px -40px rgba(165, 140, 245, .65); }
+.stage__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.stage::before, .stage::after { content: '୨୧'; position: absolute; color: var(--rose); font-size: 1.1rem; z-index: 2; }
+.stage::before { top: -26px; left: -4px; }
+.stage::after { bottom: 52px; right: -22px; transform: rotate(90deg); }
+.stage__bar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 16px; }
+.stage__now { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; min-width: 0; }
+.stage__now em { font-family: var(--serif); font-style: italic; color: var(--lav); font-size: 1.1rem; }
+.stage__now b { font-size: 1.25rem; color: #fff; font-weight: 800; letter-spacing: -0.02em; }
+.tag { font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba(200, 182, 255, .45); color: var(--lav); }
+.tag--CHZZK { border-color: rgba(143, 240, 200, .45); color: #8FF0C8; }
+.tag--SOOP { border-color: rgba(143, 180, 255, .5); color: #A9C4FF; }
+.stage__nav { display: flex; gap: 8px; flex: 0 0 auto; }
+.rd { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--noir-line); background: var(--noir-2); color: #fff; cursor: pointer; display: grid; place-items: center; transition: border-color .2s, background .2s; }
+.rd:hover { border-color: var(--lav); background: #2A2433; }
+.rd svg { width: 18px; height: 18px; }
+
+.reel { position: relative; z-index: 1; max-width: 1240px; margin: 56px auto 0; padding: 0 28px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 14px; }
+.reel__it { all: unset; box-sizing: border-box; cursor: pointer; display: block; }
+.reel__img { position: relative; display: block; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; background: var(--noir-2); box-shadow: 0 0 0 1px var(--noir-line); transition: box-shadow .25s ease, transform .25s ease; }
+.reel__img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(.55) brightness(.75); transition: filter .3s ease; }
+.reel__it:hover .reel__img img, .reel__it.is-on .reel__img img { filter: none; }
+.reel__it.is-on .reel__img { box-shadow: 0 0 0 2px var(--lav); transform: translateY(-3px); }
+.reel__nm { display: block; margin-top: 9px; font-size: .86rem; font-weight: 700; color: #ABA4B8; text-align: center; }
+.reel__it.is-on .reel__nm { color: #fff; }
+.reel__it:focus-visible .reel__img { box-shadow: 0 0 0 2px var(--rose); }
+
+/* =========================================================
+   2. MENU (메뉴판)
+   ========================================================= */
+.jr-sec { position: relative; padding: 120px 0; }
+.jr-wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+.jr-dark { background: var(--noir); color: #D9D3E4; }
+.jr-mist { background: var(--mist); }
+
+.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.plan { position: relative; padding: 44px 44px 40px; border-radius: 28px; border: 1px solid var(--line); background: #fff; overflow: hidden; }
+.plan--noir { background: var(--noir); border-color: var(--noir); color: #D9D3E4; }
+.plan--noir::before { content: ''; position: absolute; right: -120px; top: -140px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(closest-side, rgba(165, 140, 245, .35), transparent); }
+.plan > * { position: relative; }
+.plan__en { font-family: var(--serif); font-style: italic; font-size: 1.5rem; color: var(--vio); }
+.plan--noir .plan__en { color: var(--lav); }
+.plan__name { margin: 2px 0 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+.plan--noir .plan__name { color: #fff; }
+.plan__for { margin: 6px 0 0; font-size: .95rem; color: var(--mut); }
+.plan--noir .plan__for { color: #ABA4B8; }
+.plan__price { margin: 30px 0 26px; font-size: clamp(2.4rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -0.045em; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
+.plan__price small { font-size: .45em; vertical-align: .55em; margin-right: 4px; }
+.plan--noir .plan__price { color: #fff; }
+.plan__feat { list-style: none; margin: 0; padding: 24px 0 0; border-top: 1px solid var(--line); display: grid; gap: 12px; }
+.plan--noir .plan__feat { border-top-color: var(--noir-line); }
+.plan__feat li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; font-size: .98rem; line-height: 1.5; color: var(--txt); }
+.plan--noir .plan__feat li { color: #E9E4F1; }
+.plan__feat li::before { content: '♡'; color: var(--vio); font-size: .95rem; line-height: 1.5; }
+.plan--noir .plan__feat li::before { color: var(--rose); }
+.plan__note { font-size: .82em; font-weight: 700; color: var(--rose); margin-left: 4px; white-space: nowrap; }
+
+.board { margin-top: 28px; background: var(--noir); color: #D9D3E4; border-radius: 28px; padding: 56px 56px 40px; position: relative; overflow: hidden; }
+.board__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; padding-bottom: 26px; border-bottom: 1px solid var(--noir-line); margin-bottom: 36px; }
+.board__head h3 { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 2.6rem; color: var(--lav); line-height: 1; }
+.board__head p { margin: 0; font-size: .9rem; color: #ABA4B8; }
+.board__cols { columns: 2; column-gap: 64px; }
+.cat { break-inside: avoid; margin: 0 0 40px; }
+.cat__h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 14px; }
+.cat__h h4 { margin: 0; font-size: 1.12rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+.cat__h h4::before { content: '୨୧'; color: var(--rose); margin-right: 8px; font-weight: 400; font-size: .9em; }
+.cat__h span { font-size: .8rem; color: #8F889C; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mi { padding: 10px 0; }
+.mi + .mi { border-top: 1px dashed #2E2936; }
+.mi__l { display: flex; align-items: baseline; gap: 10px; }
+.mi__n { font-size: .98rem; font-weight: 700; color: #F4F0FA; }
+.mi__d { flex: 1; border-bottom: 1.5px dotted #4A4455; transform: translateY(-4px); min-width: 16px; }
+.mi__p { font-size: .98rem; font-weight: 800; color: var(--lav); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mi__s { margin: 4px 0 0; font-size: .84rem; line-height: 1.55; color: #9E97AB; }
+.tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 0 4px; }
+.tier { border: 1px solid #35303E; border-radius: 12px; padding: 10px 12px; }
+.tier b { display: block; font-size: .72rem; font-weight: 700; color: #ABA4B8; }
+.tier strong { display: block; margin-top: 3px; font-size: .95rem; font-weight: 800; color: var(--lav); font-variant-numeric: tabular-nums; }
+.tier span { display: block; margin-top: 3px; font-size: .74rem; line-height: 1.4; color: #8F889C; }
+.callout { margin: 10px 0 4px; padding: 12px 14px; border-radius: 12px; background: rgba(200, 182, 255, .1); font-size: .85rem; line-height: 1.6; color: #E1DAF0; }
+.callout b { color: var(--lav); margin-right: 6px; }
+.callout strong { color: #fff; }
+.note { margin: 8px 0 0; font-size: .8rem; color: #8F889C; padding-left: 14px; position: relative; }
+.note::before { content: '♡'; position: absolute; left: 0; color: var(--rose); font-size: .75rem; }
+
+/* =========================================================
+   3. PROCESS
+   ========================================================= */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
+.step { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 26px 24px 26px; transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease; }
+.step:hover { border-color: var(--lav); transform: translateY(-4px); box-shadow: 0 24px 40px -28px rgba(115, 80, 220, .45); }
+.step__no { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 3rem; line-height: .9; color: var(--lav-2); }
+.step:last-child { background: var(--noir); border-color: var(--noir); }
+.step:last-child .step__no { color: var(--lav); }
+.step:last-child h3 { color: #fff; }
+.step:last-child p { color: #ABA4B8; }
+.step h3 { margin: 18px 0 0; font-size: 1.08rem; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; }
+.step p { margin: 6px 0 0; font-size: .9rem; line-height: 1.55; color: var(--mut); }
+.pnotes { list-style: none; margin: 40px 0 0; padding: 30px 0 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 48px; }
+.pnotes li { position: relative; padding-left: 24px; font-size: .97rem; line-height: 1.65; color: var(--txt); }
+.pnotes li::before { content: '♡'; position: absolute; left: 0; color: var(--vio); }
+.pnotes b { color: var(--ink); }
+
+/* =========================================================
+   4. COLLAB (포토카드)
+   ========================================================= */
+.pcs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+.pc { display: block; text-decoration: none; color: inherit; background: #fff; border-radius: 18px; padding: 10px 10px 18px; box-shadow: 0 30px 60px -36px rgba(0, 0, 0, .8); transition: transform .35s cubic-bezier(.22, .8, .24, 1), box-shadow .35s ease; }
+.pc:nth-child(3n+1) { transform: rotate(-1.2deg); }
+.pc:nth-child(3n+3) { transform: rotate(1.2deg); }
+.pc:hover { transform: rotate(0) translateY(-8px); box-shadow: 0 40px 70px -36px rgba(165, 140, 245, .7); }
+.pc__img { position: relative; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: #EDE8F5 var(--img) center / cover no-repeat; }
+.pc__img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .45) 50%, transparent 65%); transform: translateX(-100%); transition: transform .8s ease; }
+.pc:hover .pc__img::after { transform: translateX(100%); }
+.pc__body { padding: 16px 8px 0; }
+.pc__name { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 0; font-size: 1.12rem; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; }
+.pc__name span { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: .95rem; color: var(--vio); white-space: nowrap; }
+.pc__perks { margin: 12px 0 0; display: grid; gap: 6px; }
+.pc__perks div { display: grid; grid-template-columns: 58px 1fr; gap: 8px; font-size: .9rem; line-height: 1.45; }
+.pc__perks dt { color: var(--mut); font-weight: 600; }
+.pc__perks dd { margin: 0; color: var(--ink); font-weight: 700; }
+.pc__limit { display: table; margin-top: 6px; padding: 2px 10px; border-radius: 999px; background: var(--noir); color: var(--lav); font-size: .72rem; font-weight: 800; }
+.pc--soon { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 340px; background: transparent; border: 1px dashed #4A4455; box-shadow: none; color: #8F889C; }
+.pc--soon:hover { transform: none; box-shadow: none; border-color: var(--lav); }
+.pc--soon em { font-family: var(--serif); font-size: 1.8rem; color: var(--lav); }
+.pc--soon p { margin: 6px 0 0; font-size: .9rem; }
+
+/* =========================================================
+   5. SLOTS
+   ========================================================= */
+.months { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; }
+.mo { position: relative; border-radius: 999px 999px 24px 24px; padding: 30px 14px 22px; text-align: center; border: 1px solid var(--line); background: #fff; }
+.mo__m { font-family: var(--serif); font-style: italic; font-size: 2.6rem; font-weight: 500; line-height: 1; color: var(--ink); }
+.mo__m small { font-family: var(--sans); font-style: normal; font-size: .9rem; font-weight: 700; margin-left: 2px; }
+.mo__c { margin-top: 6px; font-size: .8rem; color: var(--mut); }
+.mo__seats { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
+.mo__seats i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--lav-2); }
+.mo__seats i.on { background: var(--lav-2); }
+.mo__s { margin-top: 12px; font-size: .85rem; font-weight: 800; color: var(--mut); }
+.mo[data-state="closed"] { background: var(--mist); border-color: var(--mist); }
+.mo[data-state="closed"] .mo__m { color: #B2ABBD; }
+.mo[data-state="closed"] .mo__seats i { border-color: #C9C2D4; }
+.mo[data-state="closed"] .mo__seats i.on { background: #C9C2D4; }
+.mo[data-state="vacation"] .mo__s { color: #B07A0E; }
+.mo[data-state="open"] { background: var(--noir); border-color: var(--noir); box-shadow: 0 24px 50px -24px rgba(115, 80, 220, .6); }
+.mo[data-state="open"] .mo__m { color: #fff; }
+.mo[data-state="open"] .mo__c { color: #ABA4B8; }
+.mo[data-state="open"] .mo__s { color: var(--lav); }
+.mo[data-state="open"] .mo__seats i { border-color: var(--lav); }
+.mo[data-state="open"] .mo__seats i.on { background: var(--lav); }
+.policy { list-style: none; margin: 44px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 48px; }
+.policy li { position: relative; padding-left: 24px; font-size: .96rem; line-height: 1.65; color: var(--txt); }
+.policy li::before { content: '♡'; position: absolute; left: 0; color: var(--vio); }
+.policy b { color: var(--ink); }
+
+/* =========================================================
+   6. NOTICE
+   ========================================================= */
+.ntc { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 32px; align-items: start; }
+.ntc__list { list-style: none; margin: 0; padding: 0; counter-reset: n; }
+.ntc__it { counter-increment: n; display: grid; grid-template-columns: 70px 1fr; gap: 10px; padding: 24px 0; border-top: 1px solid var(--line); }
+.ntc__it:last-child { border-bottom: 1px solid var(--line); }
+.ntc__it::before { content: counter(n, decimal-leading-zero); font-family: var(--serif); font-style: italic; font-size: 2rem; line-height: 1; color: var(--lav-2); }
+.ntc__tag { font-size: .78rem; font-weight: 800; color: var(--vio); }
+.ntc__it strong { display: block; margin-top: 3px; font-size: 1.05rem; color: var(--ink); letter-spacing: -0.01em; }
+.ntc__it p { margin: 5px 0 0; font-size: .92rem; line-height: 1.6; color: var(--mut); }
+.ntc__it.is-warn strong { color: #C2272D; }
+.ntc__it.is-warn .ntc__tag { color: #C2272D; }
+.evc { position: relative; border-radius: 24px; background: var(--noir); color: #D9D3E4; padding: 30px; overflow: hidden; }
+.evc .ev__inner { transition: filter .3s ease; }
+.evc.is-ended .ev__inner { filter: blur(5px); opacity: .5; pointer-events: none; user-select: none; }
+.evc__ov { display: none; }
+.evc.is-ended .evc__ov { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 10px; padding: 24px; }
+.evc__ov em { font-family: var(--serif); font-size: 2rem; color: var(--lav); }
+.evc__ov b { font-size: 1rem; color: #fff; }
+.evc__ov p { margin: 0; font-size: .86rem; color: #ABA4B8; }
+.evc .ev__live { font-size: .8rem; font-weight: 800; color: var(--rose); }
+.evc .ev__title { margin: 10px 0 0; font-size: 1.3rem; color: #fff; font-weight: 800; }
+.evc .ev__pastDate { margin: 4px 0 0; font-size: .82rem; color: #ABA4B8; }
+.evc .ev__price { margin-top: 16px; display: grid; gap: 8px; }
+.evc .ev__offer { display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: var(--noir-2); font-size: .88rem; }
+.evc .ev__offer s { color: #8F889C; margin-right: 6px; }
+.evc .ev__offer b { color: #fff; }
+.evc .ev__bonus { margin: 12px 0 0; font-size: .85rem; color: var(--lav); }
+
+/* =========================================================
+   7. INQUIRY (기존 계산기 재사용, 톤만 맞춤)
+   ========================================================= */
+.nx-iq .iq__block { border-radius: 26px !important; }
+.nx-iq .iq__secLabel em { background: var(--noir) !important; color: var(--lav) !important; font-family: var(--serif); font-style: italic; font-size: 1rem !important; }
+.nx-iq .iq__receipt { background: var(--noir) !important; box-shadow: 0 0 0 1px rgba(200, 182, 255, .3), 0 40px 70px -36px rgba(115, 80, 220, .6) !important; }
+.nx-iq .iq__receiptTitle::before { content: 'Order '; font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--lav); }
+.nx-iq .iq__btn--main { background: var(--lav) !important; color: var(--noir) !important; box-shadow: none !important; }
+.nx-iq .iq__btn--main:hover { background: #fff !important; }
+.nx-iq .iq__btn--main::after { display: none !important; }
+.nx-iq .iq__chip input:checked + span { background: var(--noir) !important; color: #fff !important; border-color: var(--noir) !important; }
+.nx-iq .iq__collabLimit, .cb__limit { background: var(--noir) !important; color: var(--lav) !important; }
+
+/* 리깅 예시 톤 */
+.nx-rig .gl__card { background: var(--noir-2) !important; border-color: var(--noir-line) !important; }
+.nx-rig .gl__badge::before { background: var(--lav) !important; box-shadow: none !important; }
+.nx-rig .gl__secPlay[aria-pressed="true"] { background: var(--lav) !important; color: var(--noir) !important; }
+.nx-rig .gl__secPlayIc { background: var(--lav) !important; }
+.nx-rig .gl__secPlayIc::before { border-left-color: var(--noir) !important; }
+.nx-rig .gl__tag { color: var(--lav) !important; }
+@media (hover: hover) { .nx-rig .gl__card:hover { border-color: var(--lav) !important; box-shadow: 0 24px 50px -24px rgba(165, 140, 245, .55) !important; } }
+.nx-rig .gl__basic { background: var(--lav) !important; color: var(--noir) !important; }
+
+/* 푸터 */
+.jr-foot { background: var(--noir); color: #8F889C; padding: 70px 0 60px; text-align: center; }
+.jr-foot b { display: block; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 2.2rem; color: #fff; }
+.jr-foot p { margin: 10px 0 0; font-size: .85rem; }
+
+/* 등장 모션 (기존 nx-rv 사용) */
+.hero .nx-rv { opacity: 1; }
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 1024px) {
+  .tb__nav { display: none; }
+  .hero__in { grid-template-columns: 1fr; gap: 40px; }
+  .reel { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 140px; overflow-x: auto; scrollbar-width: none; padding-top: 6px; padding-bottom: 4px; }
+  .reel::-webkit-scrollbar { display: none; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pcs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ntc { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .nx-sec, .jr-sec { padding: 84px 0 !important; }
+  .jr-wrap, .tb, .hero__in, .reel { padding-left: 18px; padding-right: 18px; }
+  .hero__in { padding-top: 18px; }
+  .stage::after { display: none; }
+  .stage__now b { font-size: 1.05rem; }
+  .plans { grid-template-columns: 1fr; gap: 16px; }
+  .plan { padding: 32px 24px 28px; }
+  .board { padding: 34px 20px 14px; border-radius: 22px; }
+  .board__head h3 { font-size: 2.1rem; }
+  .board__cols { columns: 1; }
+  .tiers { grid-template-columns: 1fr; }
+  .tier { display: grid; grid-template-columns: 44px auto 1fr; align-items: baseline; gap: 10px; }
+  .tier strong, .tier span { margin: 0; }
+  .tier span { text-align: right; }
+  .steps { grid-template-columns: 1fr; gap: 10px; }
+  .step { display: grid; grid-template-columns: 64px 1fr; column-gap: 10px; padding: 20px; }
+  .step__no { grid-row: span 2; font-size: 2.4rem; }
+  .step h3 { margin-top: 2px; }
+  .pnotes, .policy { grid-template-columns: 1fr; }
+  .pcs { grid-template-columns: 1fr; gap: 20px; }
+  .pc:nth-child(n) { transform: none; }
+  .months { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nx-head { grid-template-columns: 1fr !important; margin-bottom: 36px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__slot.is-open i { animation: none; }
+  .pc, .pc__img::after, .step { transition: none; }
+}
+</style>
+<style>
+/* 수정: 진행 과정 카드 윤곽 / 포토카드 반짝임 제거 / 마감 달 또렷하게 */
+.step { border: 1.5px solid #CDBFF0 !important; box-shadow: 0 12px 26px -20px rgba(115, 80, 220, .55); }
+.step__no { color: var(--vio) !important; }
+.step:last-child .step__no { color: var(--lav) !important; }
+.pc__img::after { display: none !important; }
+.mo[data-state="closed"] { background: #F1EDF6 !important; border: 1.5px solid #D6CDE4 !important; }
+.mo[data-state="closed"] .mo__m { color: #5E5869 !important; }
+.mo[data-state="closed"] .mo__c { color: #7A7386 !important; }
+.mo[data-state="closed"] .mo__seats i { border-color: #8A8494 !important; }
+.mo[data-state="closed"] .mo__seats i.on { background: #8A8494 !important; }
+.mo .mo__s { display: inline-block; margin-top: 14px; padding: 5px 14px; border-radius: 999px; font-size: .85rem; }
+.mo[data-state="closed"] .mo__s { background: #E4DEEC; color: #5E5869 !important; }
+.mo[data-state="open"] .mo__s { background: var(--lav); color: var(--noir) !important; }
+.mo[data-state="vacation"] .mo__s { background: #FFE7B3; color: #8A5A00 !important; }
+</style>
+<style>
+/* 견적·문의: 번호 배지 제거, 선택 표시는 페이지 톤에 맞춘 보라색 단색 */
+.nx-iq .iq__secLabel em { display: none !important; }
+.nx-iq .iq__baseCard[aria-pressed="true"], .nx-iq .iq__collabBtn[aria-pressed="true"], .nx-iq .iq__diffBtn[aria-pressed="true"],
+.nx-iq .iq__qtyItem.is-on, .nx-iq .iq__toggle:has(input:checked) {
+  background: #fff !important;
+  border: 1.5px solid #7350DC !important;
+  box-shadow: 0 0 0 3px rgba(115, 80, 220, .12), 0 16px 32px -22px rgba(115, 80, 220, .55) !important;
+}
+.nx-iq .iq__baseCard[aria-pressed="true"]::after, .nx-iq .iq__collabBtn[aria-pressed="true"]::after { background-color: #7350DC !important; border-color: #7350DC !important; }
+.nx-iq .iq__toggle input:checked { background-color: #7350DC !important; }
+.nx-iq .iq__chip input:checked + span { box-shadow: none !important; }
+.nx-iq .iq__input:focus, .nx-iq .iq__textarea:focus { border-color: #7350DC !important; box-shadow: 0 0 0 4px rgba(115, 80, 220, .15) !important; }
+.nx-iq .iq__stepBtn[data-act="inc"]:hover, .nx-iq .iq__diffAddBtn:hover { background: #7350DC !important; border-color: #7350DC !important; }
+.nx-iq .iq__recLinePrice--neg, .nx-iq .iq__recQty { color: #C8B6FF !important; }
+.nx-iq .iq__recLine.is-new .iq__recLineName { animation: none !important; }
+@keyframes nxTotal { 0% { color: #C8B6FF; } 100% { color: #fff; } }
+.nx-iq .iq__baseCard:hover, .nx-iq .iq__collabBtn:hover, .nx-iq .iq__diffBtn:hover, .nx-iq .iq__qtyItem:hover, .nx-iq .iq__toggle:hover { border-color: #B9A6F0 !important; box-shadow: 0 14px 28px -22px rgba(115, 80, 220, .5); }
+</style>
+<style>
+/* ===== 가독성 개선: 확인사항 · 진행 과정 안내 · 옵션 메뉴판 ===== */
+
+/* 작업 전 확인사항: 흰 카드 + 색 태그 */
+.ntc__list { display: grid; gap: 12px; }
+.ntc__it { background: #fff; border: 1.5px solid #DCD3EA !important; border-radius: 20px; padding: 22px 24px !important; grid-template-columns: 64px 1fr !important; align-items: start; box-shadow: 0 12px 26px -22px rgba(115, 80, 220, .5); }
+.ntc__it:last-child { border-bottom: 1.5px solid #DCD3EA !important; }
+.ntc__it::before { color: var(--vio) !important; font-size: 2.3rem !important; }
+.ntc__tag { display: inline-block; padding: 3px 10px; border-radius: 999px; background: #EEE8FD; color: var(--vio-ink) !important; font-size: .78rem; }
+.ntc__it strong { margin-top: 8px !important; font-size: 1.1rem !important; }
+.ntc__it p { color: #5E5869 !important; font-size: .95rem !important; }
+.ntc__it.is-warn { border-color: #F2B8BB !important; background: #FFF7F7; }
+.ntc__it.is-warn::before { color: #C2272D !important; }
+.ntc__it.is-warn .ntc__tag { background: #FDE3E4; color: #C2272D !important; }
+
+
+/* 옵션 메뉴판: 분류별 칸 나누기 + 여백 */
+.board__cols { column-gap: 28px !important; }
+.cat { background: #1D1922; border: 1px solid #2E2936; border-radius: 20px; padding: 22px 22px 14px; margin: 0 0 28px !important; }
+.cat__h { padding-bottom: 12px; margin-bottom: 6px !important; border-bottom: 1px solid #35303E; }
+.cat__h h4 { font-size: 1.15rem !important; }
+.cat__h span { color: #C8B6FF !important; font-weight: 700; }
+.mi { padding: 14px 0 !important; }
+.mi + .mi { border-top: 1px solid #2E2936 !important; }
+.mi__n { font-size: 1rem !important; }
+.mi__p { color: #fff !important; }
+.mi__s { color: #B3ACC0 !important; font-size: .86rem !important; margin-top: 6px !important; }
+.note { color: #B3ACC0 !important; font-size: .83rem !important; margin: 10px 0 6px !important; padding-left: 20px !important; }
+.callout { background: rgba(200, 182, 255, .12) !important; }
+
+/* 난이도: 단계별 색 구분 */
+.tiers { gap: 10px !important; margin: 14px 0 6px !important; }
+.tier { border: 0 !important; border-top: 3px solid var(--tc) !important; background: rgba(255, 255, 255, .04); border-radius: 12px !important; padding: 12px 12px 12px !important; }
+.tier:nth-child(1) { --tc: #7FE3BE; }
+.tier:nth-child(2) { --tc: #C8B6FF; }
+.tier:nth-child(3) { --tc: #F48FC0; }
+.tier b { display: inline-flex !important; align-items: center; gap: 6px; color: var(--tc) !important; font-size: .78rem !important; }
+.tier b::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--tc); }
+.tier strong { color: #fff !important; font-size: 1rem !important; margin-top: 6px !important; }
+.tier span { color: #B3ACC0 !important; font-size: .78rem !important; margin-top: 4px !important; }
+@media (max-width: 768px) {
+  .cat { padding: 18px 16px 10px; }
+  .tier { border-top: 0 !important; border-left: 3px solid var(--tc) !important; }
+  .ntc__it { grid-template-columns: 48px 1fr !important; padding: 18px !important; }
+  .ntc__it::before { font-size: 1.9rem !important; }
+}
+</style>
+<style>
+/* ===== 옵션 탭 · 진행 과정 · 예약 현황: 예전 구성 + 라벤더 누아르 색 ===== */
+/* 옵션 탭 */
+.ct { border: 1.5px solid #DCD3EA !important; border-radius: 26px !important; background: #fff !important; }
+.ct__title h3 { color: var(--ink) !important; }
+.ct__nav { background: #F5F2FB !important; border-right-color: #DCD3EA !important; }
+.ct__tab { color: var(--ink) !important; }
+.ct__tab small { color: #7A7386 !important; }
+.ct__tab[aria-selected="true"] { color: #fff !important; }
+.ct__tab[aria-selected="true"] small { color: rgba(255, 255, 255, .8) !important; }
+.ct__ind { background: var(--noir) !important; box-shadow: 0 10px 22px -12px rgba(20, 17, 24, .6) !important; }
+.ct__ind::after { background: var(--lav) !important; opacity: 1 !important; }
+@media (hover: hover) { .ct__tab:not([aria-selected="true"]):hover { color: var(--vio) !important; } }
+.ct__panelHead { border-bottom-color: var(--noir) !important; }
+.ct__panelHead span { color: var(--vio) !important; }
+.ct__price { color: var(--vio-ink) !important; }
+.ct__lead { border-bottom-color: #D5CDE3 !important; }
+.ct__item:hover { background: #F5F2FB !important; }
+.ct__item:hover .ct__name { color: var(--vio) !important; }
+.ct__desc, .ct__note { color: #6A6476 !important; }
+.ct__note::before { background: var(--vio) !important; }
+.ct__tier { background: #fff !important; border: 1.5px solid #E6E0EF !important; border-top: 3px solid var(--tc) !important; }
+.ct__tier:nth-child(1) { --tc: #2FBF8F; }
+.ct__tier:nth-child(2) { --tc: #7350DC; }
+.ct__tier:nth-child(3) { --tc: #E0559A; }
+.ct__tierLv { color: var(--tc) !important; font-weight: 800 !important; }
+.ct__tierLv i::before { background: linear-gradient(90deg, var(--tc) var(--f), #E6E0EF 0) !important; }
+.ct__tier b { color: var(--ink) !important; }
+.ct__callout { background: #F1ECFF !important; color: #3E3947 !important; }
+.ct__callout b { color: var(--vio-ink) !important; }
+@media (max-width: 768px) {
+  .ct__nav { border-bottom-color: #DCD3EA !important; }
+  .ct__tier { border-top: 1.5px solid #E6E0EF !important; border-left: 3px solid var(--tc) !important; }
+}
+
+/* 진행 과정 */
+.nx-proc { background: #EAE3FF !important; color: var(--txt) !important; }
+.nx-proc::before { background: radial-gradient(700px 320px at 15% 0%, rgba(255, 255, 255, .75), transparent 70%), radial-gradient(500px 360px at 100% 100%, rgba(165, 140, 245, .25), transparent 70%) !important; }
+.nx-proc .nx-h2 { color: var(--ink) !important; }
+.nx-proc .nx-h2::before { color: var(--vio) !important; background: none !important; }
+.nx-proc .nx-lede { color: #5E5869 !important; }
+.nx-proc .nx-meta { color: #5E5869 !important; }
+.nx-proc .nx-meta b { -webkit-text-fill-color: var(--vio) !important; color: var(--vio) !important; }
+.pv__track { background: rgba(115, 80, 220, .18) !important; }
+.pv__fill { background: var(--vio) !important; }
+.pv__node { background: #fff !important; color: var(--vio) !important; box-shadow: 0 0 0 1.5px #CDBFF0, 0 12px 24px -12px rgba(115, 80, 220, .5) !important; }
+.pv__step:last-child .pv__node { background: var(--noir) !important; color: var(--lav) !important; box-shadow: 0 12px 24px -10px rgba(20, 17, 24, .6) !important; }
+.pv__step:last-child .pv__node::after { border-color: rgba(115, 80, 220, .5) !important; }
+.pv__step h3 { color: var(--ink) !important; }
+.pv__step p { color: #5E5869 !important; }
+.pv__note { background: #fff !important; box-shadow: 0 0 0 1.5px #DCD3EA, 0 18px 34px -26px rgba(115, 80, 220, .5) !important; }
+.pv__note p { color: var(--txt) !important; }
+.pv__ic { background: #EEE8FD !important; color: var(--vio) !important; }
+.pv__note--key .pv__ic { background: var(--noir) !important; color: var(--lav) !important; }
+
+/* 예약 현황 */
+.av__m { background: #fff !important; border: 1.5px solid #DCD3EA !important; border-radius: 20px !important; box-shadow: none !important; }
+.av__name { color: var(--ink) !important; }
+.av__cap { color: #7A7386 !important; }
+.av__seats i { background: #E6E0EF !important; box-shadow: none !important; }
+.av__seats i.on { background: var(--vio) !important; }
+.av__state { color: #7A7386 !important; }
+.av__m[data-state="closed"] { background: #F3F0F8 !important; border-color: #DCD3EA !important; }
+.av__m[data-state="closed"] .av__name { color: #6E6879 !important; }
+.av__m[data-state="closed"] .av__seats i.on { background: #B3ABC0 !important; }
+.av__m[data-state="closed"] .av__state { color: #8A8494 !important; }
+.av__m[data-state="vacation"] { background: #FFF6E0 !important; border-color: #F3DFAF !important; }
+.av__m[data-state="vacation"] .av__state { color: #8A5A00 !important; }
+.av__m[data-state="open"] { background: var(--noir) !important; border-color: var(--noir) !important; box-shadow: 0 22px 44px -24px rgba(115, 80, 220, .65) !important; }
+.av__m[data-state="open"] .av__name { color: #fff !important; }
+.av__m[data-state="open"] .av__cap { color: #ABA4B8 !important; }
+.av__m[data-state="open"] .av__state { color: var(--lav) !important; }
+.av__m[data-state="open"] .av__seats i { background: transparent !important; box-shadow: inset 0 0 0 1.5px var(--lav) !important; }
+.av__m[data-state="open"] .av__seats i.on { background: var(--lav) !important; }
+.av__m[data-state="open"]::after { background: var(--lav) !important; }
+.av__policy li::before { background: none !important; content: '♡' !important; width: auto !important; height: auto !important; top: 0 !important; color: var(--vio); }
+
+/* ===== 모바일 첫 화면: 짧게, 작업 목록은 한눈에 ===== */
+@media (max-width: 768px) {
+  .hero .orn, .hero__sub { display: none; }
+  .hero__title { font-size: 2rem; margin-top: 6px; }
+  .hero__cta { margin-top: 22px; }
+  .hero__cta .btn { padding: 14px 20px; font-size: .95rem; }
+  .hero__slot { margin-top: 20px; padding-top: 16px; }
+  .hero__in { gap: 28px; }
+  .reel { display: grid !important; grid-auto-flow: row !important; grid-template-columns: repeat(4, minmax(0, 1fr)) !important; grid-auto-columns: auto !important; overflow: visible !important; gap: 10px 8px !important; margin-top: 22px !important; padding-top: 0 !important; }
+  .reel__img { border-radius: 8px; }
+  .reel__nm { font-size: .74rem; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hero { padding-bottom: 44px; }
+}
+</style>
+<style>
+/* ===== 리깅 메뉴: 가격 카드와 옵션 사이 간격 ===== */
+.ct__title { margin-top: 72px !important; margin-bottom: 22px !important; align-items: flex-end !important; }
+.ct__title h3 { font-size: 1.6rem !important; }
+.ct__title h3::before { content: 'Options'; display: block; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 2.6rem; line-height: 1; color: var(--vio); margin-bottom: 4px; }
+
+/* ===== 추가 옵션: 어두운 바탕 + 리본 장식 ===== */
+.ct { background: var(--noir) !important; border: 0 !important; box-shadow: 0 40px 80px -50px rgba(20, 17, 24, .8) !important; }
+.ct__nav { background: #1D1922 !important; border-right: 1px solid #2E2936 !important; }
+.ct__tab { color: #E9E4F1 !important; }
+.ct__tab small { color: #8F889C !important; }
+.ct__ind { background: var(--lav) !important; box-shadow: 0 10px 24px -12px rgba(200, 182, 255, .6) !important; }
+.ct__ind::after { display: none !important; }
+.ct__tab[aria-selected="true"] { color: var(--noir) !important; }
+.ct__tab[aria-selected="true"] small { color: rgba(20, 17, 24, .65) !important; }
+@media (hover: hover) { .ct__tab:not([aria-selected="true"]):hover { color: var(--lav) !important; } }
+.ct__panelHead { border-bottom: 1px solid #35303E !important; }
+.ct__panelHead h4 { color: #fff !important; }
+.ct__panelHead h4::before { content: '୨୧'; color: var(--rose); margin-right: 8px; font-weight: 400; font-size: .9em; }
+.ct__panelHead span { color: var(--lav) !important; }
+.ct__item + .ct__item::before, .ct__extra + .ct__item::before { border-top-color: #2E2936 !important; }
+.ct__item:hover { background: rgba(200, 182, 255, .06) !important; }
+.ct__name { color: #F4F0FA !important; }
+.ct__item:hover .ct__name { color: var(--lav) !important; }
+.ct__price { color: var(--lav) !important; }
+.ct__lead { border-bottom-color: #4A4455 !important; }
+.ct__desc { color: #B3ACC0 !important; }
+.ct__note { color: #B3ACC0 !important; padding-left: 18px !important; }
+.ct__note::before { content: '♡' !important; background: none !important; width: auto !important; height: auto !important; top: 0 !important; color: var(--rose); font-size: .75rem; }
+.ct__tier { background: rgba(255, 255, 255, .04) !important; border: 0 !important; border-top: 3px solid var(--tc) !important; }
+.ct__tier:nth-child(1) { --tc: #7FE3BE; }
+.ct__tier:nth-child(2) { --tc: #C8B6FF; }
+.ct__tier:nth-child(3) { --tc: #F48FC0; }
+.ct__tier b { color: #fff !important; }
+.ct__tier p { color: #B3ACC0 !important; }
+.ct__tierLv i::before { background: linear-gradient(90deg, var(--tc) var(--f), #3A3444 0) !important; }
+.ct__callout { background: rgba(200, 182, 255, .12) !important; color: #E1DAF0 !important; }
+.ct__callout b { color: var(--lav) !important; }
+.ct__callout strong { color: #fff !important; }
+@media (max-width: 768px) {
+  .ct__title { margin-top: 52px !important; flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
+  .ct__title h3::before { font-size: 2.1rem; }
+  .ct__nav { border-right: 0 !important; border-bottom: 1px solid #2E2936 !important; }
+  .ct__tier { border-top: 0 !important; border-left: 3px solid var(--tc) !important; }
+}
+
+/* ===== 협업: 모집 중 칸 ===== */
+.pc--soon em { white-space: nowrap; }
+
+/* ===== 작업 전 확인사항: 아이콘 ===== */
+.ntc__it { grid-template-columns: 52px 1fr !important; gap: 16px !important; }
+.ntc__it::before { display: none !important; }
+.ntc__ic { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: var(--c); color: #fff; box-shadow: 0 10px 20px -10px var(--c); }
+.ntc__ic svg { width: 24px; height: 24px; }
+.ntc--info { --c: #5B7CE8; }
+.ntc--work { --c: #7350DC; }
+.ntc--fee { --c: #B066D6; }
+.ntc--warn { --c: #D9434A; }
+.ntc__tag { background: color-mix(in srgb, var(--c) 12%, #fff) !important; color: var(--c) !important; }
+@media (max-width: 768px) { .ntc__it { grid-template-columns: 44px 1fr !important; gap: 14px !important; } .ntc__ic { width: 44px; height: 44px; border-radius: 13px; } .ntc__ic svg { width: 20px; height: 20px; } }
+
+/* ===== 첫 화면 작업 목록 (모바일: 넘겨보는 카드) ===== */
+.reel__meta { display: none; }
+@media (max-width: 768px) {
+  .reel__meta { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; max-width: 1240px; margin: 26px auto 10px; padding: 0 18px; position: relative; z-index: 1; }
+  .reel__meta b { font-size: .9rem; color: #fff; font-weight: 800; }
+  .reel__meta span { font-size: .78rem; color: #ABA4B8; }
+  .reel { display: flex !important; grid-template-columns: none !important; overflow-x: auto !important; scroll-snap-type: x mandatory; gap: 10px !important; margin-top: 0 !important; padding: 4px 18px 6px !important; scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+  .reel::-webkit-scrollbar { display: none; }
+  .reel__it { flex: 0 0 44%; scroll-snap-align: start; position: relative; }
+  .reel { scroll-padding-left: 18px; }
+  .reel__img { aspect-ratio: 16 / 10; border-radius: 12px; }
+  .reel__img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(20, 17, 24, .85)); }
+  .reel__nm { position: absolute; left: 10px; right: 10px; bottom: 8px; margin: 0 !important; text-align: left !important; color: #fff !important; font-size: .85rem !important; z-index: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .reel__img img { filter: brightness(.85) !important; }
+  .reel__it.is-on .reel__img { box-shadow: 0 0 0 2px var(--lav) !important; transform: none !important; }
+}
+
+/* ===== 견적 계산기: 모바일 단계 탭 ===== */
+.iqt { display: none; }
+.iq--tabs { gap: 0 !important; }
+.iq--tabs .iqt { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: -4px -4px 20px; padding: 4px; scroll-margin-top: 20px; }
+.iq--tabs .iqt::-webkit-scrollbar { display: none; }
+.iqt__b { all: unset; box-sizing: border-box; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; padding: 10px 14px; border-radius: 999px; background: #F5F2FB; color: var(--ink); font-size: .88rem; font-weight: 700; cursor: pointer; }
+.iqt__b em { font-style: normal; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: .72rem; background: #fff; color: var(--vio); }
+.iqt__b[aria-selected="true"] { background: var(--noir); color: #fff; }
+.iqt__b[aria-selected="true"] em { background: var(--lav); color: var(--noir); }
+.iq--tabs > div:not(.iqt):not(.iqt__prog) { display: none; }
+.iq--tabs > div.is-on { display: block !important; }
+.iq--tabs .iq__acc { display: none; }
+.iq--tabs .iq__acc.is-on { display: block; }
+.iq--tabs .iq__secLabel, .iq--tabs .iq__accSum { display: none !important; }
+.iq--tabs .iq__field.is-on .iq__secLabel { display: flex !important; }
+.iqt__next { display: none; }
+.iq--tabs .iqt__next { all: unset; box-sizing: border-box; display: block; width: 100%; margin-top: 18px; padding: 14px; border-radius: 14px; text-align: center; background: var(--noir); color: var(--lav); font-weight: 800; font-size: .95rem; cursor: pointer; }
+</style>
+<style>
+/* 견적 단계 탭: 부드러운 전환 */
+.iq--tabs .iqt { position: relative; isolation: isolate; }
+.iqt__ind { position: absolute; left: 0; top: 0; z-index: -1; border-radius: 999px; background: var(--noir); transition: transform .4s cubic-bezier(.22, .8, .24, 1), width .4s cubic-bezier(.22, .8, .24, 1); pointer-events: none; }
+.iqt__b { transition: color .3s ease, background .3s ease; }
+.iqt__b[aria-selected="true"] { background: transparent !important; }
+.iqt__b em { transition: background .3s ease, color .3s ease; }
+.iqt__prog { display: none; }
+.iq--tabs .iqt__prog { display: block; height: 3px; border-radius: 2px; background: #EEE8FD; margin: -8px 0 20px; overflow: hidden; }
+.iqt__prog i { display: block; height: 100%; width: 0; background: var(--vio); border-radius: inherit; transition: width .45s cubic-bezier(.22, .8, .24, 1); }
+.iq--tabs .iq__acc.is-on > .iq__accSum { display: block !important; margin-bottom: 12px; font-size: .85rem; color: var(--mut); }
+.iq-in { animation: iqIn .38s cubic-bezier(.22, .8, .24, 1) both; }
+.iq-in--back { animation: iqInBack .38s cubic-bezier(.22, .8, .24, 1) both; }
+@keyframes iqIn { from { opacity: 0; transform: translateX(22px); } to { opacity: 1; transform: none; } }
+@keyframes iqInBack { from { opacity: 0; transform: translateX(-22px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .iq-in, .iq-in--back { animation: none; } .iqt__ind, .iqt__prog i { transition: none; } }
+</style>
 </head>
 <body>
-
-    <section class="sc" id="showcase" aria-label="작업 갤러리">
-        <div class="sc__glow" aria-hidden="true"></div>
-        <div class="sc__head">
-            <div>
-                <div class="sc__brand"><span>Live2D Rigging</span></div>
-                <h1 class="sc__title">작업 갤러리</h1>
-                <p class="sc__sub">실제 방송에서 움직이는 모델을 확인해 보세요.</p>
-            </div>
-        </div>
-
-        <div class="sc__desk">
-            <!-- PC: 폴더 탭 목록 -->
-            <div class="sc__list" id="scList">
-                <div class="sc__listHead"><span>Playlist</span><span>총 <b id="scTotal">0</b>개</span></div>
-            </div>
-
-            <!-- 모니터 -->
-            <div class="sc__monitor">
-                <div class="sc__now">
-                    <span class="sc__nowLabel">Now</span>
-                    <div class="sc__nowMain" id="scNow"></div>
-                </div>
-
-                <div class="sc__screen">
-                    <iframe id="scFrame" title="Live2D 쇼케이스" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
-                    <div class="sc__cover" id="scCover"><img alt=""></div>
-                </div>
-
-                <div class="sc__param">
-                    <button class="sc__step sc__step--prev" id="scPrev" type="button" aria-label="이전 작업"></button>
-                    <div class="sc__slider">
-                        <div class="sc__sliderTop"><span>Showcase</span><span id="scPos"></span></div>
-                        <div class="sc__track" id="scTrack" tabindex="0" role="slider" aria-label="작업 선택" aria-valuemin="1">
-                            <div class="sc__rail"><div class="sc__fill" id="scFill"></div></div>
-                            <div class="sc__knob" id="scKnob"><span class="sc__knobTip" id="scTip"></span></div>
-                        </div>
-                    </div>
-                    <button class="sc__step sc__step--next" id="scNext" type="button" aria-label="다음 작업"></button>
-                </div>
-
-                <!-- 모바일: 썸네일 레일 -->
-                <div class="sc__strip" id="scStrip"></div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-    (function () {
-        const VIDEOS = [
-            { id: "9Ehdze8WTd8", name: "쿠잉", platform: "CHZZK" },
-            { id: "B7JMb4uTo_A", name: "몽냐", platform: "CHZZK" },
-            { id: "F-9i3QCwyac", name: "루치로", platform: "CHZZK" },
-            { id: "3n33khIgAgc", name: "유우이", platform: "CHZZK" },
-            { id: "Vwv1Ut-qEtg", name: "슬묘", platform: "CHZZK" },
-            { id: "GmHCBD8DT_4", name: "하주야", platform: "CHZZK" },
-            { id: "nKnbNQM_E6Y", name: "아야린", platform: "CHZZK" }
-        ];
-
-        const N = VIDEOS.length;
-        const $ = (id) => document.getElementById(id);
-        const list = $('scList'), strip = $('scStrip'), frame = $('scFrame'), cover = $('scCover');
-        const now = $('scNow'), pos = $('scPos'), track = $('scTrack'), fill = $('scFill'), knob = $('scKnob'), tip = $('scTip');
-        let current = -1;
-
-        const embed = (id) => `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1`;
-        const thumb = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-        const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-        const chips = (v) => [
-            v.platform ? `<span class="sc__chip sc__chip--${/^(CHZZK|SOOP)$/.test(v.platform) ? v.platform : 'etc'}">${esc(v.platform)}</span>` : '',
-            ...(v.tags || []).map((t) => `<span class="sc__chip sc__chip--tag">${esc(t)}</span>`)
-        ].join('');
-
-        /* ---------- 목록 만들기 ---------- */
-        $('scTotal').textContent = N;
-        track.setAttribute('aria-valuemax', N);
-
-        const items = VIDEOS.map((v, i) => {
-            const b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'sc__item';
-            b.setAttribute('aria-label', `${v.name} 재생 화면으로 바꾸기`);
-            const c = chips(v);
-            b.innerHTML = `
-                <span class="sc__itemThumb"><img src="${thumb(v.id)}" alt="" loading="lazy"></span>
-                <span class="sc__itemText">
-                    <span class="sc__itemName">${esc(v.name)}</span>
-                    ${c ? `<span class="sc__chips">${c}</span>` : ''}
-                </span>`;
-            b.addEventListener('click', () => go(i));
-            list.appendChild(b);
-            return b;
-        });
-
-        const stripItems = VIDEOS.map((v, i) => {
-            const b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'sc__stripItem';
-            b.setAttribute('aria-label', `${v.name} 보기`);
-            b.innerHTML = `<span class="sc__stripThumb"><img src="${thumb(v.id)}" alt="" loading="lazy"></span><span class="sc__stripName">${esc(v.name)}</span>`;
-            b.addEventListener('click', () => go(i));
-            strip.appendChild(b);
-            return b;
-        });
-
-        const ticks = VIDEOS.map((v, i) => {
-            const t = document.createElement('span');
-            t.className = 'sc__tick';
-            t.style.left = pct(i) + '%';
-            track.insertBefore(t, knob);
-            return t;
-        });
-
-        function pct(i) { return N > 1 ? (i / (N - 1)) * 100 : 50; }
-
-        function setSlider(i, live) {
-            knob.style.left = pct(i) + '%';
-            fill.style.width = pct(i) + '%';
-            ticks.forEach((t, k) => t.classList.toggle('is-passed', k <= i));
-            tip.textContent = VIDEOS[i].name;
-            if (!live) {
-                pos.innerHTML = `<b>${i + 1}</b> / ${N}`;
-                track.setAttribute('aria-valuenow', i + 1);
-                track.setAttribute('aria-valuetext', `${i + 1}번째, ${VIDEOS[i].name}`);
-            }
-        }
-
-        /* ---------- 작업 바꾸기 ---------- */
-        let coverTimer = 0;
-        function go(i, opts) {
-            i = (i + N) % N;
-            if (i === current) return;
-            const fromLeft = current !== -1 && (i < current);
-            const first = current === -1;
-            current = i;
-            const v = VIDEOS[i];
-
-            // 이름·태그 (항상 보이는 곳)
-            const c = chips(v);
-            now.innerHTML = `<span class="sc__nowName">${esc(v.name)}</span>${c}`;
-            now.classList.remove('sc__swapIn', 'from-left');
-            void now.offsetWidth;
-            if (!first) now.classList.add('sc__swapIn');
-            if (fromLeft) now.classList.add('from-left');
-
-            // 넘기는 느낌: 썸네일이 옆에서 밀려 들어왔다가 영상이 뜨면 사라짐
-            if (!first) {
-                clearTimeout(coverTimer);
-                cover.querySelector('img').src = thumb(v.id);
-                cover.className = 'sc__cover';
-                void cover.offsetWidth;
-                cover.className = 'sc__cover is-in' + (fromLeft ? ' from-left' : '');
-                const hide = () => { cover.className = 'sc__cover is-out'; };
-                frame.onload = () => { clearTimeout(coverTimer); coverTimer = setTimeout(hide, 250); };
-                coverTimer = setTimeout(hide, 2000);
-            }
-            frame.src = embed(v.id);
-
-            items.forEach((b, k) => {
-                b.classList.toggle('is-current', k === i);
-                if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
-            });
-            stripItems.forEach((b, k) => b.classList.toggle('is-current', k === i));
-            setSlider(i);
-
-            // 목록·레일 안에서만 현재 항목이 보이게 (페이지 스크롤 없음)
-            keepVisible(list, items[i], 'y');
-            keepVisible(strip, stripItems[i], 'x');
-        }
-
-        function keepVisible(box, el, axis) {
-            if (!box || !el || box.offsetParent === null) return;
-            if (axis === 'x') {
-                if (box.scrollWidth <= box.clientWidth) return;
-                box.scrollTo({ left: el.offsetLeft - (box.clientWidth - el.offsetWidth) / 2, behavior: 'smooth' });
-            } else {
-                if (box.scrollHeight <= box.clientHeight) return;
-                const top = el.offsetTop, bottom = top + el.offsetHeight;
-                if (top < box.scrollTop) box.scrollTo({ top: top - 10, behavior: 'smooth' });
-                else if (bottom > box.scrollTop + box.clientHeight) box.scrollTo({ top: bottom - box.clientHeight + 10, behavior: 'smooth' });
-            }
-        }
-
-        $('scPrev').addEventListener('click', () => go(current - 1));
-        $('scNext').addEventListener('click', () => go(current + 1));
-
-        /* ---------- 슬라이더 끌기 ---------- */
-        let dragIdx = -1;
-        function idxFromX(x) {
-            const r = track.getBoundingClientRect();
-            const p = Math.min(1, Math.max(0, (x - r.left) / r.width));
-            return { idx: Math.round(p * (N - 1)), p: p };
-        }
-        track.addEventListener('pointerdown', (e) => {
-            track.setPointerCapture(e.pointerId);
-            track.classList.add('is-dragging');
-            move(e);
-        });
-        track.addEventListener('pointermove', (e) => { if (track.classList.contains('is-dragging')) move(e); });
-        function move(e) {
-            const r = idxFromX(e.clientX);
-            dragIdx = r.idx;
-            knob.style.left = (r.p * 100) + '%';
-            fill.style.width = (r.p * 100) + '%';
-            ticks.forEach((t, k) => t.classList.toggle('is-passed', k <= r.idx));
-            tip.textContent = VIDEOS[r.idx].name;
-        }
-        function endDrag() {
-            if (!track.classList.contains('is-dragging')) return;
-            track.classList.remove('is-dragging');
-            if (dragIdx >= 0 && dragIdx !== current) go(dragIdx);
-            else setSlider(current);
-            dragIdx = -1;
-        }
-        track.addEventListener('pointerup', endDrag);
-        track.addEventListener('pointercancel', endDrag);
-        track.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); go(current - 1); }
-            if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); go(current + 1); }
-            if (e.key === 'Home') { e.preventDefault(); go(0); }
-            if (e.key === 'End') { e.preventDefault(); go(N - 1); }
-        });
-
-        /* ---------- 모바일: 이름 바·슬라이더 영역에서 옆으로 밀어 넘기기 ---------- */
-        const swipeZone = document.querySelector('.sc__now');
-        let sx = 0, sy = 0, on = false;
-        swipeZone.addEventListener('touchstart', (e) => { if (e.touches.length === 1) { on = true; sx = e.touches[0].clientX; sy = e.touches[0].clientY; } }, { passive: true });
-        swipeZone.addEventListener('touchend', (e) => {
-            if (!on) return; on = false;
-            const t = e.changedTouches[0]; const dx = t.clientX - sx, dy = t.clientY - sy;
-            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(current + (dx < 0 ? 1 : -1));
-        }, { passive: true });
-
-        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-        go(0);
-        window.scrollTo(0, 0);
-    })();
-    </script>
-</body>
-</html>
-
-<main class="nx">
-<section class="nx-sec" id="notice-event" aria-label="작업 전 확인사항">
-<div class="nx-wrap">
-<div class="nx-head"><div><h2 class="nx-h2">작업 전 확인사항</h2><p class="nx-lede nx-rv" style="--rd:.15s">의뢰 전에 아래 내용을 꼭 읽어 주세요.</p></div></div>
-<div class="nt">
-<ul class="nt__list">
-<li class="nt__row nt__row--info nx-rv" style="--rd:0.00s"><span class="nt__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 8.3l5-.7z"/></svg></span><div><span class="nt__tag">안내</span><strong>파츠 분리에 따라 작업 퀄리티에 차이가 발생할 수 있습니다.</strong><p>파츠 분리가 미흡할 경우 작업이 거절되거나 제한적으로 작업할 수 있습니다.</p></div></li>
-<li class="nt__row nt__row--work nx-rv" style="--rd:0.08s"><span class="nt__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 10.5 5-3v9l-5-3"/></svg></span><div><span class="nt__tag">작업</span><strong>작업 과정은 중간마다 영상으로 공유됩니다.</strong><p>컨펌은 편하신 시점에 요청 가능하며, 총 3회까지 진행됩니다.</p></div></li>
-<li class="nt__row nt__row--fee nx-rv" style="--rd:0.16s"><span class="nt__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h4"/></svg></span><div><span class="nt__tag">위약금</span><strong>예약 취소 시 결제 금액 10%의 위약금이 발생합니다.</strong><p>작업 진행 전 예약 취소에 한해 적용됩니다.</p></div></li>
-<li class="nt__row nt__row--warn nx-rv" style="--rd:0.24s"><span class="nt__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></svg></span><div><span class="nt__tag">경고</span><strong>MOC3 파일의 무단 역복원 및 2차 수정을 금지합니다.</strong><p>CMO3 원본은 제공되지 않으며, 사전 동의 없는 역복원·수정·유포 시 모든 법적 책임은 행위자 본인에게 있습니다.</p></div></li>
-</ul>
-<!-- 이벤트 진행 중이면 class="ev is-ended" 에서 is-ended 를 지우고 내용을 바꿔 주세요 -->
-<aside class="ev is-ended nx-rv" style="--rd:.2s" aria-label="이벤트">
-  <div class="ev__overlay"><span class="ev__badge">진행 중인 이벤트 없음</span><p>새 이벤트가 열리면 이곳에서 가장 먼저 안내드려요</p></div>
-  <div class="ev__inner" aria-hidden="true">
-    <span class="ev__live">EVENT</span>
-    <p class="ev__title">리깅 할인 이벤트</p>
-    <p class="ev__pastDate">2026.02.01 – 2026.02.28</p>
-    <div class="ev__price">
-      <div class="ev__offer"><span>전신 리깅</span><span><s>₩1,200,000</s><b>₩1,150,000</b></span></div>
-      <div class="ev__offer"><span>반신 리깅</span><span><s>₩1,000,000</s><b>₩950,000</b></span></div>
+<section class="hero" id="top" style="position:relative">
+  <header class="tb">
+    <a class="tb__logo" href="#top"><b>Live2D Rigging</b><span>리깅 커미션</span></a>
+    <nav class="tb__nav" aria-label="바로가기">
+      <a href="#menu" data-jump>메뉴</a><a href="#examples" data-jump>리깅 예시</a><a href="#process" data-jump>진행 과정</a><a href="#slots" data-jump>예약 현황</a><a href="#inquiry" data-jump>견적 · 문의</a>
+    </nav>
+  </header>
+  <div class="hero__in">
+    <div class="hero__copy">
+      <p class="orn">Live2D Rigging Commission</p>
+      <h1 class="hero__title"><span class="en">Full of life, in every motion</span>움직임 하나하나에<br>생동감을 담아요</h1>
+      <p class="hero__sub">얼굴·몸 XYZ부터 머리카락 물리, 표정, VBridger까지.<br>한 달에 최대 두 분만 받아 한 분 한 분 정성껏 리깅합니다.</p>
+      <div class="hero__cta"><a class="btn btn--lav" href="#inquiry" data-jump>견적 계산하기 <span aria-hidden="true">→</span></a><a class="btn btn--ghost" href="#menu" data-jump>메뉴 보기</a></div>
+      <p class="hero__slot" id="heroSlotWrap"><i></i><span id="heroSlot">예약 현황 확인 중</span></p>
     </div>
-    <p class="ev__bonus">신청 시 간단 표정 3종 무료 제공</p>
+    <div class="stage" id="showcase">
+      <div class="stage__frame"><iframe id="pvFrame" title="리깅 작업 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+      <div class="stage__bar">
+        <div class="stage__now"><em>Now playing</em><b id="pvName"></b><span id="pvTags"></span></div>
+        <div class="stage__nav"><button class="rd" id="pvPrev" type="button" aria-label="이전 작업"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button><button class="rd" id="pvNext" type="button" aria-label="다음 작업"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+      </div>
+    </div>
   </div>
-</aside>
+  <div class="reel__meta" aria-live="polite"><b id="reelCount"></b><span>옆으로 넘겨서 다른 작업도 보세요</span></div>
+  <div class="reel" id="reel" role="list" aria-label="작업 목록"></div>
+</section>
+<div class="lace" style="--lb:#fff" aria-hidden="true"></div>
+<main class="nx">
+<section class="jr-sec" id="menu" aria-label="리깅 메뉴">
+<div class="jr-wrap">
+<div class="nx-head"><div><h2 class="nx-h2" data-en="Menu">리깅 메뉴</h2><p class="nx-lede nx-rv" style="--rd:.15s">기본 리깅을 고른 뒤, 원하는 옵션을 더해 나만의 구성을 완성하세요.</p></div></div>
+<div class="plans"><article class="plan plan--noir nx-rv"><div class="plan__en">Full body</div><h3 class="plan__name">LD 전신 리깅</h3><p class="plan__for">전신 의상 물리와 허리 튕기기까지 담은 구성</p><p class="plan__price"><small>₩</small><span data-count>1,200,000</span></p><ul class="plan__feat"><li>머리 XYZ / 몸 XYZ</li><li>눈동자 물리 · 눈썹 움직임</li><li>눈썹·입 움직임에 따른 눈매 변환</li><li>입 모양 12점 이상 정교 제작</li><li>머리카락 흔들림 물리 &amp; 전신 의상 물리</li><li><span>허리 튕기기 구성 <small class="plan__note">(여성 캐릭터 한정)</small></span></li></ul></article><article class="plan nx-rv"><div class="plan__en">Half body</div><h3 class="plan__name">LD 반신 리깅</h3><p class="plan__for">상반신 중심 방송에 맞춘 구성</p><p class="plan__price"><small>₩</small><span data-count>1,000,000</span></p><ul class="plan__feat"><li>머리 XYZ / 몸 XYZ</li><li>눈동자 물리 · 눈썹 움직임</li><li>눈썹·입 움직임에 따른 눈매 변환</li><li>입 모양 12점 이상 정교 제작</li><li>머리카락 흔들림 물리 &amp; 상체 의상 물리</li></ul></article></div>
+<div class="ct__title"><h3>추가 옵션</h3><span>분류를 눌러 상세 가격을 확인하세요</span></div>
+<div class="ct nx-rv">
+<div class="ct__nav" role="tablist" aria-label="옵션 분류">
+<span class="ct__ind" aria-hidden="true"></span>
+<button class="ct__tab" role="tab" id="ct-t0" aria-controls="ct-p0" aria-selected="true" tabindex="0"><span>표정 · 페이셜</span><small>₩10,000 – ₩100,000</small></button>
+<button class="ct__tab" role="tab" id="ct-t1" aria-controls="ct-p1" aria-selected="false" tabindex="-1"><span>VBridger</span><small>₩200,000</small></button>
+<button class="ct__tab" role="tab" id="ct-t2" aria-controls="ct-p2" aria-selected="false" tabindex="-1"><span>손</span><small>₩30,000~</small></button>
+<button class="ct__tab" role="tab" id="ct-t3" aria-controls="ct-p3" aria-selected="false" tabindex="-1"><span>동물 귀 · 꼬리</span><small>₩50,000</small></button>
+<button class="ct__tab" role="tab" id="ct-t4" aria-controls="ct-p4" aria-selected="false" tabindex="-1"><span>기타 옵션</span><small>₩10,000 – ₩80,000</small></button>
+<button class="ct__tab" role="tab" id="ct-t5" aria-controls="ct-p5" aria-selected="false" tabindex="-1"><span>가치코이</span><small>₩100,000 – ₩200,000</small></button>
+<button class="ct__tab" role="tab" id="ct-t6" aria-controls="ct-p6" aria-selected="false" tabindex="-1"><span>신규 헤어</span><small>₩150,000~</small></button>
+<button class="ct__tab" role="tab" id="ct-t7" aria-controls="ct-p7" aria-selected="false" tabindex="-1"><span>신규 의상</span><small>₩200,000~</small></button>
+<button class="ct__tab" role="tab" id="ct-t9" aria-controls="ct-p9" aria-selected="false" tabindex="-1"><span>치비</span><small>₩250,000</small></button>
+<button class="ct__tab" role="tab" id="ct-t8" aria-controls="ct-p8" aria-selected="false" tabindex="-1"><span>기타 서비스</span><small>₩0 – ₩900,000</small></button>
+</div>
+<div class="ct__panels">
+<div class="ct__panel is-active" role="tabpanel" id="ct-p0" aria-labelledby="ct-t0">
+<div class="ct__panelHead"><h4>표정 · 페이셜 옵션</h4><span>₩10,000 – ₩100,000</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">간단 토글 표정 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩10,000</span></div><p class="ct__desc">홍조, 정색 등 고정 표정 ON/OFF 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">애니메이션 토글 표정 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩20,000</span></div><p class="ct__desc">눈물, 반짝임, 어질어질 눈 등 애니메이션 포함 특수 표정 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">입 좌우 움직임</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">입의 좌우 움직임을 추가하여 더 자연스러운 입 모양 연출</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">볼빵빵</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">볼을 부풀리는 귀여운 표정 토글 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">혀내밀기</span><span class="ct__lead"></span><span class="ct__price">₩100,000</span></div><p class="ct__desc">혀를 내미는 표정/움직임 구성</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p1" aria-labelledby="ct-t1" aria-hidden="true">
+<div class="ct__panelHead"><h4>VBridger</h4><span>₩200,000</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">VBridger 연동</span><span class="ct__lead"></span><span class="ct__price">₩200,000</span></div><p class="ct__desc">발음별 입 모양 보정 및 더 섬세한 입 움직임 구성</p></li><li class="ct__extra"><p class="ct__callout"><b>필수 프로그램</b><span>VBridger 프로그램 실행 필수 (미실행 시 입 모양 움직임 제한)</span></p></li><li class="ct__extra"><p class="ct__note">VBridger는 별도 유료 프로그램입니다</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p2" aria-labelledby="ct-t2" aria-hidden="true">
+<div class="ct__panelHead"><h4>손 옵션</h4><span>₩30,000~</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">손 옵션 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩30,000~</span></div><p class="ct__desc">게임패드, 마이크 등 특정 소품을 든 손 동작 구현</p></li><li class="ct__extra"><div class="ct__tiers"><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:33%"></i>낮음</span><b>₩30,000</b><p>마이크 같은 간단한 소품을 든 손 ON/OFF</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:66%"></i>중간</span><b>₩50,000</b><p>게임패드를 쥔 손 같은 약간의 손가락 포즈</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:100%"></i>높음</span><b>₩70,000~</b><p>타블렛 펜을 들고 그리는 등 복잡한 손 애니메이션</p></div></div></li><li class="ct__extra"><p class="ct__note">난이도는 손 모양의 복잡도와 움직임 정도에 따라 결정됩니다</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p3" aria-labelledby="ct-t3" aria-hidden="true">
+<div class="ct__panelHead"><h4>동물 귀 · 꼬리</h4><span>₩50,000</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">동물 귀</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">동물 귀 파츠의 자연스러운 흔들림 및 물리 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">꼬리</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">꼬리 파츠의 생동감 있는 흔들림 및 물리 구성</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p4" aria-labelledby="ct-t4" aria-hidden="true">
+<div class="ct__panelHead"><h4>기타 옵션</h4><span>₩10,000 – ₩80,000</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">ON / OFF 옵션 추가 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩10,000</span></div><p class="ct__desc">머리띠, 의상, 소품 등 개별 파츠의 ON/OFF 토글 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">간단 소품 추가</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">안대처럼 구조가 단순한 소품 파츠 추가 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">복잡 소품 추가</span><span class="ct__lead"></span><span class="ct__price">₩80,000</span></div><p class="ct__desc">헤드셋처럼 파츠 구조가 복잡하거나 움직임 구성이 필요한 소품 추가 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">스텝 추가</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">몸의 기울기에 발 위치를 연동한 스텝 구성</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p5" aria-labelledby="ct-t5" aria-hidden="true">
+<div class="ct__panelHead"><h4>가치코이</h4><span>₩100,000 – ₩200,000</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">가치코이 – 단축키</span><span class="ct__lead"></span><span class="ct__price">₩100,000</span></div><p class="ct__desc">단축키 활성화 시 화면 근처로 다가오는 듯한 숙이기 연출 구성</p></li><li class="ct__extra"><p class="ct__note">신의상에도 가치코이 단축키 적용 시 의상 1종당 ₩50,000 추가</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">가치코이 – 페이셜</span><span class="ct__lead"></span><span class="ct__price">₩200,000</span></div><p class="ct__desc">캠 거리 인식 기반 전·후 이동 입체 연출</p></li><li class="ct__extra"><p class="ct__note">신의상에도 가치코이 페이셜 적용 시 의상 1종당 ₩100,000 추가</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p6" aria-labelledby="ct-t6" aria-hidden="true">
+<div class="ct__panelHead"><h4>신규 헤어</h4><span>₩150,000~</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">신규 헤어 추가 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩150,000~</span></div><p class="ct__desc">신규 헤어 추가 및 흔들림 물리 구성</p></li><li class="ct__extra"><div class="ct__tiers"><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:33%"></i>낮음</span><b>₩150,000</b><p>짧은 머리처럼 매우 간단한 파츠 구조</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:66%"></i>중간</span><b>₩200,000</b><p>중간 정도의 파츠 수와 물리 구성 (일반적인 머리)</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:100%"></i>높음</span><b>₩280,000~</b><p>잔머리 많은 머리, 복잡한 헤어스타일</p></div></div></li><li class="ct__extra"><p class="ct__note">난이도는 파츠 수와 물리 표현 복잡도에 따라 결정되며, 추가금이 발생할 수 있습니다</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p7" aria-labelledby="ct-t7" aria-hidden="true">
+<div class="ct__panelHead"><h4>신규 의상</h4><span>₩200,000~</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">신규 의상 추가 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩200,000~</span></div><p class="ct__desc">신규 의상 리깅 및 의상 물리 구성</p></li><li class="ct__extra"><div class="ct__tiers"><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:33%"></i>낮음</span><b>₩200,000</b><p>박스티처럼 매우 간단한 의상</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:66%"></i>중간</span><b>₩300,000</b><p>상의와 하의가 모두 있고 무난한 구조</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:100%"></i>높음</span><b>₩400,000~</b><p>복잡한 의상 구조와 많은 디테일</p></div></div></li><li class="ct__extra"><p class="ct__note">난이도는 의상 구조, 파츠 수, 물리 표현에 따라 결정되며, 추가금이 발생할 수 있습니다</p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p9" aria-labelledby="ct-t9" aria-hidden="true">
+<div class="ct__panelHead"><h4>치비 옵션</h4><span>₩250,000</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">LD → MD 변환</span><span class="ct__lead"></span><span class="ct__price">₩250,000</span></div><p class="ct__desc">기존 LD 일러스트를 MD(미니) 비율로 변형하여 제작</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">LD → SD 변환</span><span class="ct__lead"></span><span class="ct__price">₩250,000</span></div><p class="ct__desc">기존 LD 일러스트를 SD(치비) 비율로 변형하여 제작</p></li><li class="ct__extra"><p class="ct__callout"><b>주의</b><span>본 옵션은 기존 LD 일러스트를 MD·SD(치비) 형태로 변형하여 제작하는 옵션입니다.<br><strong style="color:inherit">옵션 선택 전, 일러스트 작가님께 먼저 허가를 받아주세요.</strong></span></p></li></ul>
+</div>
+<div class="ct__panel" role="tabpanel" id="ct-p8" aria-labelledby="ct-t8" aria-hidden="true">
+<div class="ct__panelHead"><h4>기타 서비스</h4><span>₩0 – ₩900,000</span></div>
+<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">완성 후 60일 이상 비공개</span><span class="ct__lead"></span><span class="ct__price">₩100,000</span></div><p class="ct__desc">작업 완료 후 데뷔까지 60일 이상 보관/비공개 유지가 필요한 경우 추가됩니다</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">작업 영구 비공개</span><span class="ct__lead"></span><span class="ct__price">₩900,000</span></div><p class="ct__desc">포트폴리오 및 샘플 공개 없이 작업물 정보 노출을 제한</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">설치 도움</span><span class="ct__lead"></span><span class="ct__price">₩0</span></div><p class="ct__desc">VTube Studio 초기 세팅 및 적용 도움</p></li></ul>
+</div>
+</div>
 </div>
 </div>
 </section>
-<section class="nx-sec nx-sec--dark nx-rig" aria-label="리깅 예시">
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.ct__tab'));
+  var ind = document.querySelector('.ct__ind');
+  var cur = 0;
+  function place() {
+    var t = tabs[cur];
+    ind.style.width = t.offsetWidth + 'px';
+    ind.style.height = t.offsetHeight + 'px';
+    ind.style.transform = 'translate(' + t.offsetLeft + 'px,' + t.offsetTop + 'px)';
+  }
+  function pick(i, focus) {
+    cur = i;
+    place();
+    tabs.forEach(function (t, k) {
+      var on = k === i;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      var p = document.getElementById(t.getAttribute('aria-controls'));
+      p.classList.toggle('is-active', on);
+      if (on) p.removeAttribute('aria-hidden'); else p.setAttribute('aria-hidden', 'true');
+    });
+    var t = tabs[i], nav = t.parentNode;
+    if (nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: t.offsetLeft - (nav.clientWidth - t.offsetWidth) / 2, behavior: 'smooth' });
+    if (focus) t.focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { pick(i); });
+    t.addEventListener('keydown', function (e) {
+      var k = e.key, n = tabs.length;
+      if (k === 'ArrowDown' || k === 'ArrowRight') { e.preventDefault(); pick((i + 1) % n, true); }
+      if (k === 'ArrowUp' || k === 'ArrowLeft') { e.preventDefault(); pick((i - 1 + n) % n, true); }
+    });
+  });
+  // 처음부터 선택된 탭 위에 표시기가 있도록 (애니메이션 없이 즉시 배치)
+  function snap() {
+    ind.style.transition = 'none';
+    place();
+    void ind.offsetWidth;
+    requestAnimationFrame(function () { ind.style.transition = ''; });
+  }
+  snap();
+  if (document.readyState !== 'complete') window.addEventListener('load', snap);
+  document.addEventListener('DOMContentLoaded', snap);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(snap);
+  window.addEventListener('resize', snap);
+  if ('ResizeObserver' in window) new ResizeObserver(snap).observe(ind.parentNode);
+})();
+</script>
+<div class="lace lace--up" style="--lb:#fff" aria-hidden="true"></div>
+<section class="nx-sec nx-sec--dark nx-rig" id="examples" aria-label="리깅 예시">
 <div class="nx-wrap">
-<div class="nx-head"><div><h2 class="nx-h2">리깅 예시</h2><p class="nx-lede nx-rv" style="--rd:.15s">부위별 움직임과 연동 기능을 실제 작업 영상으로 확인하세요.</p></div></div>
+<div class="nx-head"><div><h2 class="nx-h2" data-en="Rigging">리깅 예시</h2><p class="nx-lede nx-rv" style="--rd:.15s">부위별 움직임과 연동 기능을 실제 작업 영상으로 확인하세요.</p></div></div>
 <div class="gl">
 
   <p class="gl__hint">목차의 재생 버튼으로 한 번에 보거나, 영상을 눌러 하나씩 재생하세요</p>
@@ -2172,176 +2702,32 @@
   }
 })();
 </script>
-<section class="nx-sec nx-price" id="menu" aria-label="리깅 가격">
+<div class="lace" style="--lb:#EAE3FF" aria-hidden="true"></div>
+<section class="nx-sec nx-proc" id="process" aria-label="작업 진행 과정">
 <div class="nx-wrap">
-<div class="nx-head"><div><h2 class="nx-h2">리깅 가격</h2><p class="nx-lede nx-rv" style="--rd:.15s">기본 리깅을 고른 뒤, 필요한 옵션을 더해 나만의 구성을 완성하세요.</p></div></div>
-<div class="pl">
-<article class="pl__card pl__card--dark nx-rv" style="--rd:0s">
-  <h3 class="pl__name">LD 전신 리깅</h3>
-  <p class="pl__for">전신 의상 물리와 허리 튕기기까지 담은 구성</p>
-  <p class="pl__price"><small>₩</small><span data-count>1,200,000</span></p>
-  <ul class="pl__feat"><li>머리 XYZ / 몸 XYZ</li><li>눈동자 물리 · 눈썹 움직임</li><li>눈썹·입 움직임에 따른 눈매 변환</li><li>입 모양 12점 이상 정교 제작</li><li>머리카락 흔들림 물리 &amp; 전신 의상 물리</li><li class="is-plus"><span>허리 튕기기 구성 <small class="pl__note">(여성 캐릭터 한정)</small></span></li></ul>
-</article>
-<article class="pl__card nx-rv" style="--rd:.12s">
-  <h3 class="pl__name">LD 반신 리깅</h3>
-  <p class="pl__for">상반신 중심 방송에 맞춘 구성</p>
-  <p class="pl__price"><small>₩</small><span data-count>1,000,000</span></p>
-  <ul class="pl__feat"><li>머리 XYZ / 몸 XYZ</li><li>눈동자 물리 · 눈썹 움직임</li><li>눈썹·입 움직임에 따른 눈매 변환</li><li>입 모양 12점 이상 정교 제작</li><li>머리카락 흔들림 물리 &amp; 상체 의상 물리</li></ul>
-</article>
-</div>
-<div class="ct__title"><h3>추가 옵션</h3><span>분류를 눌러 상세 가격을 확인하세요</span></div>
-<div class="ct nx-rv">
-<div class="ct__nav" role="tablist" aria-label="옵션 분류">
-<span class="ct__ind" aria-hidden="true"></span>
-<button class="ct__tab" role="tab" id="ct-t0" aria-controls="ct-p0" aria-selected="true" tabindex="0"><span>표정 · 페이셜</span><small>₩10,000 – ₩100,000</small></button>
-<button class="ct__tab" role="tab" id="ct-t1" aria-controls="ct-p1" aria-selected="false" tabindex="-1"><span>VBridger</span><small>₩200,000</small></button>
-<button class="ct__tab" role="tab" id="ct-t2" aria-controls="ct-p2" aria-selected="false" tabindex="-1"><span>손</span><small>₩30,000~</small></button>
-<button class="ct__tab" role="tab" id="ct-t3" aria-controls="ct-p3" aria-selected="false" tabindex="-1"><span>동물 귀 · 꼬리</span><small>₩50,000</small></button>
-<button class="ct__tab" role="tab" id="ct-t4" aria-controls="ct-p4" aria-selected="false" tabindex="-1"><span>기타 옵션</span><small>₩10,000 – ₩80,000</small></button>
-<button class="ct__tab" role="tab" id="ct-t5" aria-controls="ct-p5" aria-selected="false" tabindex="-1"><span>가치코이</span><small>₩100,000 – ₩200,000</small></button>
-<button class="ct__tab" role="tab" id="ct-t6" aria-controls="ct-p6" aria-selected="false" tabindex="-1"><span>신규 헤어</span><small>₩150,000~</small></button>
-<button class="ct__tab" role="tab" id="ct-t7" aria-controls="ct-p7" aria-selected="false" tabindex="-1"><span>신규 의상</span><small>₩200,000~</small></button>
-<button class="ct__tab" role="tab" id="ct-t9" aria-controls="ct-p9" aria-selected="false" tabindex="-1"><span>치비</span><small>₩250,000</small></button>
-<button class="ct__tab" role="tab" id="ct-t8" aria-controls="ct-p8" aria-selected="false" tabindex="-1"><span>기타 서비스</span><small>₩0 – ₩900,000</small></button>
-</div>
-<div class="ct__panels">
-<div class="ct__panel is-active" role="tabpanel" id="ct-p0" aria-labelledby="ct-t0">
-<div class="ct__panelHead"><h4>표정 · 페이셜 옵션</h4><span>₩10,000 – ₩100,000</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">간단 토글 표정 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩10,000</span></div><p class="ct__desc">홍조, 정색 등 고정 표정 ON/OFF 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">애니메이션 토글 표정 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩20,000</span></div><p class="ct__desc">눈물, 반짝임, 어질어질 눈 등 애니메이션 포함 특수 표정 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">입 좌우 움직임</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">입의 좌우 움직임을 추가하여 더 자연스러운 입 모양 연출</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">볼빵빵</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">볼을 부풀리는 귀여운 표정 토글 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">혀내밀기</span><span class="ct__lead"></span><span class="ct__price">₩100,000</span></div><p class="ct__desc">혀를 내미는 표정/움직임 구성</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p1" aria-labelledby="ct-t1" aria-hidden="true">
-<div class="ct__panelHead"><h4>VBridger</h4><span>₩200,000</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">VBridger 연동</span><span class="ct__lead"></span><span class="ct__price">₩200,000</span></div><p class="ct__desc">발음별 입 모양 보정 및 더 섬세한 입 움직임 구성</p></li><li class="ct__extra"><p class="ct__callout"><b>필수 프로그램</b><span>VBridger 프로그램 실행 필수 (미실행 시 입 모양 움직임 제한)</span></p></li><li class="ct__extra"><p class="ct__note">VBridger는 별도 유료 프로그램입니다</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p2" aria-labelledby="ct-t2" aria-hidden="true">
-<div class="ct__panelHead"><h4>손 옵션</h4><span>₩30,000~</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">손 옵션 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩30,000~</span></div><p class="ct__desc">게임패드, 마이크 등 특정 소품을 든 손 동작 구현</p></li><li class="ct__extra"><div class="ct__tiers"><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:33%"></i>낮음</span><b>₩30,000</b><p>마이크 같은 간단한 소품을 든 손 ON/OFF</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:66%"></i>중간</span><b>₩50,000</b><p>게임패드를 쥔 손 같은 약간의 손가락 포즈</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:100%"></i>높음</span><b>₩70,000~</b><p>타블렛 펜을 들고 그리는 등 복잡한 손 애니메이션</p></div></div></li><li class="ct__extra"><p class="ct__note">난이도는 손 모양의 복잡도와 움직임 정도에 따라 결정됩니다</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p3" aria-labelledby="ct-t3" aria-hidden="true">
-<div class="ct__panelHead"><h4>동물 귀 · 꼬리</h4><span>₩50,000</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">동물 귀</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">동물 귀 파츠의 자연스러운 흔들림 및 물리 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">꼬리</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">꼬리 파츠의 생동감 있는 흔들림 및 물리 구성</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p4" aria-labelledby="ct-t4" aria-hidden="true">
-<div class="ct__panelHead"><h4>기타 옵션</h4><span>₩10,000 – ₩80,000</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">ON / OFF 옵션 추가 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩10,000</span></div><p class="ct__desc">머리띠, 의상, 소품 등 개별 파츠의 ON/OFF 토글 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">간단 소품 추가</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">안대처럼 구조가 단순한 소품 파츠 추가 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">복잡 소품 추가</span><span class="ct__lead"></span><span class="ct__price">₩80,000</span></div><p class="ct__desc">헤드셋처럼 파츠 구조가 복잡하거나 움직임 구성이 필요한 소품 추가 구성</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">스텝 추가</span><span class="ct__lead"></span><span class="ct__price">₩50,000</span></div><p class="ct__desc">몸의 기울기에 발 위치를 연동한 스텝 구성</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p5" aria-labelledby="ct-t5" aria-hidden="true">
-<div class="ct__panelHead"><h4>가치코이</h4><span>₩100,000 – ₩200,000</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">가치코이 – 단축키</span><span class="ct__lead"></span><span class="ct__price">₩100,000</span></div><p class="ct__desc">단축키 활성화 시 화면 근처로 다가오는 듯한 숙이기 연출 구성</p></li><li class="ct__extra"><p class="ct__note">신의상에도 가치코이 단축키 적용 시 의상 1종당 ₩50,000 추가</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">가치코이 – 페이셜</span><span class="ct__lead"></span><span class="ct__price">₩200,000</span></div><p class="ct__desc">캠 거리 인식 기반 전·후 이동 입체 연출</p></li><li class="ct__extra"><p class="ct__note">신의상에도 가치코이 페이셜 적용 시 의상 1종당 ₩100,000 추가</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p6" aria-labelledby="ct-t6" aria-hidden="true">
-<div class="ct__panelHead"><h4>신규 헤어</h4><span>₩150,000~</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">신규 헤어 추가 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩150,000~</span></div><p class="ct__desc">신규 헤어 추가 및 흔들림 물리 구성</p></li><li class="ct__extra"><div class="ct__tiers"><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:33%"></i>낮음</span><b>₩150,000</b><p>짧은 머리처럼 매우 간단한 파츠 구조</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:66%"></i>중간</span><b>₩200,000</b><p>중간 정도의 파츠 수와 물리 구성 (일반적인 머리)</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:100%"></i>높음</span><b>₩280,000~</b><p>잔머리 많은 머리, 복잡한 헤어스타일</p></div></div></li><li class="ct__extra"><p class="ct__note">난이도는 파츠 수와 물리 표현 복잡도에 따라 결정되며, 추가금이 발생할 수 있습니다</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p7" aria-labelledby="ct-t7" aria-hidden="true">
-<div class="ct__panelHead"><h4>신규 의상</h4><span>₩200,000~</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">신규 의상 추가 (1종)</span><span class="ct__lead"></span><span class="ct__price">₩200,000~</span></div><p class="ct__desc">신규 의상 리깅 및 의상 물리 구성</p></li><li class="ct__extra"><div class="ct__tiers"><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:33%"></i>낮음</span><b>₩200,000</b><p>박스티처럼 매우 간단한 의상</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:66%"></i>중간</span><b>₩300,000</b><p>상의와 하의가 모두 있고 무난한 구조</p></div><div class="ct__tier"><span class="ct__tierLv" ><i style="--f:100%"></i>높음</span><b>₩400,000~</b><p>복잡한 의상 구조와 많은 디테일</p></div></div></li><li class="ct__extra"><p class="ct__note">난이도는 의상 구조, 파츠 수, 물리 표현에 따라 결정되며, 추가금이 발생할 수 있습니다</p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p9" aria-labelledby="ct-t9" aria-hidden="true">
-<div class="ct__panelHead"><h4>치비 옵션</h4><span>₩250,000</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">LD → MD 변환</span><span class="ct__lead"></span><span class="ct__price">₩250,000</span></div><p class="ct__desc">기존 LD 일러스트를 MD(미니) 비율로 변형하여 제작</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">LD → SD 변환</span><span class="ct__lead"></span><span class="ct__price">₩250,000</span></div><p class="ct__desc">기존 LD 일러스트를 SD(치비) 비율로 변형하여 제작</p></li><li class="ct__extra"><p class="ct__callout"><b>주의</b><span>본 옵션은 기존 LD 일러스트를 MD·SD(치비) 형태로 변형하여 제작하는 옵션입니다.<br><strong style="color:inherit">옵션 선택 전, 일러스트 작가님께 먼저 허가를 받아주세요.</strong></span></p></li></ul>
-</div>
-<div class="ct__panel" role="tabpanel" id="ct-p8" aria-labelledby="ct-t8" aria-hidden="true">
-<div class="ct__panelHead"><h4>기타 서비스</h4><span>₩0 – ₩900,000</span></div>
-<ul><li class="ct__item"><div class="ct__line"><span class="ct__name">완성 후 60일 이상 비공개</span><span class="ct__lead"></span><span class="ct__price">₩100,000</span></div><p class="ct__desc">작업 완료 후 데뷔까지 60일 이상 보관/비공개 유지가 필요한 경우 추가됩니다</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">작업 영구 비공개</span><span class="ct__lead"></span><span class="ct__price">₩900,000</span></div><p class="ct__desc">포트폴리오 및 샘플 공개 없이 작업물 정보 노출을 제한</p></li><li class="ct__item"><div class="ct__line"><span class="ct__name">설치 도움</span><span class="ct__lead"></span><span class="ct__price">₩0</span></div><p class="ct__desc">VTube Studio 초기 세팅 및 적용 도움</p></li></ul>
-</div>
-</div>
-</div>
-</div>
-</section>
-<script>
-(function () {
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.ct__tab'));
-  var ind = document.querySelector('.ct__ind');
-  var cur = 0;
-  function place() {
-    var t = tabs[cur];
-    ind.style.width = t.offsetWidth + 'px';
-    ind.style.height = t.offsetHeight + 'px';
-    ind.style.transform = 'translate(' + t.offsetLeft + 'px,' + t.offsetTop + 'px)';
-  }
-  function pick(i, focus) {
-    cur = i;
-    place();
-    tabs.forEach(function (t, k) {
-      var on = k === i;
-      t.setAttribute('aria-selected', on);
-      t.tabIndex = on ? 0 : -1;
-      var p = document.getElementById(t.getAttribute('aria-controls'));
-      p.classList.toggle('is-active', on);
-      if (on) p.removeAttribute('aria-hidden'); else p.setAttribute('aria-hidden', 'true');
-    });
-    var t = tabs[i], nav = t.parentNode;
-    if (nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: t.offsetLeft - (nav.clientWidth - t.offsetWidth) / 2, behavior: 'smooth' });
-    if (focus) t.focus();
-  }
-  tabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { pick(i); });
-    t.addEventListener('keydown', function (e) {
-      var k = e.key, n = tabs.length;
-      if (k === 'ArrowDown' || k === 'ArrowRight') { e.preventDefault(); pick((i + 1) % n, true); }
-      if (k === 'ArrowUp' || k === 'ArrowLeft') { e.preventDefault(); pick((i - 1 + n) % n, true); }
-    });
-  });
-  // 처음부터 선택된 탭 위에 표시기가 있도록 (애니메이션 없이 즉시 배치)
-  function snap() {
-    ind.style.transition = 'none';
-    place();
-    void ind.offsetWidth;
-    requestAnimationFrame(function () { ind.style.transition = ''; });
-  }
-  snap();
-  if (document.readyState !== 'complete') window.addEventListener('load', snap);
-  document.addEventListener('DOMContentLoaded', snap);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(snap);
-  window.addEventListener('resize', snap);
-  if ('ResizeObserver' in window) new ResizeObserver(snap).observe(ind.parentNode);
-})();
-</script>
-<section class="nx-sec nx-proc" aria-label="작업 진행 과정">
-<div class="nx-wrap">
-<div class="nx-head"><div><h2 class="nx-h2">작업 진행 과정</h2><p class="nx-lede nx-rv" style="--rd:.15s">문의부터 토글 세팅까지, 아래 순서로 차근차근 진행됩니다.</p></div><div class="nx-meta nx-rv" style="--rd:.25s">최대 <b data-count>21</b>일</div></div>
+<div class="nx-head"><div><h2 class="nx-h2" data-en="Process">작업 진행 과정</h2><p class="nx-lede nx-rv" style="--rd:.15s">문의부터 토글 세팅까지, 아래 순서로 차근차근 진행됩니다.</p></div><div class="nx-meta nx-rv" style="--rd:.25s">최대 <b data-count>21</b>일</div></div>
 <div class="pv-wrap"><ol class="pv"><span class="pv__track" aria-hidden="true"><span class="pv__fill"></span></span><li class="pv__step"><span class="pv__node" style="--d:0.00s">01</span><h3>문의</h3><p>일정/옵션/요청사항 확인</p></li><li class="pv__step"><span class="pv__node" style="--d:0.28s">02</span><h3>결제</h3><p>메뉴 확정 후 진행</p></li><li class="pv__step"><span class="pv__node" style="--d:0.56s">03</span><h3>예약</h3><p>작업 시작/마감 일정 안내</p></li><li class="pv__step"><span class="pv__node" style="--d:0.84s">04</span><h3>파츠 정리</h3><p>PSD 구조/명칭 점검</p></li><li class="pv__step"><span class="pv__node" style="--d:1.12s">05</span><h3>얼굴 리깅</h3><p>눈·눈썹·입 기본 세팅</p></li><li class="pv__step"><span class="pv__node" style="--d:1.40s">06</span><h3>머리 리깅</h3><p>각도/물리/헤어 세팅</p></li><li class="pv__step"><span class="pv__node" style="--d:1.68s">07</span><h3>몸 리깅</h3><p>가동 + 의상/몸 물리</p></li><li class="pv__step"><span class="pv__node" style="--d:1.96s">08</span><h3>토글 세팅</h3><p>표정/옵션 ON·OFF 정리</p></li></ol></div>
 <ul class="pv__notes"><li class="pv__note pv__note--key nx-rv" style="--rd:0.0s"><span class="pv__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><p><b>리깅 컨펌은 총 3회</b>까지 진행하실 수 있습니다.</p></li><li class="pv__note nx-rv" style="--rd:0.1s"><span class="pv__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg></span><p>작업 과정은 중간마다 <b>동영상으로 제공</b>드리며, 컨펌은 편하신 시점에 요청해 주시면 됩니다.</p></li><li class="pv__note nx-rv" style="--rd:0.2s"><span class="pv__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><p>작가의 실수로 발생한 오류는 <b>기간과 관계없이 언제든 수정</b>해드립니다.</p></li><li class="pv__note nx-rv" style="--rd:0.3s"><span class="pv__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><p>작업 기간은 <b>최대 21일</b>이며, 작업 난이도에 따라 더 소요될 수 있습니다.</p></li></ul>
 </div>
 </section>
-<section class="nx-sec" aria-label="협업 작가 혜택">
-<div class="nx-wrap">
-<div class="nx-head"><div><h2 class="nx-h2">협업 작가 혜택</h2><p class="nx-lede nx-rv" style="--rd:.15s">일러스트와 리깅 결제가 <b>모두 완료된 경우에만</b> 할인이 적용됩니다.</p></div></div>
-<div class="cb">
-<a class="cb__card nx-rv" style="--rd:0.00s" href="https://artmug.kr/index.php?channel=view&amp;uid=53653" target="_blank" rel="noopener">
-  <div class="cb__media"><div class="cb__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17739956820_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-  <div class="cb__body"><h3 class="cb__name">Cooing 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩100,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-</a>
-<a class="cb__card nx-rv" style="--rd:0.08s" href="https://artmug.kr/index.php?channel=view&amp;uid=54330" target="_blank" rel="noopener">
-  <div class="cb__media"><div class="cb__img" style="--img:url('https://artmugfile2.cafe24.com/image/up_img/detail/5/goods_51824/17668233240_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-  <div class="cb__body"><h3 class="cb__name">쿠리 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩50,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-</a>
-<a class="cb__card nx-rv" style="--rd:0.16s" href="https://artmug.kr/index.php?channel=view&amp;uid=51109" target="_blank" rel="noopener">
-  <div class="cb__media"><div class="cb__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17737150290_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-  <div class="cb__body"><h3 class="cb__name">피치 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩50,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인 + 표정 3종 무료</dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-</a>
-<a class="cb__card nx-rv" style="--rd:0.24s" href="https://artmug.kr/index.php?channel=view&amp;uid=54571&amp;no_vcnt=1" target="_blank" rel="noopener">
-  <div class="cb__media"><div class="cb__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17900701460_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-  <div class="cb__body"><h3 class="cb__name">맹이 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩100,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-</a>
-<a class="cb__card nx-rv" style="--rd:0.32s" href="https://artmug.kr/index.php?channel=view&amp;uid=60645&amp;no_vcnt=1" target="_blank" rel="noopener">
-  <div class="cb__media"><div class="cb__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17900701660_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-  <div class="cb__body"><h3 class="cb__name">야냐 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩100,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-</a>
-<a class="cb__card nx-rv" style="--rd:0.40s" href="https://artmug.kr/index.php?channel=view&amp;uid=7624" target="_blank" rel="noopener">
-  <div class="cb__media"><div class="cb__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17933036580_Re.jpg')"></div><span class="cb__cta"><span class="cb__ctaTxt">작가 페이지로 이동</span><span class="cb__ctaIc"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span><span class="cb__tap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-  <div class="cb__body"><h3 class="cb__name">냥찬 작가님</h3><dl class="cb__perks"><div><dt>일러스트</dt><dd>₩100,000 할인 + 신헤어</dd></div><div><dt>리깅</dt><dd>₩100,000 할인 + 신헤어</dd></div><div><dt></dt><dd><span class="cb__limit">신헤어 선착순 3명 한정</span></dd></div></dl><span class="cb__go">작가 페이지 보기 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div>
-</a>
-<div class="cb__card cb__card--soon nx-rv"><span class="cb__plus" aria-hidden="true"></span><strong>새 협업 작가</strong><p>곧 추가될 예정이에요</p></div>
-<div class="cb__card cb__card--soon nx-rv"><span class="cb__plus" aria-hidden="true"></span><strong>새 협업 작가</strong><p>곧 추가될 예정이에요</p></div>
-<div class="cb__card cb__card--soon nx-rv"><span class="cb__plus" aria-hidden="true"></span><strong>새 협업 작가</strong><p>곧 추가될 예정이에요</p></div>
-</div>
+<div class="lace lace--up" style="--lb:#EAE3FF" aria-hidden="true"></div>
+<section class="jr-sec jr-dark" aria-label="협업 작가 혜택">
+<div class="jr-wrap">
+<div class="nx-head"><div><h2 class="nx-h2" data-en="Collaboration">협업 작가 혜택</h2><p class="nx-lede nx-rv" style="--rd:.15s">일러스트와 리깅 결제가 <b>모두 완료된 경우에만</b> 할인이 적용됩니다.</p></div></div>
+<div class="pcs">
+<a class="pc nx-rv" style="--rd:0.00s" href="https://artmug.kr/index.php?channel=view&amp;uid=53653" target="_blank" rel="noopener"><div class="pc__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17739956820_Re.jpg')"></div><div class="pc__body"><p class="pc__name">Cooing 작가님<span>Visit →</span></p><dl class="pc__perks"><div><dt>일러스트</dt><dd>₩100,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl></div></a>
+<a class="pc nx-rv" style="--rd:0.06s" href="https://artmug.kr/index.php?channel=view&amp;uid=54330" target="_blank" rel="noopener"><div class="pc__img" style="--img:url('https://artmugfile2.cafe24.com/image/up_img/detail/5/goods_51824/17668233240_Re.jpg')"></div><div class="pc__body"><p class="pc__name">쿠리 작가님<span>Visit →</span></p><dl class="pc__perks"><div><dt>일러스트</dt><dd>₩50,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl></div></a>
+<a class="pc nx-rv" style="--rd:0.12s" href="https://artmug.kr/index.php?channel=view&amp;uid=51109" target="_blank" rel="noopener"><div class="pc__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17737150290_Re.jpg')"></div><div class="pc__body"><p class="pc__name">피치 작가님<span>Visit →</span></p><dl class="pc__perks"><div><dt>일러스트</dt><dd>₩50,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인 + 표정 3종 무료</dd></div></dl></div></a>
+<a class="pc nx-rv" style="--rd:0.18s" href="https://artmug.kr/index.php?channel=view&amp;uid=54571&amp;no_vcnt=1" target="_blank" rel="noopener"><div class="pc__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17900701460_Re.jpg')"></div><div class="pc__body"><p class="pc__name">맹이 작가님<span>Visit →</span></p><dl class="pc__perks"><div><dt>일러스트</dt><dd>₩100,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl></div></a>
+<a class="pc nx-rv" style="--rd:0.24s" href="https://artmug.kr/index.php?channel=view&amp;uid=60645&amp;no_vcnt=1" target="_blank" rel="noopener"><div class="pc__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17900701660_Re.jpg')"></div><div class="pc__body"><p class="pc__name">야냐 작가님<span>Visit →</span></p><dl class="pc__perks"><div><dt>일러스트</dt><dd>₩100,000 할인</dd></div><div><dt>리깅</dt><dd>₩100,000 할인</dd></div></dl></div></a>
+<a class="pc nx-rv" style="--rd:0.30s" href="https://artmug.kr/index.php?channel=view&amp;uid=7624" target="_blank" rel="noopener"><div class="pc__img" style="--img:url('https://artmug.kr/image/up_img/detail/5/goods_51824/17933036580_Re.jpg')"></div><div class="pc__body"><p class="pc__name">냥찬 작가님<span>Visit →</span></p><dl class="pc__perks"><div><dt>일러스트</dt><dd>₩100,000 할인 + 신헤어</dd></div><div><dt>리깅</dt><dd>₩100,000 할인 + 신헤어</dd></div><div><dt></dt><dd><span class="pc__limit">신헤어 선착순 3명 한정</span></dd></div></dl></div></a>
+<div class="pc pc--soon nx-rv"><em>Coming soon</em><p>새 협업 작가가 곧 추가돼요</p></div><div class="pc pc--soon nx-rv"><em>Recruiting</em><p>협업 작가 모집 중</p></div><div class="pc pc--soon nx-rv"><em>Recruiting</em><p>협업 작가 모집 중</p></div></div>
 </div>
 </section>
-<section class="nx-sec nx-sec--soft" id="slots" aria-label="예약 현황">
-<div class="nx-wrap">
-<div class="nx-head"><div><h2 class="nx-h2">예약 현황</h2><p class="nx-lede nx-rv" style="--rd:.15s">매월 최대 2명까지만 받아 한 분 한 분 집중해서 작업합니다.</p></div></div>
+<div class="lace" style="--lb:#fff" aria-hidden="true"></div>
+<section class="jr-sec" id="slots" aria-label="예약 현황">
+<div class="jr-wrap">
+<div class="nx-head"><div><h2 class="nx-h2" data-en="Reservation">예약 현황</h2><p class="nx-lede nx-rv" style="--rd:.15s">매월 최대 2명까지만 받아 한 분 한 분 집중해서 작업합니다.</p></div></div>
 <!-- 상태 바꾸는 법: data-state = closed(마감) / vacation(휴가) / open(예약 가능), 칸 <i class="on"></i> = 예약된 자리 -->
 <ol class="av nx-rv">
   <li class="av__m" data-state="closed"><span class="av__name">11월</span><span class="av__cap">월 1명</span><span class="av__seats"><i class="on"></i></span><span class="av__state">마감</span></li>
@@ -2351,12 +2737,34 @@
   <li class="av__m" data-state="closed"><span class="av__name">3월</span><span class="av__cap">월 1명</span><span class="av__seats"><i class="on"></i></span><span class="av__state">마감</span></li>
   <li class="av__m" data-state="closed"><span class="av__name">4월</span><span class="av__cap">월 1명</span><span class="av__seats"><i class="on"></i></span><span class="av__state">마감</span></li>
 </ol>
-<ul class="av__policy nx-rv"><li>매월 최대 <b>2명</b>까지 예약을 받고 있으나, 작업 일정과 난이도에 따라 <b>1명만 진행</b>하는 달도 있습니다.</li><li>상담 후 <b>결제 완료 순</b>으로 슬롯이 최종 확정됩니다. 예약 월에 슬롯이 확정되더라도, 앞선 작업이 완료된 뒤 순차적으로 착수합니다.</li><li>작업 시작 전에는 미리 연락드리며, 일정은 진행 상황에 따라 조율될 수 있습니다.</li><li>리깅 상세 메뉴나 추가 옵션이 확정되지 않았더라도 <b>기본 리깅 결제</b>만으로 우선 슬롯 예약이 가능합니다.</li><li>아래에 표기되지 않은 월도 사전 예약 및 상담이 가능하니 편하게 문의해 주세요.</li></ul>
+<ul class="policy nx-rv"><li>매월 최대 <b>2명</b>까지 예약을 받고 있으나, 작업 일정과 난이도에 따라 <b>1명만 진행</b>하는 달도 있습니다.</li><li>상담 후 <b>결제 완료 순</b>으로 슬롯이 최종 확정됩니다. 예약 월에 슬롯이 확정되더라도, 앞선 작업이 완료된 뒤 순차적으로 착수합니다.</li><li>작업 시작 전에는 미리 연락드리며, 일정은 진행 상황에 따라 조율될 수 있습니다.</li><li>리깅 상세 메뉴나 추가 옵션이 확정되지 않았더라도 <b>기본 리깅 결제</b>만으로 우선 슬롯 예약이 가능합니다.</li><li>아래에 표기되지 않은 월도 사전 예약 및 상담이 가능하니 편하게 문의해 주세요.</li></ul>
+</div>
+</section>
+<section class="jr-sec jr-mist" id="notice-event" aria-label="작업 전 확인사항">
+<div class="jr-wrap">
+<div class="nx-head"><div><h2 class="nx-h2" data-en="Before you order">작업 전 확인사항</h2><p class="nx-lede nx-rv" style="--rd:.15s">의뢰 전에 아래 내용을 꼭 읽어 주세요.</p></div></div>
+<div class="ntc">
+<ol class="ntc__list"><li class="ntc__it ntc--info nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 8.3l5-.7z"/></svg></span><div><span class="ntc__tag">안내</span><strong>파츠 분리에 따라 작업 퀄리티에 차이가 발생할 수 있습니다.</strong><p>파츠 분리가 미흡할 경우 작업이 거절되거나 제한적으로 작업할 수 있습니다.</p></div></li><li class="ntc__it ntc--work nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 10.5 5-3v9l-5-3"/></svg></span><div><span class="ntc__tag">작업</span><strong>작업 과정은 중간마다 영상으로 공유됩니다.</strong><p>컨펌은 편하신 시점에 요청 가능하며, 총 3회까지 진행됩니다.</p></div></li><li class="ntc__it ntc--fee nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h4"/></svg></span><div><span class="ntc__tag">위약금</span><strong>예약 취소 시 결제 금액 10%의 위약금이 발생합니다.</strong><p>작업 진행 전 예약 취소에 한해 적용됩니다.</p></div></li><li class="ntc__it ntc--warn is-warn nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></svg></span><div><span class="ntc__tag">경고</span><strong>MOC3 파일의 무단 역복원 및 2차 수정을 금지합니다.</strong><p>CMO3 원본은 제공되지 않으며, 사전 동의 없는 역복원·수정·유포 시 모든 법적 책임은 행위자 본인에게 있습니다.</p></div></li></ol>
+<!-- 이벤트 진행 중이면 class="evc is-ended" 에서 is-ended 를 지우고 내용을 바꿔 주세요 -->
+<aside class="evc is-ended nx-rv" aria-label="이벤트">
+  <div class="evc__ov"><em>No event</em><b>진행 중인 이벤트가 없어요</b><p>새 이벤트가 열리면 이곳에서 가장 먼저 안내드려요</p></div>
+  <div class="ev__inner" aria-hidden="true">
+<span class="ev__live">EVENT</span>
+<p class="ev__title">리깅 할인 이벤트</p>
+<p class="ev__pastDate">2026.02.01 – 2026.02.28</p>
+<div class="ev__price">
+<div class="ev__offer"><span>전신 리깅</span><span><s>₩1,200,000</s><b>₩1,150,000</b></span></div>
+<div class="ev__offer"><span>반신 리깅</span><span><s>₩1,000,000</s><b>₩950,000</b></span></div>
+</div>
+<p class="ev__bonus">신청 시 간단 표정 3종 무료 제공</p>
+</div>
+</aside>
+</div>
 </div>
 </section>
 <section class="nx-sec nx-iq iq" id="inquiry" aria-label="견적 및 문의">
 <div class="nx-wrap">
-<div class="nx-head"><div><h2 class="nx-h2">견적 · 문의</h2><p class="nx-lede nx-rv" style="--rd:.15s">원하는 구성을 고르면 견적이 자동으로 계산되고, 문의 문구가 만들어집니다.</p></div></div>
+<div class="nx-head"><div><h2 class="nx-h2" data-en="Order">견적 · 문의</h2><p class="nx-lede nx-rv" style="--rd:.15s">원하는 구성을 고르면 견적이 자동으로 계산되고, 문의 문구가 만들어집니다.</p></div></div>
 
 
   
@@ -2780,7 +3188,55 @@
 })();
 </script>
 </main>
-<footer class="nx-foot"><div class="nx-wrap"><strong>Live2D Rigging</strong></div></footer>
+<div class="lace lace--up" style="--lb:#fff" aria-hidden="true"></div>
+<footer class="jr-foot"><b>Live2D Rigging</b><p class="orn" style="margin-top:12px">thank you for visiting</p></footer>
+<script>
+/* ===== 작업 영상 (영상 추가·삭제는 이 목록만 고치면 돼요) ===== */
+var SC_VIDEOS = [
+    { id: "9Ehdze8WTd8", name: "쿠잉", platform: "CHZZK" },
+    { id: "B7JMb4uTo_A", name: "몽냐", platform: "CHZZK" },
+    { id: "F-9i3QCwyac", name: "루치로", platform: "CHZZK" },
+    { id: "3n33khIgAgc", name: "유우이", platform: "CHZZK" },
+    { id: "Vwv1Ut-qEtg", name: "슬묘", platform: "CHZZK" },
+    { id: "GmHCBD8DT_4", name: "하주야", platform: "CHZZK" },
+    { id: "nKnbNQM_E6Y", name: "아야린", platform: "CHZZK" }
+];
+(function () {
+  var V = SC_VIDEOS, cur = -1;
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var reel = $('reel');
+  reel.innerHTML = V.map(function (v, i) {
+    return '<button class="reel__it" type="button" role="listitem" data-i="' + i + '" aria-label="' + esc(v.name) + ' 영상 보기"><span class="reel__img"><img src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="" loading="lazy"></span><span class="reel__nm">' + esc(v.name) + '</span></button>';
+  }).join('');
+  var its = reel.querySelectorAll('.reel__it');
+  function go(i) {
+    i = (i + V.length) % V.length; if (i === cur) return; cur = i;
+    var v = V[i];
+    $('pvFrame').src = 'https://www.youtube-nocookie.com/embed/' + v.id + '?rel=0&modestbranding=1&playsinline=1';
+    $('pvName').textContent = v.name;
+    $('pvTags').innerHTML = v.platform ? '<span class="tag tag--' + esc(v.platform) + '">' + esc(v.platform) + '</span>' : '';
+    its.forEach(function (b, k) { b.classList.toggle('is-on', k === i); if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    var b = its[i]; if (reel.scrollWidth > reel.clientWidth) reel.scrollTo({ left: Math.max(0, b.offsetLeft - 18), behavior: 'smooth' });
+    $('reelCount').textContent = '작업물 ' + (i + 1) + ' / ' + V.length;
+  }
+  reel.addEventListener('click', function (e) { var b = e.target.closest('.reel__it'); if (b) go(+b.dataset.i); });
+  $('pvPrev').addEventListener('click', function () { go(cur - 1); });
+  $('pvNext').addEventListener('click', function () { go(cur + 1); });
+  go(0);
+
+  var open = Array.prototype.map.call(document.querySelectorAll('.av__m[data-state="open"] .av__name'), function (m) { return m.textContent.trim(); });
+  if (open.length) { $('heroSlot').textContent = open.join(' · ') + ' 예약이 가능해요 · 예약 상담 환영해요'; $('heroSlotWrap').classList.add('is-open'); }
+  else $('heroSlot').textContent = '지금은 모든 예약이 마감되었어요';
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-jump]'); if (!a) return;
+    var t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+
 <script>
 /* 스크롤 등장 모션 + 숫자 카운트업 */
 (function () {
@@ -2867,5 +3323,66 @@
       total.classList.remove('flash'); void total.offsetWidth; total.classList.add('flash');
     }).observe(total, { childList: true, characterData: true, subtree: true });
   }
+})();
+</script>
+<script>
+/* 견적 계산기: 모바일에서는 단계별 탭으로 */
+(function () {
+  var picker = document.querySelector('.iq__picker'); if (!picker) return;
+  var kids = Array.prototype.filter.call(picker.children, function (n) { return n.tagName === 'DIV'; });
+  var opt = kids[2], accs = opt ? opt.querySelectorAll(':scope > .iq__acc') : [];
+  var panes = [
+    { name: '기본 리깅', el: kids[0] },
+    { name: '협업 할인', el: kids[1] },
+    { name: '추가 옵션 1', el: accs[0], group: opt },
+    { name: '추가 옵션 2', el: accs[1], group: opt },
+    { name: '문의 내용', el: kids[3] }
+  ].filter(function (p) { return p.el; });
+  var bar = document.createElement('div');
+  bar.className = 'iqt'; bar.setAttribute('role', 'tablist'); bar.setAttribute('aria-label', '견적 단계');
+  bar.innerHTML = '<span class="iqt__ind" aria-hidden="true"></span>' + panes.map(function (p, i) { return '<button type="button" role="tab" class="iqt__b" data-i="' + i + '"><em>' + (i + 1) + '</em>' + p.name + '</button>'; }).join('');
+  var prog = document.createElement('div');
+  prog.className = 'iqt__prog'; prog.innerHTML = '<i></i>';
+  picker.insertBefore(bar, picker.firstChild);
+  picker.insertBefore(prog, bar.nextSibling);
+  panes.forEach(function (p, i) {
+    p.el.setAttribute('data-pane', i);
+    if (i < panes.length - 1) {
+      var nx = document.createElement('button');
+      nx.type = 'button'; nx.className = 'iqt__next'; nx.textContent = '다음: ' + panes[i + 1].name + ' →';
+      nx.addEventListener('click', function () { show(i + 1, true); });
+      p.el.appendChild(nx);
+    }
+  });
+  var btns = bar.querySelectorAll('.iqt__b'), cur = -1, ind = bar.querySelector('.iqt__ind');
+  function place() {
+    var b = btns[cur]; if (!b || !b.offsetWidth) return;
+    ind.style.width = b.offsetWidth + 'px'; ind.style.height = b.offsetHeight + 'px';
+    ind.style.transform = 'translate(' + b.offsetLeft + 'px,' + b.offsetTop + 'px)';
+  }
+  function show(i, scroll) {
+    var back = cur > i, first = cur === -1;
+    cur = i;
+    panes.forEach(function (p, k) {
+      var on = k === i;
+      p.el.classList.toggle('is-on', on);
+      p.el.classList.remove('iq-in', 'iq-in--back');
+      if (on && !first) { void p.el.offsetWidth; p.el.classList.add(back ? 'iq-in--back' : 'iq-in'); }
+      if (p.group) p.group.classList.toggle('is-on', panes[i].group === p.group);
+    });
+    btns.forEach(function (b, k) { b.setAttribute('aria-selected', k === i); });
+    prog.firstChild.style.width = ((i + 1) / panes.length * 100) + '%';
+    place();
+    var b = btns[i]; if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: b.offsetLeft - 20, behavior: 'smooth' });
+    if (scroll) bar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  bar.addEventListener('click', function (e) { var b = e.target.closest('.iqt__b'); if (b) show(+b.dataset.i); });
+  var mq = window.matchMedia('(max-width: 768px)');
+  function apply() { picker.classList.toggle('iq--tabs', mq.matches); }
+  if (mq.addEventListener) mq.addEventListener('change', apply); else mq.addListener(apply);
+  apply(); show(0);
+  window.addEventListener('resize', place);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  if (mq.addEventListener) mq.addEventListener('change', place);
 })();
 </script>
