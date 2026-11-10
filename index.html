@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live2D Rigging Showcase</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+    <link rel="preconnect" href="https://www.youtube-nocookie.com">
+    <link rel="preconnect" href="https://i.ytimg.com">
+    <link rel="preconnect" href="https://www.google.com">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1672,7 +1675,7 @@
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 /* =========================================================
    LAVENDER NOIR — 블랙 · 화이트 · 라벤더, 레이스와 리본(୨୧) 장식
@@ -2344,7 +2347,7 @@ body { margin: 0; font-family: var(--sans); color: var(--txt); word-break: keep-
       <p class="hero__slot" id="heroSlotWrap"><i></i><span id="heroSlot">예약 현황 확인 중</span></p>
     </div>
     <div class="stage" id="showcase">
-      <div class="stage__frame"><iframe id="pvFrame" title="리깅 작업 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+      <div class="stage__frame"><iframe id="pvFrame" src="https://www.youtube-nocookie.com/embed/9Ehdze8WTd8?rel=0&modestbranding=1&playsinline=1" title="리깅 작업 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
       <div class="stage__bar">
         <div class="stage__now"><em>Now playing</em><b id="pvName"></b><span id="pvTags"></span></div>
         <div class="stage__nav"><button class="rd" id="pvPrev" type="button" aria-label="이전 작업"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button><button class="rd" id="pvNext" type="button" aria-label="다음 작업"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
@@ -2354,6 +2357,56 @@ body { margin: 0; font-family: var(--sans); color: var(--txt); word-break: keep-
   <div class="reel__meta" aria-live="polite"><b id="reelCount"></b><span>옆으로 넘겨서 다른 작업도 보세요</span></div>
   <div class="reel" id="reel" role="list" aria-label="작업 목록"></div>
 </section>
+<script>
+/* ===== 작업 영상 (영상 추가·삭제는 이 목록만 고치면 돼요) ===== */
+var SC_VIDEOS = [
+    { id: "9Ehdze8WTd8", name: "쿠잉", platform: "CHZZK" },
+    { id: "B7JMb4uTo_A", name: "몽냐", platform: "CHZZK" },
+    { id: "F-9i3QCwyac", name: "루치로", platform: "CHZZK" },
+    { id: "3n33khIgAgc", name: "유우이", platform: "CHZZK" },
+    { id: "Vwv1Ut-qEtg", name: "슬묘", platform: "CHZZK" },
+    { id: "GmHCBD8DT_4", name: "하주야", platform: "CHZZK" },
+    { id: "nKnbNQM_E6Y", name: "아야린", platform: "CHZZK" }
+];
+(function () {
+  var V = SC_VIDEOS, cur = -1;
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var reel = $('reel');
+  reel.innerHTML = V.map(function (v, i) {
+    return '<button class="reel__it" type="button" role="listitem" data-i="' + i + '" aria-label="' + esc(v.name) + ' 영상 보기"><span class="reel__img"><img src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="" loading="lazy"></span><span class="reel__nm">' + esc(v.name) + '</span></button>';
+  }).join('');
+  var its = reel.querySelectorAll('.reel__it');
+  function go(i) {
+    i = (i + V.length) % V.length; if (i === cur) return; cur = i;
+    var v = V[i];
+    var url = 'https://www.youtube-nocookie.com/embed/' + v.id + '?rel=0&modestbranding=1&playsinline=1';
+    if ($('pvFrame').getAttribute('src') !== url) $('pvFrame').src = url;
+    $('pvName').textContent = v.name;
+    $('pvTags').innerHTML = v.platform ? '<span class="tag tag--' + esc(v.platform) + '">' + esc(v.platform) + '</span>' : '';
+    its.forEach(function (b, k) { b.classList.toggle('is-on', k === i); if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    var b = its[i]; if (reel.scrollWidth > reel.clientWidth) reel.scrollTo({ left: Math.max(0, b.offsetLeft - 18), behavior: 'smooth' });
+    $('reelCount').textContent = '작업물 ' + (i + 1) + ' / ' + V.length;
+  }
+  reel.addEventListener('click', function (e) { var b = e.target.closest('.reel__it'); if (b) go(+b.dataset.i); });
+  $('pvPrev').addEventListener('click', function () { go(cur - 1); });
+  $('pvNext').addEventListener('click', function () { go(cur + 1); });
+  go(0);
+
+  function slot() {
+    var open = Array.prototype.map.call(document.querySelectorAll('.av__m[data-state="open"] .av__name'), function (m) { return m.textContent.trim(); });
+    if (open.length) { $('heroSlot').textContent = open.join(' · ') + ' 예약이 가능해요 · 예약 상담 환영해요'; $('heroSlotWrap').classList.add('is-open'); }
+    else $('heroSlot').textContent = '지금은 모든 예약이 마감되었어요';
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', slot); else slot();
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-jump]'); if (!a) return;
+    var t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
 <div class="lace" style="--lb:#fff" aria-hidden="true"></div>
 <main class="nx">
 <section class="jr-sec" id="menu" aria-label="리깅 메뉴">
@@ -3190,52 +3243,7 @@ body { margin: 0; font-family: var(--sans); color: var(--txt); word-break: keep-
 </main>
 <div class="lace lace--up" style="--lb:#fff" aria-hidden="true"></div>
 <footer class="jr-foot"><b>Live2D Rigging</b><p class="orn" style="margin-top:12px">thank you for visiting</p></footer>
-<script>
-/* ===== 작업 영상 (영상 추가·삭제는 이 목록만 고치면 돼요) ===== */
-var SC_VIDEOS = [
-    { id: "9Ehdze8WTd8", name: "쿠잉", platform: "CHZZK" },
-    { id: "B7JMb4uTo_A", name: "몽냐", platform: "CHZZK" },
-    { id: "F-9i3QCwyac", name: "루치로", platform: "CHZZK" },
-    { id: "3n33khIgAgc", name: "유우이", platform: "CHZZK" },
-    { id: "Vwv1Ut-qEtg", name: "슬묘", platform: "CHZZK" },
-    { id: "GmHCBD8DT_4", name: "하주야", platform: "CHZZK" },
-    { id: "nKnbNQM_E6Y", name: "아야린", platform: "CHZZK" }
-];
-(function () {
-  var V = SC_VIDEOS, cur = -1;
-  var $ = function (id) { return document.getElementById(id); };
-  var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
-  var reel = $('reel');
-  reel.innerHTML = V.map(function (v, i) {
-    return '<button class="reel__it" type="button" role="listitem" data-i="' + i + '" aria-label="' + esc(v.name) + ' 영상 보기"><span class="reel__img"><img src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="" loading="lazy"></span><span class="reel__nm">' + esc(v.name) + '</span></button>';
-  }).join('');
-  var its = reel.querySelectorAll('.reel__it');
-  function go(i) {
-    i = (i + V.length) % V.length; if (i === cur) return; cur = i;
-    var v = V[i];
-    $('pvFrame').src = 'https://www.youtube-nocookie.com/embed/' + v.id + '?rel=0&modestbranding=1&playsinline=1';
-    $('pvName').textContent = v.name;
-    $('pvTags').innerHTML = v.platform ? '<span class="tag tag--' + esc(v.platform) + '">' + esc(v.platform) + '</span>' : '';
-    its.forEach(function (b, k) { b.classList.toggle('is-on', k === i); if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
-    var b = its[i]; if (reel.scrollWidth > reel.clientWidth) reel.scrollTo({ left: Math.max(0, b.offsetLeft - 18), behavior: 'smooth' });
-    $('reelCount').textContent = '작업물 ' + (i + 1) + ' / ' + V.length;
-  }
-  reel.addEventListener('click', function (e) { var b = e.target.closest('.reel__it'); if (b) go(+b.dataset.i); });
-  $('pvPrev').addEventListener('click', function () { go(cur - 1); });
-  $('pvNext').addEventListener('click', function () { go(cur + 1); });
-  go(0);
 
-  var open = Array.prototype.map.call(document.querySelectorAll('.av__m[data-state="open"] .av__name'), function (m) { return m.textContent.trim(); });
-  if (open.length) { $('heroSlot').textContent = open.join(' · ') + ' 예약이 가능해요 · 예약 상담 환영해요'; $('heroSlotWrap').classList.add('is-open'); }
-  else $('heroSlot').textContent = '지금은 모든 예약이 마감되었어요';
-
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest('a[data-jump]'); if (!a) return;
-    var t = document.querySelector(a.getAttribute('href')); if (!t) return;
-    e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-})();
-</script>
 
 <script>
 /* 스크롤 등장 모션 + 숫자 카운트업 */
