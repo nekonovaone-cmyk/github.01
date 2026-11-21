@@ -1969,6 +1969,7 @@ body { margin: 0; font-family: var(--sans); color: var(--txt); word-break: keep-
 .evc .ev__offer { display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: var(--noir-2); font-size: .88rem; }
 .evc .ev__offer s { color: #8F889C; margin-right: 6px; }
 .evc .ev__offer b { color: #fff; }
+.evc .ev__offer > span:first-child { color: #E6E0F0; font-weight: 700; }
 .evc .ev__bonus { margin: 12px 0 0; font-size: .85rem; color: var(--lav); }
 
 /* =========================================================
@@ -2395,7 +2396,7 @@ var SC_VIDEOS = [
 
   function slot() {
     var open = Array.prototype.map.call(document.querySelectorAll('.av__m[data-state="open"] .av__name'), function (m) { return m.textContent.trim(); });
-    if (open.length) { $('heroSlot').textContent = open.join(' · ') + ' 예약이 가능해요 · 예약 상담 환영합니다'; $('heroSlotWrap').classList.add('is-open'); }
+    if (open.length) { $('heroSlot').textContent = open.join(' · ') + ' 예약이 가능해요 · 예약 상담 환영해요'; $('heroSlotWrap').classList.add('is-open'); }
     else $('heroSlot').textContent = '지금은 모든 예약이 마감되었어요';
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', slot); else slot();
@@ -2798,18 +2799,18 @@ var SC_VIDEOS = [
 <div class="nx-head"><div><h2 class="nx-h2" data-en="Before you order">작업 전 확인사항</h2><p class="nx-lede nx-rv" style="--rd:.15s">의뢰 전에 아래 내용을 꼭 읽어 주세요.</p></div></div>
 <div class="ntc">
 <ol class="ntc__list"><li class="ntc__it ntc--info nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 8.3l5-.7z"/></svg></span><div><span class="ntc__tag">안내</span><strong>파츠 분리에 따라 작업 퀄리티에 차이가 발생할 수 있습니다.</strong><p>파츠 분리가 미흡할 경우 작업이 거절되거나 제한적으로 작업할 수 있습니다.</p></div></li><li class="ntc__it ntc--work nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 10.5 5-3v9l-5-3"/></svg></span><div><span class="ntc__tag">작업</span><strong>작업 과정은 중간마다 영상으로 공유됩니다.</strong><p>컨펌은 편하신 시점에 요청 가능하며, 총 3회까지 진행됩니다.</p></div></li><li class="ntc__it ntc--fee nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h4"/></svg></span><div><span class="ntc__tag">위약금</span><strong>예약 취소 시 결제 금액 10%의 위약금이 발생합니다.</strong><p>작업 진행 전 예약 취소에 한해 적용됩니다.</p></div></li><li class="ntc__it ntc--warn is-warn nx-rv"><span class="ntc__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></svg></span><div><span class="ntc__tag">경고</span><strong>MOC3 파일의 무단 역복원 및 2차 수정을 금지합니다.</strong><p>CMO3 원본은 제공되지 않으며, 사전 동의 없는 역복원·수정·유포 시 모든 법적 책임은 행위자 본인에게 있습니다.</p></div></li></ol>
-<!-- 이벤트 진행 중이면 class="evc is-ended" 에서 is-ended 를 지우고 내용을 바꿔 주세요 -->
-<aside class="evc is-ended nx-rv" aria-label="이벤트">
+<!-- 이벤트 종료 시 class="evc nx-rv" 를 class="evc is-ended nx-rv" 로 바꾸면 흐리게 + "진행 중인 이벤트가 없어요" 표시 -->
+<aside class="evc nx-rv" aria-label="이벤트">
   <div class="evc__ov"><em>No event</em><b>진행 중인 이벤트가 없어요</b><p>새 이벤트가 열리면 이곳에서 가장 먼저 안내드려요</p></div>
-  <div class="ev__inner" aria-hidden="true">
-<span class="ev__live">EVENT</span>
-<p class="ev__title">리깅 할인 이벤트</p>
-<p class="ev__pastDate">2026.02.01 – 2026.02.28</p>
+  <div class="ev__inner">
+<span class="ev__live">EVENT · 진행 중</span>
+<p class="ev__title">5월 슬롯 예약자 VBridger 서비스</p>
+<p class="ev__pastDate">이벤트 기간 · 5월 슬롯 마감 시까지</p>
 <div class="ev__price">
-<div class="ev__offer"><span>전신 리깅</span><span><s>₩1,200,000</s><b>₩1,150,000</b></span></div>
-<div class="ev__offer"><span>반신 리깅</span><span><s>₩1,000,000</s><b>₩950,000</b></span></div>
+<div class="ev__offer"><span>VBridger 연동</span><span><s>₩200,000</s><b>무료</b></span></div>
 </div>
-<p class="ev__bonus">신청 시 간단 표정 3종 무료 제공</p>
+<p class="ev__bonus">5월 슬롯을 예약하시면 VBridger 연동을 서비스로 넣어 드려요.</p>
+<p class="ev__pastDate">※ VBridger는 별도 유료 프로그램이에요. 프로그램은 직접 구매해 주세요.</p>
 </div>
 </aside>
 </div>
