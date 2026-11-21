@@ -2396,7 +2396,7 @@ var SC_VIDEOS = [
 
   function slot() {
     var open = Array.prototype.map.call(document.querySelectorAll('.av__m[data-state="open"] .av__name'), function (m) { return m.textContent.trim(); });
-    if (open.length) { $('heroSlot').textContent = open.join(' · ') + ' 예약이 가능해요 · 예약 상담 환영해요'; $('heroSlotWrap').classList.add('is-open'); }
+    if (open.length) { $('heroSlot').textContent = open.join(' · ') + ' 예약이 가능해요 · 예약 상담 환영합니다'; $('heroSlotWrap').classList.add('is-open'); }
     else $('heroSlot').textContent = '지금은 모든 예약이 마감되었어요';
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', slot); else slot();
